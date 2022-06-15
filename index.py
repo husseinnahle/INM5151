@@ -6,12 +6,13 @@ from .modules.database import Database
 
 app = Flask(__name__)
 
+
 def get_db():
     db = getattr(g, 'database', None)
     if db is None:
         g._database = Database()
     return g._database
- 
+
 
 @app.teardown_appcontext
 def close_connection(exception):
