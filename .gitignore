@@ -109,6 +109,7 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+INM5151-virtualenv/
 
 # Spyder project settings
 .spyderproject
