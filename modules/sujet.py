@@ -12,4 +12,3 @@ class Sujet:
             "Information": self.informations
         }
         return sujet
-        
