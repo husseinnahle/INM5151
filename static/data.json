@@ -1,0 +1,42 @@
+{
+	"Java": {
+		"Lecon": "java_lecon",
+		"Exemples" : [
+		  "java_exemple_0",
+		  "java_exemple_1",
+		  "java_exemple_2"
+		],
+		"Questions": [
+			"java_question_0",
+			"java_question_1",
+			"java_question_2",
+			"java_question_3"
+		],
+		"Reponses": [
+			"java_reponse_0",
+			"java_reponse_1",
+			"java_reponse_2",
+			"java_reponse_3"
+		]
+	},
+	"Python": {
+		"Lecon": "python_lecon",
+		"Exemples" : [
+		  "python_exemple_0",
+		  "python_exemple_1",
+		  "python_exemple_2"
+		],
+		"Questions": [
+			"python_question_0",
+			"python_question_1",
+			"python_question_2",
+			"python_question_3"
+		],
+		"Reponses": [
+			"python_reponse_0",
+			"python_reponse_1",
+			"python_reponse_2",
+			"python_reponse_3"
+		]
+	}
+}
