@@ -40,7 +40,7 @@ def index():
     return render_template('index.html', title='index'), 200
 
 
-# Tester si la lecture et l'ecriture des donnees fonctionne 
+# Tester si la lecture et l'ecriture des donnees fonctionne
 @app.route('/test/sujets')
 def sujets():
     db = get_db()

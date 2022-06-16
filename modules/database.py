@@ -2,21 +2,19 @@ import sqlite3
 import json
 from .sujet import Sujet
 
+
 class Database:
     def __init__(self):
         self.connection = None
-
 
     def get_connection(self):
         if self.connection is None:
             self.connection = sqlite3.connect('db/database.db')
         return self.connection
 
-
     def disconnect(self):
         if self.connection is not None:
             self.connection.close()
-
 
     def insert_sujet(self, id, nom, informations):
         connection = self.get_connection()
@@ -25,7 +23,6 @@ class Database:
                            'values(?, ?, ?)',
                            (id, nom, informations))
         connection.commit()
-
 
     def read_all_sujet(self):
         connection = self.get_connection()
