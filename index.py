@@ -55,8 +55,8 @@ def quiz():
     numero_raw = request.args.get('numero', type=int)
     try:
         numero = int(numero_raw)  # ValueError
-        sujet = get_db().read_sujet_nom(nom_sujet).to_json()  # TypeError
-        quiz = sujet.get_quiz()  # KeyError, IndexError
+        sujet = get_db().read_sujet_nom(nom_sujet)  # TypeError
+        quiz = sujet.get_quiz(nom_sous_sujet, numero)  # KeyError, IndexError
     except ValueError:
         # Retourner une erreur si le numero n'est pas un entier
         err = "Le numero '" + html.escape(numero_raw) + "' n'existe pas."
@@ -85,7 +85,7 @@ def sujets():
         return jsonify({e.get_nom(): e.to_json() for e in sujets}), 200
     # Retourner un sujet selon 'nom'
     try:
-        sujet = get_db().read_sujet_nom(nom).to_json()
+        sujet = get_db().read_sujet_nom(nom)
     except TypeError:
         return jsonify("Aucun sujet trouvé."), 204
     return jsonify({sujet.get_nom(): sujet.to_json()}), 200
