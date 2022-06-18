@@ -4,6 +4,11 @@ class Sujet:
         self.nom = nom
         self.informations = informations
 
+    
+    def get_nom(self):
+        return self.nom
+    
+
     def to_json(self):
         sujet = {
             "Id": self.id,
