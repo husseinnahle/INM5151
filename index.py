@@ -54,29 +54,24 @@ def quiz():
     nom_sous_sujet = request.args.get('sous-sujet')
     numero_raw = request.args.get('numero', type=int)
     try:
-        numero = int(numero_raw)
+        numero = int(numero_raw)  # ValueError
+        sujet = get_db().read_sujet_nom(nom_sujet).to_json()  # TypeError
+        quiz = sujet.get_quiz()  # KeyError, IndexError
     except ValueError:
         # Retourner une erreur si le numero n'est pas un entier
-        erreur = "Le numero '" + html.escape(numero_raw) + "' n'existe pas."
-        return render_template("404.html", title="Erreur 404", erreur=erreur), 404    
-    try:
-        sujet = get_db().read_sujet_nom(nom_sujet).to_json()
+        err = "Le numero '" + html.escape(numero_raw) + "' n'existe pas."
+        return render_template("404.html", title="Erreur 404", err=err), 404
     except TypeError:
-        return ('', 204)    
-    try:
-        quiz = {
-            "Question": sujet["Information"][nom_sous_sujet]["Quiz"]["Question"][numero],
-            "Choix" : sujet["Information"][nom_sous_sujet]["Quiz"]["Choix"][numero],
-            "Reponse" : sujet["Information"][nom_sous_sujet]["Quiz"]["Reponse"][numero]
-        }
+        # Retourner un statut 204 si aucun sujet n'a été trouvé
+        return ('', 204)
     except KeyError:
         # Retourner une erreur si le nom du sous-sujet n'existe pas
-        erreur = "Le sujet '" + html.escape(nom_sous_sujet) + "' n'existe pas."
-        return render_template("404.html", title="Erreur 404", erreur=erreur), 404
+        err = "Le sujet '" + html.escape(nom_sous_sujet) + "' n'existe pas."
+        return render_template("404.html", title="Erreur 404", err=err), 404
     except IndexError:
         # Retourner une erreur si le numero de la question du quiz n'existe pas
-        erreur = "Le numero '" + str(numero) + "' n'existe pas."
-        return render_template("404.html", title="Erreur 404", erreur=erreur), 404        
+        err = "Le numero '" + str(numero) + "' n'existe pas."
+        return render_template("404.html", title="Erreur 404", err=err), 404
     return jsonify(quiz)
 
 
@@ -87,10 +82,10 @@ def sujets():
     if nom is None or len(nom) == 0:
         # Retourner tous les sujets
         sujets = get_db().read_all_sujet()
-        return jsonify({sujet.get_nom() : sujet.to_json() for sujet in sujets}), 200        
+        return jsonify({e.get_nom(): e.to_json() for e in sujets}), 200
     # Retourner un sujet selon 'nom'
     try:
         sujet = get_db().read_sujet_nom(nom).to_json()
     except TypeError:
-        return jsonify("Aucun sujet trouvé."), 204 
-    return jsonify({sujet.get_nom() : sujet.to_json()}), 200
+        return jsonify("Aucun sujet trouvé."), 204
+    return jsonify({sujet.get_nom(): sujet.to_json()}), 200

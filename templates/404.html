@@ -2,6 +2,6 @@
 
 {% block content %}
     <h3>Page d'erreur - 404</h3>
-    <div class="alert alert-danger" role="alert">L'URL à laquelle vous essayez d'accéder est introuvable. {{ erreur }}</div>
+    <div class="alert alert-danger" role="alert">L'URL à laquelle vous essayez d'accéder est introuvable. {{ err }}</div>
     <p><a href="{{ url_for('index') }}">Retourner</a></p>
 {% endblock %}
