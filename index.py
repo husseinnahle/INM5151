@@ -1,3 +1,4 @@
+
 from flask import Flask
 from flask import render_template
 from flask import g
@@ -24,3 +25,12 @@ def close_connection(exception):
 @app.route('/')
 def index():
     return render_template('index.html', title='index'), 200
+
+
+@app.route("/<name>")
+def exercice(name):
+    return render_template("exercices.html", content=name)
+
+
+if __name__ == "__main__":
+    app.run(debug=True)
