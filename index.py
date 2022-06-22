@@ -3,6 +3,8 @@ import html
 from flask import Flask
 from flask import render_template
 from flask import request
+from flask import redirect
+from flask import session
 from flask import g
 from flask import jsonify
 from .modules.database import Database
@@ -10,13 +12,30 @@ from .modules.database import Database
 app = Flask(__name__)
 app.config['JSON_SORT_KEYS'] = False
 DATA_FILE_PATH = 'static/data.json'
-
+app.config['SECRET_KEY'] = "clé secrète"  # Temporaire
 
 def get_db():
     db = getattr(g, 'database', None)
     if db is None:
         g._database = Database()
     return g._database
+
+
+def evaluer(raw_data):
+    data = json.loads(raw_data)
+    sujet_obj = get_db().read_sujet_nom(data["Sujet"])
+    note = 0
+    for i, choix in enumerate(data["Reponses"]):
+        reponse = sujet_obj.get_quiz_reponse(data["Sous-sujet"], i)
+        if reponse == choix:
+            note += 1
+    resultat = {
+        "Sujet" : data["Sujet"],
+        "Sous-sujet" : data["Sous-sujet"],
+        "Total": len(data["Reponses"]), 
+        "Note": note
+    }
+    session["Resultat"] = resultat
 
 
 @app.teardown_appcontext
@@ -42,27 +61,27 @@ def not_found_error(error):
     return render_template('404.html', title="Erreur 404"), 404
 
 
-@app.route('/')
+@app.route('/', methods=["GET"])
 def index():
     return render_template('index.html', title='Accueil'), 200
 
 
-@app.route('/tutoriels')
+@app.route('/tutoriels', methods=["GET"])
 def tutoriels():
     return render_template('tutoriels.html', title='Tutoriels'), 200
 
 
-@app.route('/connexion')
+@app.route('/connexion', methods=["GET"])
 def connexion():
     return render_template('connexion.html', title='Connexion'), 200
 
 
-@app.route('/aide')
+@app.route('/aide', methods=["GET"])
 def aide():
     return render_template('aide.html', title='Aide'), 200
 
 
-@app.route('/a_propos')
+@app.route('/a_propos', methods=["GET"])
 def a_propos():
     return render_template('a_propos.html', title='À propos'), 200
 
@@ -71,17 +90,42 @@ def a_propos():
 def page_not_found(e):
     return render_template('404.html'), 404
 
- 
-# Retourner un quiz
-@app.route('/api/quiz')
+
+@app.route('/tutoriels/quiz', methods=["GET"])
 def quiz():
+    sujet = request.args.get('sujet')
+    sous_sujet = request.args.get('sous-sujet')
+    sujet_obj = get_db().read_sujet_nom(sujet)
+    quiz = sujet_obj.get_quiz_question(sous_sujet, 0)
+    return render_template('quiz.html', sujet=sujet, sous_sujet=sous_sujet,
+                           question=quiz['Question'], choix=quiz['Choix'])
+
+@app.route('/tutoriels/quiz/resultat', methods=["GET", "POST"])
+def quiz_resultat():
+    if request.method == "POST":
+        evaluer(request.form['data'])
+        return redirect('/tutoriels/quiz/resultat')
+    if "Resultat" in session:
+        sujet = session["Resultat"]["Sujet"]
+        sous_sujet = session["Resultat"]["Sous-sujet"]
+        total = session["Resultat"]["Total"]
+        note = session["Resultat"]["Note"]
+        session.pop("Resultat")
+        return render_template('resultat.html', sujet=sujet,
+                                sous_sujet=sous_sujet, total=total,
+                                note=note)
+    return render_template("404.html", title="Erreur 404"), 404
+
+# Retourner un quiz
+@app.route('/api/quiz', methods=["GET"])
+def api_quiz():
     nom_sujet = request.args.get('sujet')
     nom_sous_sujet = request.args.get('sous-sujet')
     numero_raw = request.args.get('numero', type=int)
     try:
         numero = int(numero_raw)  # ValueError
         sujet = get_db().read_sujet_nom(nom_sujet)  # TypeError
-        quiz = sujet.get_quiz(nom_sous_sujet, numero)  # KeyError, IndexError
+        quiz = sujet.get_quiz_question(nom_sous_sujet, numero)  # KeyError, IndexError
     except ValueError:
         # Retourner une erreur si le numero n'est pas un entier
         err = "Le numero '" + html.escape(numero_raw) + "' n'existe pas."
@@ -101,8 +145,8 @@ def quiz():
 
 
 # Retourner les sujets disponibles
-@app.route('/api/sujets')
-def sujets():
+@app.route('/api/sujets', methods=["GET"])
+def api_sujets():
     nom = request.args.get('nom')
     if nom is None or len(nom) == 0:
         # Retourner tous les sujets

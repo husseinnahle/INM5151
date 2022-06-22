@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div style="display: flex;">
+    <h1 id="sujet">{{ sujet }}</h1>
+    <h1> - </h1>
+    <h1 id="sous_sujet">{{ sous_sujet }}</h1>
+  </div>
+  <div style="display: flex;">
+    <p id="numero">1</p>
+    <p>.&nbsp;</p>
+    <p id="question">{{ question }}</p>
+  </div>
+  {% for c in choix %}
+    <input type="radio" id="choix" name="choix">
+    <label name="choix_label" for={{ c }}>{{ c }}</label>
+    <br>
+  {% endfor %}
+  <span id="erreur"></span><br>
+  <button onclick="questionSuivante();">Suivant</button>
+{% endblock %}
