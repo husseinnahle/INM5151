@@ -47,10 +47,6 @@ def index():
     return render_template('index.html', title='Accueil'), 200
 
 
-@app.route("/<name>")
-def exercice(name):
-    return render_template("exercices.html", content=name)
-
 @app.route('/tutoriels')
 def tutoriels():
     return render_template('tutoriels.html', title='Tutoriels'), 200
