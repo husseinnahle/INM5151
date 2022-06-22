@@ -8,13 +8,11 @@ class Sujet:
         return self.nom
 
     def get_quiz_reponse(self, sous_sujet, numero):
-        quiz = self.info["Sous-sujet"][sous_sujet]["Quiz"]
-        return quiz["Reponse"][numero]
+        return self.info["Sous-sujet"][sous_sujet]["Quiz"][numero]["Reponse"]
     
     def get_quiz_question(self, sous_sujet, numero):
         quiz = self.info["Sous-sujet"][sous_sujet]["Quiz"]
-        return {"Question": quiz["Question"][numero],
-                    "Choix": quiz["Choix"][numero]}
+        return {"Question": quiz[numero]["Question"], "Choix": quiz[numero]["Choix"]}
             
     def to_json(self):
         sujet = {
