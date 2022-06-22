@@ -23,4 +23,29 @@ def close_connection(exception):
 
 @app.route('/')
 def index():
-    return render_template('index.html', title='index'), 200
+    return render_template('index.html', title='Accueil'), 200
+
+
+@app.route('/tutoriels')
+def tutoriels():
+    return render_template('tutoriels.html', title='Tutoriels'), 200
+
+
+@app.route('/connexion')
+def connexion():
+    return render_template('connexion.html', title='Connexion'), 200
+
+
+@app.route('/aide')
+def aide():
+    return render_template('aide.html', title='Aide'), 200
+
+
+@app.route('/a_propos')
+def a_propos():
+    return render_template('a_propos.html', title='À propos'), 200
+
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
