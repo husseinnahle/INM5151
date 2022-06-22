@@ -1,0 +1,55 @@
+{
+	"Python": {
+	 	"Introduction" : {
+			"Tutoriel" : {
+				"Titre" : "Introduction",
+				"Video" : "https://www.youtube.com/watch?v=cpPG0bKHYKc",
+				"Tuteur" : "Keven1999"
+			},
+			"Quiz" : {
+				"Question" : [
+					"Quelle est la syntaxe correcte pour afficher \"Hello World\" en Python ?",
+					"Comment insérer des COMMENTAIRES dans le code Python ?",
+					"Lequel n'est PAS un nom de variable légal ?"
+				],
+				"Choix" : [
+					[
+						"echo \"Hello World\"",
+						"p(\"Hello World\")",
+						"print(\"Hello World\")",
+						"echo(\"Hello World\")"
+					],
+					[
+						"//COMMENTAIRES",
+						"/*COMMENTAIRES*/",
+						"#COMMENTAIRES"
+					],
+					[
+						"my-var",
+						"my_var",
+						"_myvar",
+						"Myvar"
+					]
+				], 
+				"Reponse" : [
+					"print(\"Hello World\")",
+					"#COMMENTAIRES",
+					"my-var"
+				]
+			}
+		},
+		"Syntaxe" : "",
+		"Mots-clés du langage" : "",
+		"Types de base" : "",
+		"Operateurs" : "",
+		"Erreurs et exceptions" : "",
+		"Classes" : "",
+		"Bibliothèque standard" : ""
+	},
+	"Java" : {
+
+	},
+	"C" : {
+		
+	}
+}
