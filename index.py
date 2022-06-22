@@ -1,7 +1,5 @@
 import json
 import html
-import os
-import binascii
 from flask import Flask
 from flask import render_template
 from flask import request
