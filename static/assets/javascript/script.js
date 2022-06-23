@@ -31,9 +31,10 @@ function chercherQuestion(sujet, sous_sujet, numero_str) {
 function modifierQuestion(numero, question, choix) {
   document.getElementById('numero').innerText = numero;
   document.getElementById('question').innerText = question;
-  var label = document.getElementsByName('choix_label');
-  for(var i = 0; i < label.length; i++) {
-    label[i].innerText = choix[i];
+  document.getElementById("container").innerHTML = "";
+  for(var i = 0; i < choix.length; i++) {
+    document.getElementById("container").innerHTML += `<input type="radio" id="choix" name="choix">
+    <label id="choix" name="choix_label" for=${choix[i]}>${choix[i]}</label><br>`;
   }
 }
 
