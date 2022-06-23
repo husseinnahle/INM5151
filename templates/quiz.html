@@ -11,11 +11,13 @@
     <p>.&nbsp;</p>
     <p id="question">{{ question }}</p>
   </div>
-  {% for c in choix %}
-    <input type="radio" id="choix" name="choix">
-    <label name="choix_label" for={{ c }}>{{ c }}</label>
-    <br>
-  {% endfor %}
+  <div id="container">
+    {% for c in choix %}
+      <input type="radio" id="choix" name="choix">
+      <label id="choix" name="choix_label" for={{ c }}>{{ c }}</label>
+      <br>
+    {% endfor %}
+  </div>
   <span id="erreur"></span><br>
   <button onclick="questionSuivante();">Suivant</button>
 {% endblock %}

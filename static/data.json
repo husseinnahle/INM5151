@@ -16,13 +16,18 @@
 					},
 					{
 						"Question" : "Comment insérer des COMMENTAIRES dans le code Python ?",
-						"Choix" : ["//COMMENTAIRES",	"/*COMMENTAIRES*/", "#COMMENTAIRES", "::COMMENTAIRES"],
+						"Choix" : ["//COMMENTAIRES",	"/*COMMENTAIRES*/", "#COMMENTAIRES"],
 						"Reponse" : "#COMMENTAIRES"
 					},
 					{
 						"Question" : "Lequel n'est PAS un nom de variable légal ?",
 						"Choix" : ["my-var", "my_var", "_myvar", "Myvar"],
 						"Reponse" : "my-var"
+					},
+					{
+						"Question" : "Test avec vrai/faux",
+						"Choix" : ["vrai", "faux"],
+						"Reponse" : "vrai"
 					}
 				]
 			},
