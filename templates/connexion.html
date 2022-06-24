@@ -2,6 +2,58 @@
 
 {% block content %}
 
+<div class="container-fluid">
+  <section class=" text-center text-lg-start">
+      <style>
+        .rounded-t-5 {
+          border-top-left-radius: 0.5rem;
+          border-top-right-radius: 0.5rem;
+        }
+        @media (min-width: 992px) {
+          .rounded-tr-lg-0 {
+            border-top-right-radius: 0;
+          }
+          .rounded-bl-lg-5 {
+            border-bottom-left-radius: 0.5rem;
+          }
+        }
+      </style>
+      <div class="card mb-3">
+        <div class="row g-0 d-flex align-items-center">
+          <div class="col-lg-4 d-none d-lg-flex">
+            <img
+                src="images/EZcoding-2.png"
+                alt="Trendy Pants and Shoes"
+                class="w-100 rounded-t-5 rounded-tr-lg-0 rounded-bl-lg-5"
+                />
+          </div>
+          <div class="col-lg-8">
+            <div class="card-body py-5 px-md-5">
+              <form id="login" type= "post" action="#" >
+                <div class="form-outline mb-4">
+                  <input type="text" id="user" class="form-control" name="user" required/>
+                  <label class="form-label" for="user">Nom d'utilisateur</label>
+                  <span id = "sp-login"></span>
+                </div>
+    
+                <div class="form-outline mb-4">
+                  <input type="password" id="pass" class="form-control" name="pass" required/>
+                  <label class="form-label" for="pass">Mot de passe</label>
+                  <span id = "sp-pass"></span>
+                </div>
+    
+                <button input type="submit" class="btn btn-primary btn-block mb-4">Sign in</button>
+                <span id = "match_pass"></span>
+              </form>
+    
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  <br />
+</div>
+
 <div class="container-fluid p-5 bg-secondary text-white text-center">
   <h1>Connexion</h1>
 </div>
