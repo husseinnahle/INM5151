@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="container-fluid p-5 bg-secondary text-white text-center">
+    <h1>{{ sujet["Nom"] }}</h1>
+  </div>
+
+  <div class="container mt-5">
+    <div class="tree">
+      {% for ss in sujet["Information"]["Sous-sujet"] %}
+          <div class="node" id={{ ss["Nom"] }}>
+            <a class="node__link__wrapper" href="/langages/{{ sujet["Nom"] }}?sous-sujet={{ ss["Nom"] }}">
+              <span class="node__link">{{ ss["Nom"] }}</span>
+            </a>
+          </div>
+      {% endfor %}
+    </div>    
+  </div>
+
+  <script src="{{ url_for('static', filename='assets/javascript/leader-line.min.js') }}"></script>
+  <script type="text/javascript">
+    setTree();
+  </script>
+{% endblock %}

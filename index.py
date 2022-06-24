@@ -24,9 +24,11 @@ def get_db():
 def evaluer(raw_data):
     data = json.loads(raw_data)
     sujet_obj = get_db().read_sujet_nom(data["Sujet"])
+    sous_sujet_index = sujet_obj.get_sous_sujet_index(data["Sous-sujet"])
     note = 0
     for i, choix in enumerate(data["Reponses"]):
-        reponse = sujet_obj.get_quiz_reponse(data["Sous-sujet"], i)
+        
+        reponse = sujet_obj.get_quiz_reponse(sous_sujet_index, i)
         if reponse == choix:
             note += 1
     resultat = {
@@ -66,9 +68,24 @@ def index():
     return render_template('index.html', title='Accueil'), 200
 
 
-@app.route('/tutoriels', methods=["GET"])
-def tutoriels():
-    return render_template('tutoriels.html', title='Tutoriels'), 200
+@app.route('/langages', methods=["GET"])
+def langages():
+    sujets = get_db().read_all_sujet()
+    sujets_info = [sujet.to_json() for sujet in sujets]
+    return render_template('langages.html', sujets=sujets_info), 200
+
+
+@app.route('/langages/<sujet>', methods=["GET"])
+def langages_sujet(sujet):
+    sujet = get_db().read_sujet_nom(sujet)
+    sous_sujet_nom = request.args.get('sous-sujet')
+    if sous_sujet_nom is None or len(sous_sujet_nom) == 0:
+        return render_template('arbre_de_progression.html', sujet=sujet.to_json()), 200
+    try:
+        sous_sujet = sujet.get_sous_sujet(sous_sujet_nom)
+    except ValueError as error:
+        return render_template("404.html", title="Erreur 404", err=str(error)), 404
+    return render_template('sous_sujet.html', sujet=sujet.to_json()["Nom"], sous_sujet=sous_sujet), 200
 
 
 @app.route('/connexion', methods=["GET"])
@@ -91,20 +108,23 @@ def page_not_found(e):
     return render_template('404.html'), 404
 
 
-@app.route('/tutoriels/quiz', methods=["GET"])
-def quiz():
-    sujet = request.args.get('sujet')
-    sous_sujet = request.args.get('sous-sujet')
-    sujet_obj = get_db().read_sujet_nom(sujet)
-    quiz = sujet_obj.get_quiz_question(sous_sujet, 0)
-    return render_template('quiz.html', sujet=sujet, sous_sujet=sous_sujet,
-                           question=quiz['Question'], choix=quiz['Choix'])
+@app.route('/langages/quiz/<sujet_nom>', methods=["GET"])
+def quiz(sujet_nom):
+    sous_sujet_nom = request.args.get('sous-sujet')
+    if sous_sujet_nom is None or len(sous_sujet_nom) == 0:
+        err = "Le parametre sous-sujet est obligatoire."
+        return render_template("404.html", title="Erreur 404", err=err), 404 
+    sujet = get_db().read_sujet_nom(sujet_nom)
+    sous_sujet_index = sujet.get_sous_sujet_index(sous_sujet_nom)
+    quiz = sujet.get_quiz_question(sous_sujet_index, 0)
+    return render_template('quiz.html', sujet=sujet_nom, sous_sujet=sous_sujet_nom, question=quiz['Question'], choix=quiz['Choix'])
 
-@app.route('/tutoriels/quiz/resultat', methods=["GET", "POST"])
+
+@app.route('/langages/quiz/resultat', methods=["GET", "POST"])
 def quiz_resultat():
     if request.method == "POST":
         evaluer(request.form['data'])
-        return redirect('/tutoriels/quiz/resultat')
+        return redirect('/langages/quiz/resultat')
     if "Resultat" in session:
         sujet = session["Resultat"]["Sujet"]
         sous_sujet = session["Resultat"]["Sous-sujet"]
@@ -116,6 +136,7 @@ def quiz_resultat():
                                 note=note)
     return render_template("404.html", title="Erreur 404"), 404
 
+
 # Retourner un quiz
 @app.route('/api/quiz', methods=["GET"])
 def api_quiz():
@@ -125,7 +146,8 @@ def api_quiz():
     try:
         numero = int(numero_raw)  # ValueError
         sujet = get_db().read_sujet_nom(nom_sujet)  # TypeError
-        quiz = sujet.get_quiz_question(nom_sous_sujet, numero)  # KeyError, IndexError
+        sous_sujet_index = sujet.get_sous_sujet_index(nom_sous_sujet)
+        quiz = sujet.get_quiz_question(sous_sujet_index, numero)  # KeyError, IndexError
     except ValueError:
         # Retourner une erreur si le numero n'est pas un entier
         err = "Le numero '" + html.escape(numero_raw) + "' n'existe pas."

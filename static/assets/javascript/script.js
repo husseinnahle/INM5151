@@ -54,7 +54,7 @@ function enregistrerReponse() {
 function post(sujet, sous_sujet) {
   const form = document.createElement('form');
   form.method = "POST";
-  form.action = "/tutoriels/quiz/resultat";
+  form.action = "/langages/quiz/resultat";
   const hiddenField = document.createElement('input');
   hiddenField.type = 'hidden';
   hiddenField.name = "data";
@@ -67,4 +67,29 @@ function post(sujet, sous_sujet) {
   form.appendChild(hiddenField);
   document.body.appendChild(form);
   form.submit();
+}
+
+function setTree() {
+  const position_left = ["-100px", "200px", "-100px", "50px", "200px"];
+  const nodes = document.getElementsByClassName("node");
+  for (var i = 0; i < nodes.length; i++) {
+    nodes[i].style.left = position_left[i%5];
+  }
+  addArrows(nodes);
+  return true;
+}
+
+function addArrows(nodes) {
+  for (var i = 0; i < nodes.length; i++) {
+    if (i+1 < nodes.length) {
+      new LeaderLine (
+        document.getElementById(nodes[i].id),
+        document.getElementById(nodes[i+1].id),
+        {
+          color: "black",
+          dash: {animation: true}  // Optionelle
+        }
+      );
+    }
+  }
 }

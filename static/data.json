@@ -1,10 +1,10 @@
 {
 	"Python": {
 		"Logo" : "static/logo/python.png",
-		"Sous-sujet" : {
-			"Introduction" : {
+		"Sous-sujet" : [
+			{
+				"Nom" : "Introduction",
 				"Tutoriel" : {
-					"Titre" : "Introduction",
 					"Video" : "https://www.youtube.com/watch?v=cpPG0bKHYKc",
 					"Tuteur" : "Keven1999"
 				},
@@ -31,23 +31,87 @@
 					}
 				]
 			},
-			"Syntaxe" : "",
-			"Mots-clés du langage" : "",
-			"Types de base" : "",
-			"Operateurs" : "",
-			"Erreurs et exceptions" : "",
-			"Classes" : "",
-			"Bibliothèque standard" : ""
-		}
+			{
+				"Nom" : "Syntaxe"
+			},
+			{
+				"Nom" : "Mots-clés du langage"
+			},
+			{
+				"Nom" : "Types de base"
+			},
+			{
+				"Nom" : "Operateurs"
+			},
+			{
+				"Nom" : "Erreurs et exceptions"
+			},
+			{
+				"Nom" : "Classes"
+			},
+			{
+				"Nom" : "Bibliothèque standard"
+			}
+		]
 	},
 
 	"Java" : {
 		"Logo" : "static/logo/java.png",
-		"Sous-sujet" : {}
+		"Sous-sujet" : []
 	},
 
 	"C" : {
 		"Logo" : "static/logo/c.png",
-		"Sous-sujet" : {}
+		"Sous-sujet" : []
+	},
+
+	"Ruby" : {
+		"Logo" : "static/logo/ruby.png",
+		"Sous-sujet" : []
+	},
+
+	"Bash" : {
+		"Logo" : "static/logo/bash.png",
+		"Sous-sujet" : []
+	},
+
+	"PHP" : {
+		"Logo" : "static/logo/php.png",
+		"Sous-sujet" : []
+	},
+
+	"HTML" : {
+		"Logo" : "static/logo/html.png",
+		"Sous-sujet" : []
+	},
+
+	"Go" : {
+		"Logo" : "static/logo/go.png",
+		"Sous-sujet" : []
+	},
+
+	"Javascript" : {
+		"Logo" : "static/logo/js.png",
+		"Sous-sujet" : []
+	},
+
+	"Swift" : {
+		"Logo" : "static/logo/swift.png",
+		"Sous-sujet" : []
+	},
+
+	"Lua" : {
+		"Logo" : "static/logo/lua.png",
+		"Sous-sujet" : []
+	},
+
+	"C++" : {
+		"Logo" : "static/logo/cplusplus.png",
+		"Sous-sujet" : []
+	},
+
+	"C#" : {
+		"Logo" : "static/logo/csharp.png",
+		"Sous-sujet" : []
 	}
 }
