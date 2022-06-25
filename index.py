@@ -26,8 +26,7 @@ def evaluer(raw_data):
     sujet_obj = get_db().read_sujet_nom(data["Sujet"])
     sous_sujet_index = sujet_obj.get_sous_sujet_index(data["Sous-sujet"])
     note = 0
-    for i, choix in enumerate(data["Reponses"]):
-        
+    for i, choix in enumerate(data["Reponses"]):  
         reponse = sujet_obj.get_quiz_reponse(sous_sujet_index, i)
         if reponse == choix:
             note += 1

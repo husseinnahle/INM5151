@@ -70,10 +70,12 @@ function post(sujet, sous_sujet) {
 }
 
 function setTree() {
-  const position_left = ["-100px", "200px", "-100px", "50px", "200px"];
+  const position_left = ["-150px", "150px", "-200px", "-80px", "220px", "150px", "-200px"];
+  const position_top = ["5px", "80px", "-10px", "110px", "-150px", "0px", "-100px"];
   const nodes = document.getElementsByClassName("node");
   for (var i = 0; i < nodes.length; i++) {
-    nodes[i].style.left = position_left[i%5];
+    nodes[i].style.left = position_left[i%7];
+    nodes[i].style.top = position_top[i%7];
   }
   addArrows(nodes);
   return true;

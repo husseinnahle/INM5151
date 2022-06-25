@@ -10,7 +10,13 @@
       {% for ss in sujet["Information"]["Sous-sujet"] %}
           <div class="node" id={{ ss["Nom"] }}>
             <a class="node__link__wrapper" href="/langages/{{ sujet["Nom"] }}?sous-sujet={{ ss["Nom"] }}">
-              <span class="node__link">{{ ss["Nom"] }}</span>
+              <span class="node__name">{{ ss["Nom"] }}</span>
+              <div class="node__score__wrapper">
+                <img class="node__score" src="{{ url_for('static', filename='icons/fire.png') }}" alt="Fire icon">
+                <img class="node__score" src="{{ url_for('static', filename='icons/empty_fire.png') }}" alt="Fire icon">
+                <img class="node__score" src="{{ url_for('static', filename='icons/empty_fire.png') }}" alt="Fire icon">
+              </div>
+              <span class="node__score__xp"> --/--XP</span>
             </a>
           </div>
       {% endfor %}
