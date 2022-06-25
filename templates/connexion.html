@@ -20,6 +20,7 @@
         }
       }
     </style>
+
     <div class="card mb-3">
       <div class="row g-0 d-flex align-items-center">
         <div class="col-lg-4 d-none d-lg-flex">
@@ -28,38 +29,38 @@
         </div>
         <div class="col-lg-8">
           <div class="card-body py-5 px-md-5">
-            <form id="login" type="post" action="#">
+            {% if username %}
+            <p>Vous êtes connecté. Nom d'utilisateur : {{ username }}.</p>
+            <p><a href="/logout">Se déconnecter</a></p>
+
+            {% else %}
+            <form id="login" method="post" action="login">
+              <h2>Ouvrir une session</h2><br />
               <div class="form-outline mb-4">
-                <label class="form-label" for="user">Nom d'utilisateur</label>
-                <input type="text" id="user" class="form-control" name="user" required />
+                <label class="form-label" for="username">Nom d'utilisateur</label>
+                <input type="text" id="username" class="form-control" name="username" required />
                 <span id="sp-login"></span>
               </div>
 
               <div class="form-outline mb-4">
-                <label class="form-label" for="pass">Mot de passe</label>
-                <input type="password" id="pass" class="form-control" name="pass" required />
+                <label class="form-label" for="password">Mot de passe</label>
+                <input type="password" id="password" class="form-control" name="password" required />
                 <span id="sp-pass"></span>
               </div>
 
               <button input type="submit" class="btn btn-primary btn-block mb-4">Connexion</button>
               <span id="match_pass"></span>
             </form>
+            <p><a href="/inscription">Vous n'êtes pas inscrit ?</a></p>
+            {% endif %}
 
           </div>
         </div>
       </div>
     </div>
+
   </section>
   <br />
 </div>
 
-<!-- <div class="container-fluid p-5 bg-secondary text-white text-center">
-  <h1>Connexion</h1>
-</div>
-
-<div class="container mt-5">
-  <div class="row text-center">
-    <h3>Formulaires de connexion et d'inscription à ajouter</h3>
-  </div>
-</div> -->
 {% endblock %}
