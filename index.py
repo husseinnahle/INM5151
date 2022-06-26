@@ -1,5 +1,3 @@
-import json
-import html
 from flask import Flask
 from flask import render_template
 from flask import request
@@ -7,18 +5,32 @@ from flask import redirect
 from flask import session
 from flask import g
 from flask import jsonify
+from flask import Response
 from .modules.database import Database
+import json
+import html
+import hashlib
+import uuid
+from functools import wraps
 
 app = Flask(__name__)
 app.config['JSON_SORT_KEYS'] = False
 DATA_FILE_PATH = 'static/data.json'
 app.config['SECRET_KEY'] = "clé secrète"  # Temporaire
 
+
 def get_db():
     db = getattr(g, 'database', None)
     if db is None:
         g._database = Database()
     return g._database
+
+
+@app.teardown_appcontext
+def close_connection(exception):
+    db = getattr(g, 'database', None)
+    if db is not None:
+        db.disconnect()
 
 
 def evaluer(raw_data):
@@ -31,19 +43,12 @@ def evaluer(raw_data):
         if reponse == choix:
             note += 1
     resultat = {
-        "Sujet" : data["Sujet"],
-        "Sous-sujet" : data["Sous-sujet"],
-        "Total": len(data["Reponses"]), 
+        "Sujet": data["Sujet"],
+        "Sous-sujet": data["Sous-sujet"],
+        "Total": len(data["Reponses"]),
         "Note": note
     }
     session["Resultat"] = resultat
-
-
-@app.teardown_appcontext
-def close_connection(exception):
-    db = getattr(g, 'database', None)
-    if db is not None:
-        db.disconnect()
 
 
 # Initialiser la base de données
@@ -57,14 +62,10 @@ def init_database():
     file.close()
 
 
-@app.errorhandler(404)
-def not_found_error(error):
-    return render_template('404.html', title="Erreur 404"), 404
-
-
 @app.route('/', methods=["GET"])
 def index():
-    return render_template('index.html', title='Accueil'), 200
+    return render_template(
+        'index.html', title='Accueil', username=get_username()), 200
 
 
 @app.route('/langages', methods=["GET"])
@@ -89,22 +90,38 @@ def langages_sujet(sujet):
 
 @app.route('/connexion', methods=["GET"])
 def connexion():
-    return render_template('connexion.html', title='Connexion'), 200
+    return render_template(
+        'connexion.html', title='Connexion', username=get_username()), 200
 
 
 @app.route('/aide', methods=["GET"])
 def aide():
-    return render_template('aide.html', title='Aide'), 200
+    return render_template(
+        'aide.html', title='Aide', username=get_username()), 200
 
 
 @app.route('/a_propos', methods=["GET"])
 def a_propos():
-    return render_template('a_propos.html', title='À propos'), 200
+    return render_template(
+        'a_propos.html', title='À propos', username=get_username()), 200
+
+
+def get_username():
+    username = None
+    if "id" in session:
+        username = get_db().get_session(session["id"])
+    return username
 
 
 @app.errorhandler(404)
 def page_not_found(e):
-    return render_template('404.html'), 404
+    return render_template('404.html', username=get_username()), 404
+
+
+@app.errorhandler(404)
+def not_found_error(error):
+    return render_template(
+        '404.html', title="Erreur 404", username=get_username()), 404
 
 
 @app.route('/langages/quiz/<sujet_nom>', methods=["GET"])
@@ -130,9 +147,9 @@ def quiz_resultat():
         total = session["Resultat"]["Total"]
         note = session["Resultat"]["Note"]
         session.pop("Resultat")
-        return render_template('resultat.html', sujet=sujet,
-                                sous_sujet=sous_sujet, total=total,
-                                note=note)
+        return render_template(
+            'resultat.html', sujet=sujet, sous_sujet=sous_sujet, total=total,
+            note=note)
     return render_template("404.html", title="Erreur 404"), 404
 
 
@@ -179,3 +196,91 @@ def api_sujets():
     except TypeError:
         return jsonify("Aucun sujet trouvé."), 204
     return jsonify({sujet.get_nom(): sujet.to_json()}), 200
+
+
+@app.route('/inscription', methods=["GET", "POST"])
+def inscription():
+    if request.method == "GET":
+        return render_template("inscription.html")
+    else:
+        username = request.form["username"]
+        password = request.form["password"]
+        email = request.form["email"]
+        # Champs vides
+        if username == "" or password == "" or email == "":
+            return render_template(
+                "inscription.html", error="Tous les champs sont obligatoires.")
+
+        # Validation du formulaire ...
+        salt = uuid.uuid4().hex
+        hashed_password = hashlib.sha512(
+            str(password + salt).encode("utf-8")).hexdigest()
+        db = get_db()
+        db.create_user(username, email, salt, hashed_password)
+
+        return redirect("/confirm_inscription")
+
+
+# Confirmation de compte créé
+@app.route('/confirm_inscription')
+def confirmation_page():
+    return render_template('confirm_inscription.html', username=get_username())
+
+
+@app.route('/login', methods=["POST"])
+def log_user():
+    username = request.form["username"]
+    password = request.form["password"]
+    # Vérifier que les champs ne sont pas vides
+    if username == "" or password == "":
+        # TODO Faire la gestion de l'erreur
+        return redirect("/")
+
+    user = get_db().get_user_login_info(username)
+    if user is None:
+        # TODO Faire la gestion de l'erreur
+        return redirect("/")
+
+    salt = user[0]
+    hashed_password = hashlib.sha512(
+        str(password + salt).encode("utf-8")).hexdigest()
+    if hashed_password == user[1]:
+        # Accès autorisé
+        id_session = uuid.uuid4().hex
+        get_db().save_session(id_session, username)
+        session["id"] = id_session
+        return redirect("/")
+    else:
+        # TODO Faire la gestion de l'erreur
+        return redirect("/")
+
+
+def authentication_required(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        if not is_authenticated(session):
+            return send_unauthorized()
+        return f(*args, **kwargs)
+    return decorated
+
+
+@app.route('/logout')
+@authentication_required
+def logout():
+    id_session = session["id"]
+    session.pop('id', None)
+    get_db().delete_session(id_session)
+    return redirect("/")
+
+
+def is_authenticated(session):
+    # TODO Next-level : Vérifier la session dans la base de données
+    return "id" in session
+
+
+def send_unauthorized():
+    return Response('Could not verify your access level for that URL.\n'
+                    'You have to login with proper credentials.', 401,
+                    {'WWW-Authenticate': 'Basic realm="Login Required"'})
+
+app.secret_key = "a6cd02e9b1104ac0*c2a02391284cb!0"
