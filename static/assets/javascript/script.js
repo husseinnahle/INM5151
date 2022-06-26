@@ -78,6 +78,7 @@ function setTree() {
     nodes[i].style.top = position_top[i%7];
   }
   addArrows(nodes);
+  document.getElementById("tree").style.visibility = "visible";
   return true;
 }
 
