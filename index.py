@@ -85,6 +85,8 @@ def langages_sujet(sujet):
         sous_sujet = sujet.get_sous_sujet(sous_sujet_nom)
     except ValueError as error:
         return render_template("404.html", title="Erreur 404", err=str(error)), 404
+    if sous_sujet_nom == "Introduction":
+        return render_template('sous_sujet_Python_Introduction.html'), 200     
     return render_template('sous_sujet.html', sujet=sujet.to_json()["Nom"], sous_sujet=sous_sujet), 200
 
 

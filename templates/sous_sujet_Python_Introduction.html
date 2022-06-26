@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container-fluid p-5 bg-secondary text-white text-center">
+  <h1>Python - Introduction</h1>
+</div>
+
+<div class="container mt-5">
+ 
+    <h4 class="tutoriel">Comments </h4>
+    <div class="tutoriel">
+      <p class="tutoriel">
+          Comments can be used for differents purposes :
+          <ul class="tutoriel">
+
+              <li>   Explain Python code.</li>
+              <li>   Make the code more readable.</li>
+              <li>   Prevent execution when testing code.</li>
+          </ul>
+      </p>
+    </div>
+      <br>
+      <h6 class="tutoriel"> Exemple</h6> 
+      <div class="exemple">      
+      <p style="color: green"> 
+        #Put a comment here</p> 
+        <p>print("Hello, World!")
+      </p> 
+    </div>
+    <br><br>
+    <h4 class="tutoriel"> Variables</h4>
+    <div class="tutoriel">
+      <p class="tutoriel">
+        Variables are containers for storing data values.<br>
+        There is no command to declare a variable so it is created <br>
+        at the moment you first assign a value to it. It does not need a type <br>
+        and it can change type after they have been set.<br>
+        Finally it is possible to specify the type of a variable with a casting
+      </p>
+    </div>
+      <br>
+      <h6 class="tutoriel"> Exemple :</h6> 
+      <div class="exemple">      
+      <p>
+        x = <span style="color: red;">3</span> <span style="color: green;"> # x is type int</span><br>
+        x = <span style="color: red;">"test"</span> <span style="color: green;"> # x is now str</span><br>
+        y = <span style="color: blue;">str(</span><span style="color: red">4</span><span style="color: blue;">) </span>
+                                                                    <span style="color: green;"> # y will be '4'</span><br>
+        z = <span style="color: blue;">float(</span><span style="color: red">4</span><span style="color: blue;">) </span>
+        <span style="color: green;"> # y will be 4.0</span><br>
+      </p>
+    </div>
+    <br><br>
+    <h4 class="tutoriel"> Data Types</h4>
+    <div class="tutoriel">
+      <p class="tutoriel">
+       
+        <ul style = "list-style-type: none">
+          <li>Text Type:                 <span style="color:red">	str</span>    </li><br>
+          <li>Numeric Types:	           <span style="color:red">	int, float, complex</span></li><br>
+          <li>Sequence Types:            <span style="color:red">	list, tuple, range</span></li><br>
+          <li>Mapping Type:               <span style="color:red">  dict</span>    </li><br>
+          <li>Set Types:                <span style="color:red">	set, frozenset</span>    </li><br>
+          <li>Boolean Type:                 <span style="color:red">	:	bool</span>    </li><br>
+          <li>Binary Types:                 <span style="color:red">	bytes, bytearray, memoryview</span>    </li><br>
+          <li>None Type:                <span style="color:red">	NoneType</span>    </li><br>
+        </ul>
+      </p>
+    </div>
+      <br>
+      <h6 class="tutoriel"> Exemple :</h6> 
+      <p> In python the data type is set when you assign a value to a variable: <br></p>
+      <div class="exemple">      
+      <p>
+       
+
+        x = 3456 <span style="color: green;"> # x is type int</span><br>
+        y = "Hello World" <span style="color: green;"> # y is a str</span><br>
+        z = ["apple","banana","orange"]<span style="color: blue;"># z is a list </span><br>
+
+      </p>
+    </div>
+    <br>
+    <a href="/langages/quiz/Python?sous-sujet=Introduction"><button type="submit">take the quiz</button></a>
+</div>
+{% endblock %}
