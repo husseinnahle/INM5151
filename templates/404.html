@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="text-center">
+    <h3>Page d'erreur - 404</h3>
+</div>
+<div class="alert alert-danger mx-auto text-center" role="alert">The URL you were looking for is not available.
+    {{ err }}
+</div>
+
+<div class="text-center m-5">
+    <form class="tutoriel" action="/{{ url_for('index') }}" method="get" target="_blank">
+        <button type="submit" class="btn btn-primary">Back to the main page</button>
+    </form>
+</div>
+
+<p><a href="{{ url_for('index') }}">Retourner</a></p>
+{% endblock %}

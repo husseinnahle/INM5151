@@ -1,0 +1,125 @@
+{
+    "Python": {
+        "Logo": "static/logo/python.png",
+        "Sous-sujet": [
+            {
+                "Nom": "Introduction",
+                "Tutoriel": {
+                    "Video": "https://www.youtube.com/watch?v=cpPG0bKHYKc",
+                    "Tuteur": "Keven1999"
+                },
+                "Quiz": [
+                    {
+                        "Question": "Quelle est la syntaxe correcte pour afficher \"Hello World\" en Python ?",
+                        "Choix": [
+                            "echo \"Hello World\"",
+                            "p(\"Hello World\")",
+                            "print(\"Hello World\")",
+                            "echo(\"Hello World\")"
+                        ],
+                        "Reponse": "print(\"Hello World\")"
+                    },
+                    {
+                        "Question": "Comment insérer des COMMENTAIRES dans le code Python ?",
+                        "Choix": [
+                            "//COMMENTAIRES",
+                            "/*COMMENTAIRES*/",
+                            "#COMMENTAIRES"
+                        ],
+                        "Reponse": "#COMMENTAIRES"
+                    },
+                    {
+                        "Question": "Lequel n'est PAS un nom de variable légal ?",
+                        "Choix": [
+                            "my-var",
+                            "my_var",
+                            "_myvar",
+                            "Myvar"
+                        ],
+                        "Reponse": "my-var"
+                    },
+                    {
+                        "Question": "Test avec vrai/faux",
+                        "Choix": [
+                            "vrai",
+                            "faux"
+                        ],
+                        "Reponse": "vrai"
+                    }
+                ]
+            },
+            {
+                "Nom": "Syntaxe"
+            },
+            {
+                "Nom": "Mots-clés du langage"
+            },
+            {
+                "Nom": "Types de base"
+            },
+            {
+                "Nom": "Operateurs"
+            },
+            {
+                "Nom": "Erreurs et exceptions"
+            },
+            {
+                "Nom": "Classes"
+            },
+            {
+                "Nom": "Bibliothèque standard"
+            },
+            {
+                "Nom": "Test"
+            }
+        ]
+    },
+    "Java": {
+        "Logo": "static/logo/java.png",
+        "Sous-sujet": []
+    },
+    "C": {
+        "Logo": "static/logo/c.png",
+        "Sous-sujet": []
+    },
+    "Ruby": {
+        "Logo": "static/logo/ruby.png",
+        "Sous-sujet": []
+    },
+    "Bash": {
+        "Logo": "static/logo/bash.png",
+        "Sous-sujet": []
+    },
+    "PHP": {
+        "Logo": "static/logo/php.png",
+        "Sous-sujet": []
+    },
+    "HTML": {
+        "Logo": "static/logo/html.png",
+        "Sous-sujet": []
+    },
+    "Go": {
+        "Logo": "static/logo/go.png",
+        "Sous-sujet": []
+    },
+    "Javascript": {
+        "Logo": "static/logo/js.png",
+        "Sous-sujet": []
+    },
+    "Swift": {
+        "Logo": "static/logo/swift.png",
+        "Sous-sujet": []
+    },
+    "Lua": {
+        "Logo": "static/logo/lua.png",
+        "Sous-sujet": []
+    },
+    "C++": {
+        "Logo": "static/logo/cplusplus.png",
+        "Sous-sujet": []
+    },
+    "C#": {
+        "Logo": "static/logo/csharp.png",
+        "Sous-sujet": []
+    }
+}
