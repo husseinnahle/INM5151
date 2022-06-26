@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container-fluid p-5 bg-secondary text-white text-center">
+  <h1>{{ sous_sujet["Nom"] }}</h1>
+</div>
+
+<div class="container mt-5">
+  <div class="row text-center">
+    <h3>Documentation</h3>
+    <a href="/langages/quiz/{{ sujet }}?sous-sujet={{ sous_sujet['Nom'] }}">Quiz</a>
+  </div>
+</div>
+{% endblock %}

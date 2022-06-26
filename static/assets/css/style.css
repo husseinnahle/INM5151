@@ -1,6 +1,129 @@
+#ezcoding__logo {
+  height: auto;
+  width: 150px;
+}
+
+.cards {
+  margin: 0 auto;
+  max-width: 1000px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(225px, 1fr));
+  grid-auto-rows: auto;
+  gap: 20px;
+  font-family: sans-serif;
+  padding-top: 30px;
+}
+
+.cards > a {
+  text-decoration: none;
+  align-self: center;
+  color: black;
+}
+
+.cards * {
+  box-sizing: border-box;
+}
+
+.card {
+  border: 3px solid hsl(180, 4%, 15%);
+  border-radius: 40px;  
+}
+
+.card__image {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  display: block;
+  border-radius: 40px;  
+}
+
+.card__content {
+  line-height: 1.5;
+  font-size: 0.9em;
+  padding: 15px;
+  background: #F5F5F5;
+  border-radius: 40px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  border-top-width: 5px;
+  border-top: 3px solid hsl(180, 4%, 15%);
+}
+
+.card__content > h4 {
+  margin-top: 0;
+  align-self: center;
+  text-align: center;
+}
+
+
+.tree {
+  position: relative;
+  top:0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  visibility: hidden;
+}
+
+.node {
+  position: relative;
+  top:0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  width: 166px;
+  height: 166px;
+  border-radius: 40px;
+  line-height: 50px;
+  text-align: center;
+  border: 4px solid #19CE95;
+  font-size: 15px;
+  font-weight: bold;
+  color: rgb(0, 0, 0);
+  background: #F5F5F5;
+}
+
+.node__link__wrapper {
+  display:inline-block;
+  width:95%;
+  height:100%;
+}
+
+.node__name {
+  line-height: 1.3;
+  display:inline-block;
+  vertical-align: middle;
+  text-decoration: none;
+  color:rgb(0, 0, 0);
+}
+
+.node__score__wrapper {
+  line-height: 1.3;
+  display:inline-block;
+  vertical-align: bottom;
+  font-size: 0;
+}
+
+.node__score {
+  display:inline-block;
+  vertical-align: bottom;
+  height: 30%;
+  width: 30%;
+  margin: -11px;
+}
+
+.node__score__xp {
+  line-height: 1.3;
+  font-size: small;
+  display:inline-block;
+  text-decoration: none;
+  color:rgb(0, 0, 0);
+}
+
 p.tutoriel{
     text-align: left; 
-
 }
 ul.tutoriel {
     text-align: left;

@@ -6,12 +6,24 @@ class Sujet:
 
     def get_nom(self):
         return self.nom
-
-    def get_quiz_reponse(self, sous_sujet, numero):
-        return self.info["Sous-sujet"][sous_sujet]["Quiz"][numero]["Reponse"]
     
-    def get_quiz_question(self, sous_sujet, numero):
-        quiz = self.info["Sous-sujet"][sous_sujet]["Quiz"]
+    def get_sous_sujet(self, sous_sujet):
+        for item in self.info["Sous-sujet"]:
+            if item["Nom"] == sous_sujet:
+                return item
+        raise ValueError("Le sous-sujet " + sous_sujet + " n'existe pas.")
+
+    def get_sous_sujet_index(self, sous_sujet):
+        for index, item in enumerate(self.info["Sous-sujet"]):
+            if item["Nom"] == sous_sujet:
+                return index
+        raise ValueError("Le sous-sujet " + sous_sujet + " n'existe pas.")
+
+    def get_quiz_reponse(self, sous_sujet_index, numero):
+        return self.info["Sous-sujet"][sous_sujet_index]["Quiz"][numero]["Reponse"]
+    
+    def get_quiz_question(self, sous_sujet_index, numero):
+        quiz = self.info["Sous-sujet"][sous_sujet_index]["Quiz"]
         return {"Question": quiz[numero]["Question"], "Choix": quiz[numero]["Choix"]}
             
     def to_json(self):
