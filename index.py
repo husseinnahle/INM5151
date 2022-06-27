@@ -241,9 +241,10 @@ def inscription():
     email = request.form["email"]
     # Champs vides
     if username == "" or password == "" or email == "":
-        return render_template(
-            "inscription.html", error="Tous les champs sont obligatoires.")
-
+        return render_template("inscription.html", error="Tous les champs sont obligatoires.")
+    elif get_db().get_user_login_info(username) != None:
+        # Username doit etre unique
+        return render_template("inscription.html", error="User already exist.")
     # Validation du formulaire ...
     salt = uuid.uuid4().hex
     hashed_password = hashlib.sha512(
@@ -277,12 +278,10 @@ def log_user():
     salt = user[0]
     hashed_password = hashlib.sha512(str(password + salt).encode("utf-8")).hexdigest()
     if hashed_password != user[1]:
-        # Accès non autorisé
-        # TODO Faire la gestion de l'erreur
-        return redirect("/")
+       return render_template('login.html', erreur="Incorect password.")
     
     id_session = uuid.uuid4().hex
-    get_db().save_session(id_session, username)
+    get_db().save_sessison(id_session, username)
     session["id"] = id_session
     return redirect("/")
 
