@@ -54,7 +54,7 @@ function enregistrerReponse() {
 function post(sujet, sous_sujet) {
   const form = document.createElement('form');
   form.method = "POST";
-  form.action = "/langages/quiz/resultat";
+  form.action = "/languages/quiz/resultat";
   const hiddenField = document.createElement('input');
   hiddenField.type = 'hidden';
   hiddenField.name = "data";

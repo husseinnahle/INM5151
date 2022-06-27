@@ -19,6 +19,7 @@ app.config['JSON_SORT_KEYS'] = False
 DATA_FILE_PATH = 'static/data.json'
 app.secret_key = "a6cd02e9b1104ac0*c2a02391284cb!0"
 
+
 def get_db():
     db = getattr(g, 'database', None)
     if db is None:
@@ -97,38 +98,38 @@ def init_database():
 
 @app.route('/', methods=["GET"])
 def index():
-    return render_template('index.html', title='Accueil', username=get_username()), 200
+    return render_template('index.html', title='Home', username=get_username()), 200
 
 
-@app.route('/aide', methods=["GET"])
-def aide():
+@app.route('/support', methods=["GET"])
+def help():
     return render_template(
-        'aide.html', title='Aide', username=get_username()), 200
+        'support.html', title='Support', username=get_username()), 200
 
 
-@app.route('/a_propos', methods=["GET"])
-def a_propos():
+@app.route('/about', methods=["GET"])
+def about_us():
     return render_template(
-        'a_propos.html', title='À propos', username=get_username()), 200
+        'about_us.html', title='About us', username=get_username()), 200
 
 
-@app.route('/connexion', methods=["GET"])
+@app.route('/login', methods=["GET"])
 def connexion():
     return render_template(
-        'connexion.html', title='Connexion', username=get_username()), 200
+        'login.html', title='Login', username=get_username()), 200
 
 
 # Retourne la page qui contient tous les sujets
-@app.route('/langages', methods=["GET"])
-def langages():
+@app.route('/languages', methods=["GET"])
+def languages():
     sujets = get_db().read_all_sujet()
     sujets_info = [sujet.to_json() for sujet in sujets]
-    return render_template('langages.html', sujets=sujets_info), 200
+    return render_template('languages.html', sujets=sujets_info), 200
 
 
 # Retourne l'arbre de progression d'un sujet
-@app.route('/langages/<sujet>', methods=["GET"])
-def langages_sujet(sujet):
+@app.route('/languages/<sujet>', methods=["GET"])
+def languages_sujet(sujet):
     try:
         sujet = get_db().read_sujet_nom(sujet)  # TypeError
         sous_sujet_nom = request.args.get('sous-sujet')
@@ -148,7 +149,7 @@ def langages_sujet(sujet):
 
 
 # Retourner la premiere question du quiz d'un 'sous_sujet_nom' appartenant a un 'sujet_nom'
-@app.route('/langages/quiz/<sujet_nom>', methods=["GET"])
+@app.route('/languages/quiz/<sujet_nom>', methods=["GET"])
 def quiz(sujet_nom):
     sous_sujet_nom = request.args.get('sous-sujet')
     if sous_sujet_nom is None or len(sous_sujet_nom) == 0:
@@ -169,12 +170,12 @@ def quiz(sujet_nom):
 
 
 # Retouner la page de resultat de quiz
-@app.route('/langages/quiz/resultat', methods=["GET", "POST"])
+@app.route('/languages/quiz/resultat', methods=["GET", "POST"])
 def quiz_resultat():
     if request.method == "POST":
         # Evaluer les reponses
         evaluer(request.form['data'])
-        return redirect('/langages/quiz/resultat')
+        return redirect('/languages/quiz/resultat')
     if "Resultat" in session:
         # Retourner le resultat du quiz
         sujet = session["Resultat"]["Sujet"]
