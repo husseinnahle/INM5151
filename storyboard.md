@@ -3,9 +3,10 @@
 | User Story # | En tant que | Je veux                                                                          | Afin de                                                                | Responsable | Statut  |
 |--------------|-------------|----------------------------------------------------------------------------------|------------------------------------------------------------------------|-------------| ------- |
 | 1            | Application | Lire et écrire les données dans la bd                                            | Initialiser la bd au démarrage                                        | Hussein     | Terminé |
-| 2            | Application | Ecrire les donnees d'un sujet dans un template                                   | Simplifier le travail                                                  | Nicolas     | En cours |
-| 3            | Utilisateur | Avoir une page d'accueil expliquant toutes les fonctionnalités du site web       | Me motiver à aller plus loin                                          | Ruben | En cours |
-
+| 2            | Application | Ecrire les donnees d'un sujet dans un template                                   | Simplifier le travail                                                  | Hussein     | En cours |
+| 3            | Utilisateur | Avoir une page d'accueil expliquant toutes les fonctionnalités du site web       | Me motiver à aller plus loin                                          | Nicolas | En cours |
+| 4            | Utilisateur | Consulter toutes les pages du site web | Naviguer dans le site web sans problèmes | Ruben | Terminé |
+| 5            | Utilisateur | Créer un compte et ouvrir une session | Charger la progression de ma formation | Ruben | En cours |
 <br>
 
 # Backlog
