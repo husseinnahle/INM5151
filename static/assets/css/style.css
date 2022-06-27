@@ -1,6 +1,6 @@
 #ezcoding__logo {
   height: auto;
-  width: 150px;
+  width: 100px;
 }
 
 .cards {
@@ -122,18 +122,14 @@
   color:rgb(0, 0, 0);
 }
 
-p.tutoriel{
+p.tutoriel, ul.tutoriel, h4.tutoriel{
     text-align: left; 
 }
-ul.tutoriel {
-    text-align: left;
-}
+
 h3.tutoriel{
     text-align: center;
 }
-h4.tutoriel{
-    text-align: left;
-}
+
 div.tutoriel{
     background-color: rgba(255, 255, 255, 0.278);
 }

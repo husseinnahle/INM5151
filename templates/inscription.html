@@ -1,11 +1,6 @@
 {% extends "base.html" %}
 
 {% block content %}
-
-{% if error %}
-<p style="color:#F00">Tous les champs sont obligatoires. Veuillez recommencer.</p>
-{% endif %}
-
 <div class="container-fluid">
     <section class=" text-center text-lg-start">
         <style>
@@ -24,7 +19,7 @@
                 }
             }
         </style>
-        <div class="card mb-3">
+        <div class="mb-3">
             <div class="row g-0 d-flex align-items-center">
                 <div class="col-lg-4 d-none d-lg-flex">
                     <img src="/static/logo/connexion.png" alt="inscription EZCoding"
@@ -58,7 +53,9 @@
                             </div>
 
                             <button input type="submit" class="btn btn-primary btn-block mb-4">Créez mon compte</button>
-                            <span id="match_pass"></span>
+                            {% if error %}
+                                <p style="color:#F00">{{error}}</p>
+                            {% endif %}
                         </form>
 
                     </div>

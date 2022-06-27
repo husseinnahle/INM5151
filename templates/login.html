@@ -21,7 +21,7 @@
       }
     </style>
 
-    <div class="card mb-3">
+    <div class="mb-3">
       <div class="row g-0 d-flex align-items-center">
         <div class="col-lg-4 d-none d-lg-flex">
           <img src="/static/logo/connexion.png" alt="image connexion EZCoding"
@@ -34,7 +34,7 @@
             <p><a href="/logout">Se déconnecter</a></p>
 
             {% else %}
-            <form id="login" method="post" action="login">
+            <form id="login" method="post" action="/login">
               <h2>Ouvrir une session</h2><br />
               <div class="form-outline mb-4">
                 <label class="form-label" for="username">Nom d'utilisateur</label>
@@ -47,9 +47,9 @@
                 <input type="password" id="password" class="form-control" name="password" required />
                 <span id="sp-pass"></span>
               </div>
+              <span id="match_pass" style="color:red;">{{erreur}}</span>
 
               <button input type="submit" class="btn btn-primary btn-block mb-4">Connexion</button>
-              <span id="match_pass"></span>
             </form>
             <p><a href="/inscription">Vous n'êtes pas inscrit ?</a></p>
             {% endif %}
