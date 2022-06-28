@@ -2,6 +2,9 @@
 
 {% block content %}
     <h3>404 Page not found</h3>
+    <br><br>
     <div class="alert alert-danger" role="alert">The URL you are trying to access cannot be found. {{ err }}</div>
+    <br><br>
     <a href="{{ url_for('index') }}">Go back</a>
+    <br><br><br>
 {% endblock %}
