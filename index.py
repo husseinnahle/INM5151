@@ -79,7 +79,7 @@ def close_connection(exception):
 @app.before_first_request
 def init_database():
     db = get_db()
-    file = open(DATA_FILE_PATH)
+    file = open(DATA_FILE_PATH, encoding="utf-8")
     data = json.load(file)
     for i, key in enumerate(data):
         db.insert_sujet(i, key, json.dumps(data[key]))
@@ -217,8 +217,7 @@ def api_quiz():
         # Retourner une erreur si le numero n'est pas un entier
         err = "Le numero '" + html.escape(numero_raw) + "' n'existe pas."
         return render_template(
-            "404.html", title="Not found", err=err, username=get_username()),
-        404
+            "404.html", title="Not found", err=err, username=get_username()), 404
     except TypeError:
         # Retourner un statut 204 si aucun sujet n'a été trouvé
         return ('', 204)
@@ -226,14 +225,12 @@ def api_quiz():
         # Retourner une erreur si le nom du sous-sujet n'existe pas
         err = "Le sujet '" + html.escape(nom_sous_sujet) + "' n'existe pas."
         return render_template(
-            "404.html", title="Not found", err=err, username=get_username()),
-        404
+            "404.html", title="Not found", err=err, username=get_username()), 404
     except IndexError:
         # Retourner une erreur si le numero de la question du quiz n'existe pas
         err = "Le numero '" + str(numero) + "' n'existe pas."
         return render_template(
-            "404.html", title="Not found", err=err, username=get_username()),
-        404
+            "404.html", title="Not found", err=err, username=get_username()), 404
     return jsonify(quiz)
 
 
@@ -286,6 +283,13 @@ def inscription():
                 "inscription.html", title='Sign up', error=error,
                 username=get_username())
 
+        user = get_db().get_user_login_info(username)
+        if user:
+            error = "Username already exists. Please enter another one"
+            return render_template(
+                "inscription.html", title='Sign up', error=error,
+                username=get_username())            
+
         salt = uuid.uuid4().hex
         hashed_password = hashlib.sha512(
             str(password + salt).encode("utf-8")).hexdigest()
@@ -306,7 +310,6 @@ def confirmation_page():
 def log_user():
     username = request.form["username"]
     password = request.form["password"]
-    print("username : " + username, flush=True)
     # Vérifier que les champs ne sont pas vides
     if username == "" or password == "":
         return render_template(
@@ -320,7 +323,6 @@ def log_user():
             error='Incorrect username or password'), 200
 
     salt = user[0]
-    print("salt : " + salt, flush=True)
     hashed_password = hashlib.sha512(
         str(password + salt).encode("utf-8")).hexdigest()
     if hashed_password == user[1]:
