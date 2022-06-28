@@ -37,6 +37,9 @@
             <p><a href="/logout">Logout</a></p>
 
             {% else %}
+            {% if error %}
+            <p style="color:#F00">{{error}}.</p>
+            {% endif %}
             <form id="login" method="post" action="/login">
               <h2>Ouvrir une session</h2><br />
               <div class="form-outline mb-4">

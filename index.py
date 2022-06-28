@@ -115,7 +115,9 @@ def a_propos():
 def languages():
     sujets = get_db().read_all_sujet()
     sujets_info = [sujet.to_json() for sujet in sujets]
-    return render_template('languages.html', sujets=sujets_info), 200
+    return render_template(
+        'languages.html', sujets=sujets_info, title='Languages',
+        username=get_username()), 200
 
 
 # Retourne l'arbre de progression d'un sujet
@@ -125,18 +127,26 @@ def languages_sujet(sujet):
         sujet = get_db().read_sujet_nom(sujet)  # TypeError
         sous_sujet_nom = request.args.get('sous-sujet')
         if sous_sujet_nom is None or len(sous_sujet_nom) == 0:
-            return render_template('arbre_de_progression.html', sujet=sujet.to_json()), 200
+            return render_template(
+                'arbre_de_progression.html', sujet=sujet.to_json(),
+                title='Languages', username=get_username()), 200
         sous_sujet = sujet.get_sous_sujet(sous_sujet_nom)  # ValueError
     except TypeError:
         # Retourner un 404 si le sujet n'existe pas
         err = "Le sujet '" + html.escape(sujet) + "' n'existe pas."
-        return render_template("404.html", title="Erreur 404", err=err), 404
+        return render_template(
+            "404.html", title="Not found", err=err,
+            username=get_username()), 404
     except ValueError as error:
         # Retourner un 404 si le sous-sujet n'existe pas
-        return render_template("404.html", title="Erreur 404", err=str(error)), 404
+        return render_template(
+            "404.html", title="Not found", err=str(error),
+            username=get_username()), 404
     if sous_sujet_nom == "Introduction":
-        return render_template('sous_sujet_Python_Introduction.html'), 200     
-    return render_template('sous_sujet.html', sujet=sujet.to_json()["Nom"], sous_sujet=sous_sujet), 200
+        return render_template("sous_sujet_Python_Introduction.html", title="Languages", username=get_username()), 200
+    return render_template(
+        'sous_sujet.html', sujet=sujet.to_json()["Nom"], sous_sujet=sous_sujet,
+        title='Languages', username=get_username()), 200
 
 
 # Retourner la premiere question du quiz d'un 'sous_sujet_nom' appartenant a un 'sujet_nom'
@@ -145,19 +155,29 @@ def quiz(sujet_nom):
     sous_sujet_nom = request.args.get('sous-sujet')
     if sous_sujet_nom is None or len(sous_sujet_nom) == 0:
         err = "Le parametre sous-sujet est obligatoire."
-        return render_template("404.html", title="Erreur 404", err=err), 404 
+        return render_template(
+            "404.html", title="Not found", err=err,
+            username=get_username()), 404
     try:
         sujet = get_db().read_sujet_nom(sujet_nom)  # TypeError
-        sous_sujet_index = sujet.get_sous_sujet_index(sous_sujet_nom)  # ValueError
+        sous_sujet_index = sujet.get_sous_sujet_index(
+            sous_sujet_nom)  # ValueError
     except TypeError:
         # Retourner un 404 si le sujet n'existe pas
         err = "Le sujet '" + html.escape(sujet) + "' n'existe pas."
-        return render_template("404.html", title="Erreur 404", err=err), 404
+        return render_template(
+            "404.html", title="Not found", err=err,
+            username=get_username()), 404
     except ValueError as error:
         # Retourner un 404 si le sous-sujet n'existe pas
-        return render_template("404.html", title="Erreur 404", err=str(error)), 404
+        return render_template(
+            "404.html", title="Not found", err=str(error),
+            username=get_username()), 404
     quiz = sujet.get_quiz_question(sous_sujet_index, 0)
-    return render_template('quiz.html', sujet=sujet_nom, sous_sujet=sous_sujet_nom, question=quiz['Question'], choix=quiz['Choix'])
+    return render_template(
+        'quiz.html', sujet=sujet_nom, sous_sujet=sous_sujet_nom, question=quiz
+        ['Question'], choix=quiz['Choix'], title='Languages',
+        username=get_username())
 
 
 # Retouner la page de resultat de quiz
@@ -174,8 +194,11 @@ def quiz_resultat():
         total = session["Resultat"]["Total"]
         note = session["Resultat"]["Note"]
         session.pop("Resultat")
-        return render_template('resultat.html', sujet=sujet, sous_sujet=sous_sujet, total=total, note=note)
-    return render_template("404.html", title="Erreur 404"), 404
+        return render_template(
+            'resultat.html', sujet=sujet, sous_sujet=sous_sujet, total=total,
+            note=note, title='Languages', username=get_username())
+    return render_template(
+        "404.html", title="Not found", username=get_username()), 404
 
 
 # Retourner un quiz
@@ -193,18 +216,24 @@ def api_quiz():
     except ValueError:
         # Retourner une erreur si le numero n'est pas un entier
         err = "Le numero '" + html.escape(numero_raw) + "' n'existe pas."
-        return render_template("404.html", title="Not found", err=err), 404
+        return render_template(
+            "404.html", title="Not found", err=err, username=get_username()),
+        404
     except TypeError:
         # Retourner un statut 204 si aucun sujet n'a été trouvé
         return ('', 204)
     except KeyError:
         # Retourner une erreur si le nom du sous-sujet n'existe pas
         err = "Le sujet '" + html.escape(nom_sous_sujet) + "' n'existe pas."
-        return render_template("404.html", title="Not found", err=err), 404
+        return render_template(
+            "404.html", title="Not found", err=err, username=get_username()),
+        404
     except IndexError:
         # Retourner une erreur si le numero de la question du quiz n'existe pas
         err = "Le numero '" + str(numero) + "' n'existe pas."
-        return render_template("404.html", title="Not found", err=err), 404
+        return render_template(
+            "404.html", title="Not found", err=err, username=get_username()),
+        404
     return jsonify(quiz)
 
 
@@ -227,7 +256,8 @@ def api_sujets():
 @app.route('/inscription', methods=["GET", "POST"])
 def inscription():
     if request.method == "GET":
-        return render_template("inscription.html", title='Sign up')
+        return render_template(
+            "inscription.html", title='Sign up', username=get_username())
     else:
         username = request.form["username"]
         password = request.form["password"]
@@ -236,21 +266,25 @@ def inscription():
         # Validation du formulaire
         if username == "" or password == "" or email == "":
             error = "Please, fill out all the fields in the form."
-            return render_template("inscription.html", title='Sign up', 
-                error=error)
+            return render_template(
+                "inscription.html", title='Sign up', error=error, username=get_username())
         if len(username) < 6:
             error = "The username should have 6 characters or more"
-            return render_template("inscription.html", title='Sign up', 
-                error=error)
+            return render_template(
+                "inscription.html", title='Sign up', error=error,
+                username=get_username())
         if len(password) < 8:
             error = "The password should have 8 characters or more"
-            return render_template("inscription.html", title='Sign up', 
-                error=error)
+            return render_template(
+                "inscription.html", title='Sign up', error=error,
+                username=get_username())
+
         regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
         if not (re.fullmatch(regex, email)):
             error = "Incorrect e-mail address"
-            return render_template("inscription.html", title='Sign up', 
-                error=error)
+            return render_template(
+                "inscription.html", title='Sign up', error=error,
+                username=get_username())
 
         salt = uuid.uuid4().hex
         hashed_password = hashlib.sha512(
@@ -282,7 +316,7 @@ def log_user():
     user = get_db().get_user_login_info(username)
     if user is None:
         return render_template(
-            'login.html', title='Llogin', username=get_username(),
+            'login.html', title='Login', username=get_username(),
             error='Incorrect username or password'), 200
 
     salt = user[0]
