@@ -2,11 +2,6 @@
 
 {% block content %}
 
-{% if error %}
-<!-- <p style="color:#F00">Tous les champs sont obligatoires. Veuillez recommencer.</p> -->
-<p style="color:#F00">All the fields in this form need to be filled.</p>
-{% endif %}
-
 <div class="container-fluid">
   <section class=" text-center text-lg-start">
     <style>
@@ -33,6 +28,9 @@
         </div>
         <div class="col-lg-8">
           <div class="card-body py-5 px-md-5">
+            {% if error %}
+            <p style="color:#F00">{{error}}.</p>
+            {% endif %}
             <form action="/inscription" id="inscription" method="POST">
               <!-- <h2>Créer un compte</h2> -->
               <h2>Create an account</h2>
