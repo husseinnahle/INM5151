@@ -17,7 +17,7 @@ import re
 app = Flask(__name__)
 app.config['JSON_SORT_KEYS'] = False
 DATA_FILE_PATH = 'static/data.json'
-app.config['SECRET_KEY'] = "clé secrète"  # Temporaire
+app.secret_key = "a6cd02e9b1104ac0*c2a02391284cb!0"
 
 
 def get_db():
@@ -27,11 +27,22 @@ def get_db():
     return g._database
 
 
-@app.teardown_appcontext
-def close_connection(exception):
-    db = getattr(g, 'database', None)
-    if db is not None:
-        db.disconnect()
+def get_username():
+    username = None
+    if "id" in session:
+        username = get_db().get_session(session["id"])
+    return username
+
+
+def is_authenticated(session):
+    # TODO Next-level : Vérifier la session dans la base de données
+    return "id" in session
+
+
+def send_unauthorized():
+    return Response('Could not verify your access level for that URL.\n'
+                    'You have to login with proper credentials.', 401,
+                    {'WWW-Authenticate': 'Basic realm="Login Required"'})
 
 
 def evaluer(raw_data):
@@ -52,6 +63,18 @@ def evaluer(raw_data):
     session["Resultat"] = resultat
 
 
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html', title='Not found', username=get_username()), 404
+
+
+@app.teardown_appcontext
+def close_connection(exception):
+    db = getattr(g, 'database', None)
+    if db is not None:
+        db.disconnect()
+
+
 # Initialiser la base de données
 @app.before_first_request
 def init_database():
@@ -69,100 +92,90 @@ def index():
         'index.html', title='Home', username=get_username()), 200
 
 
-@app.route('/langages', methods=["GET"])
-def langages():
-    sujets = get_db().read_all_sujet()
-    sujets_info = [sujet.to_json() for sujet in sujets]
+@app.route('/login', methods=["GET"])
+def login():
     return render_template(
-        'langages.html', sujets=sujets_info, title='Languages',
-        username=get_username()), 200
+        'login.html', title='Login', username=get_username()), 200
 
 
-@app.route('/langages/<sujet>', methods=["GET"])
-def langages_sujet(sujet):
-    sujet = get_db().read_sujet_nom(sujet)
-    sous_sujet_nom = request.args.get('sous-sujet')
-    if sous_sujet_nom is None or len(sous_sujet_nom) == 0:
-        return render_template(
-            'arbre_de_progression.html', sujet=sujet.to_json(),
-            title='Languages', username=get_username()), 200
-    try:
-        sous_sujet = sujet.get_sous_sujet(sous_sujet_nom)
-    except ValueError as error:
-        return render_template(
-            "404.html", title='Not found', err=str(error), 
-            username=get_username()), 404
-    if sous_sujet_nom == "Introduction":
-        return render_template('sous_sujet_Python_Introduction.html',
-                               title='Languages', username=get_username()), 200
-    return render_template('sous_sujet.html', sujet=sujet.to_json()["Nom"],
-                           sous_sujet=sous_sujet, title='Languages',
-                           username=get_username()), 200
-
-
-@app.route('/connexion', methods=["GET"])
-def connexion():
-    return render_template(
-        'connexion.html', title='Login', username=get_username()), 200
-
-
-@app.route('/aide', methods=["GET"])
+@app.route('/support', methods=["GET"])
 def aide():
     return render_template(
-        'aide.html', title='Help', username=get_username()), 200
+        'support.html', title='Support', username=get_username()), 200
 
 
-@app.route('/a_propos', methods=["GET"])
+@app.route('/about', methods=["GET"])
 def a_propos():
     return render_template(
-        'a_propos.html', title='About', username=get_username()), 200
+        'about_us.html', title='About', username=get_username()), 200
 
 
-def get_username():
-    username = None
-    if "id" in session:
-        username = get_db().get_session(session["id"])
-    return username
+# Retourne la page qui contient tous les sujets
+@app.route('/languages', methods=["GET"])
+def languages():
+    sujets = get_db().read_all_sujet()
+    sujets_info = [sujet.to_json() for sujet in sujets]
+    return render_template('languages.html', sujets=sujets_info), 200
 
 
-@app.errorhandler(404)
-def page_not_found(e):
-    return render_template('404.html', title='Not found', username=get_username()), 404
+# Retourne l'arbre de progression d'un sujet
+@app.route('/languages/<sujet>', methods=["GET"])
+def languages_sujet(sujet):
+    try:
+        sujet = get_db().read_sujet_nom(sujet)  # TypeError
+        sous_sujet_nom = request.args.get('sous-sujet')
+        if sous_sujet_nom is None or len(sous_sujet_nom) == 0:
+            return render_template('arbre_de_progression.html', sujet=sujet.to_json()), 200
+        sous_sujet = sujet.get_sous_sujet(sous_sujet_nom)  # ValueError
+    except TypeError:
+        # Retourner un 404 si le sujet n'existe pas
+        err = "Le sujet '" + html.escape(sujet) + "' n'existe pas."
+        return render_template("404.html", title="Erreur 404", err=err), 404
+    except ValueError as error:
+        # Retourner un 404 si le sous-sujet n'existe pas
+        return render_template("404.html", title="Erreur 404", err=str(error)), 404
+    if sous_sujet_nom == "Introduction":
+        return render_template('sous_sujet_Python_Introduction.html'), 200     
+    return render_template('sous_sujet.html', sujet=sujet.to_json()["Nom"], sous_sujet=sous_sujet), 200
 
 
-@app.errorhandler(404)
-def not_found_error(error):
-    return render_template(
-        '404.html', title='Not found', username=get_username()), 404
-
-
-@app.route('/langages/quiz/<sujet_nom>', methods=["GET"])
+# Retourner la premiere question du quiz d'un 'sous_sujet_nom' appartenant a un 'sujet_nom'
+@app.route('/languages/quiz/<sujet_nom>', methods=["GET"])
 def quiz(sujet_nom):
     sous_sujet_nom = request.args.get('sous-sujet')
     if sous_sujet_nom is None or len(sous_sujet_nom) == 0:
         err = "Le parametre sous-sujet est obligatoire."
-        return render_template("404.html", title="Not found", err=err, username=get_username()), 404
-    sujet = get_db().read_sujet_nom(sujet_nom)
-    sous_sujet_index = sujet.get_sous_sujet_index(sous_sujet_nom)
+        return render_template("404.html", title="Erreur 404", err=err), 404 
+    try:
+        sujet = get_db().read_sujet_nom(sujet_nom)  # TypeError
+        sous_sujet_index = sujet.get_sous_sujet_index(sous_sujet_nom)  # ValueError
+    except TypeError:
+        # Retourner un 404 si le sujet n'existe pas
+        err = "Le sujet '" + html.escape(sujet) + "' n'existe pas."
+        return render_template("404.html", title="Erreur 404", err=err), 404
+    except ValueError as error:
+        # Retourner un 404 si le sous-sujet n'existe pas
+        return render_template("404.html", title="Erreur 404", err=str(error)), 404
     quiz = sujet.get_quiz_question(sous_sujet_index, 0)
-    return render_template('quiz.html', sujet=sujet_nom, sous_sujet=sous_sujet_nom, question=quiz['Question'], choix=quiz['Choix'], title='Quiz', username=get_username())
+    return render_template('quiz.html', sujet=sujet_nom, sous_sujet=sous_sujet_nom, question=quiz['Question'], choix=quiz['Choix'])
 
 
-@app.route('/langages/quiz/resultat', methods=["GET", "POST"])
+# Retouner la page de resultat de quiz
+@app.route('/languages/quiz/resultat', methods=["GET", "POST"])
 def quiz_resultat():
     if request.method == "POST":
+        # Evaluer les reponses
         evaluer(request.form['data'])
-        return redirect('/langages/quiz/resultat')
+        return redirect('/languages/quiz/resultat')
     if "Resultat" in session:
+        # Retourner le resultat du quiz
         sujet = session["Resultat"]["Sujet"]
         sous_sujet = session["Resultat"]["Sous-sujet"]
         total = session["Resultat"]["Total"]
         note = session["Resultat"]["Note"]
         session.pop("Resultat")
-        return render_template(
-            'resultat.html', sujet=sujet, sous_sujet=sous_sujet, total=total,
-            note=note, title="Quiz", username=get_username())
-    return render_template("404.html", title="Not found", username=get_username()), 404
+        return render_template('resultat.html', sujet=sujet, sous_sujet=sous_sujet, total=total, note=note)
+    return render_template("404.html", title="Erreur 404"), 404
 
 
 # Retourner un quiz
@@ -263,13 +276,13 @@ def log_user():
     # Vérifier que les champs ne sont pas vides
     if username == "" or password == "":
         return render_template(
-            'connexion.html', title='Connexion', username=get_username(),
+            'login.html', title='Login', username=get_username(),
             error='Please, fill out all the fields in the form'), 200
 
     user = get_db().get_user_login_info(username)
     if user is None:
         return render_template(
-            'connexion.html', title='Connexion', username=get_username(),
+            'login.html', title='Llogin', username=get_username(),
             error='Incorrect username or password'), 200
 
     salt = user[0]
@@ -284,7 +297,7 @@ def log_user():
         return redirect("/")
     else:
         return render_template(
-            'connexion.html', title='Connexion', username=get_username(),
+            'login.html', title='Login', username=get_username(),
             error='Incorrect username or password'), 200
 
 
@@ -304,17 +317,3 @@ def logout():
     session.pop('id', None)
     get_db().delete_session(id_session)
     return redirect("/")
-
-
-def is_authenticated(session):
-    # TODO Next-level : Vérifier la session dans la base de données
-    return "id" in session
-
-
-def send_unauthorized():
-    return Response('Could not verify your access level for that URL.\n'
-                    'You have to login with proper credentials.', 401,
-                    {'WWW-Authenticate': 'Basic realm="Login Required"'})
-
-
-app.secret_key = "a6cd02e9b1104ac0*c2a02391284cb!0"

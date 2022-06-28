@@ -2,6 +2,8 @@
 
 {% block content %}
   <h1 >{{ sujet }} - {{sous_sujet}}</h1>
-  <h3>Resultat : {{ note }} / {{ total }}</h3>
-  <p><a href="/langages/{{sujet}}?sous-sujet={{sous_sujet}}">Retourner</a></p>
+  <h3>Results : {{ note }} / {{ total }}</h3>
+  <p>
+    <a href="/languages/{{sujet}}?sous-sujet={{sous_sujet}}">Return</a>
+  </p>
 {% endblock %}
