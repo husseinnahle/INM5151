@@ -286,6 +286,13 @@ def inscription():
                 "inscription.html", title='Sign up', error=error,
                 username=get_username())
 
+        user = get_db().get_user_login_info(username)
+        if user:
+            error = "Username already exists. Please enter another one"
+            return render_template(
+                "inscription.html", title='Sign up', error=error,
+                username=get_username())            
+
         salt = uuid.uuid4().hex
         hashed_password = hashlib.sha512(
             str(password + salt).encode("utf-8")).hexdigest()
@@ -306,7 +313,6 @@ def confirmation_page():
 def log_user():
     username = request.form["username"]
     password = request.form["password"]
-    print("username : " + username, flush=True)
     # Vérifier que les champs ne sont pas vides
     if username == "" or password == "":
         return render_template(
@@ -320,7 +326,6 @@ def log_user():
             error='Incorrect username or password'), 200
 
     salt = user[0]
-    print("salt : " + salt, flush=True)
     hashed_password = hashlib.sha512(
         str(password + salt).encode("utf-8")).hexdigest()
     if hashed_password == user[1]:
