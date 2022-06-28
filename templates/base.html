@@ -45,12 +45,29 @@
             {% block content %}{% endblock %}
         </div>
         <br />
+        <footer>
+            <div class="footer-content">
+                <h3>About us</h3>
+                <p>blal Lorem ipsyum dolor site, amet consctetur adipisicing elit. Illo iste corrupti doloribus odio
+                    sed!</p>
+                <a class="navbar-brand" href="/" id="ezcoding__link">
+                    <img src="{{ url_for('static',filename='logo/ezcoding.png') }}" alt="EZCoding"
+                        id="ezcoding__logo"></a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#collapsibleNavbar">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
+            <div class="footer-bottom">
+                <p>copyright &copy; 2022 EZCoding.</p>
 
-        <footer class="bg-light text-center text-lg-start">
+            </div>
+        </footer>
+        <!--<footer class="bg-light text-center text-lg-start">
             <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
                 © 2022 Copyright:
                 <a class="text-dark" href="/">ezcoding.com</a>
             </div>
-        </footer>
+        </footer>-->
     </body>
 </html>
