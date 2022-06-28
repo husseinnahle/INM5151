@@ -30,28 +30,37 @@
         <div class="col-lg-8">
           <div class="card-body py-5 px-md-5">
             {% if username %}
-            <p>Vous êtes connecté. Nom d'utilisateur : {{ username }}.</p>
-            <p><a href="/logout">Se déconnecter</a></p>
+            <!-- <p>Vous êtes connecté. Nom d'utilisateur : {{ username }}.</p> -->
+            <p>You are logged in. Username : {{ username }}.</p>
+
+            <!-- <p><a href="/logout">Se déconnecter</a></p> -->
+            <p><a href="/logout">Logout</a></p>
 
             {% else %}
+            {% if error %}
+            <p style="color:#F00">{{error}}.</p>
+            {% endif %}
             <form id="login" method="post" action="/login">
               <h2>Ouvrir une session</h2><br />
               <div class="form-outline mb-4">
-                <label class="form-label" for="username">Nom d'utilisateur</label>
+                <!-- <label class="form-label" for="username">Nom d'utilisateur</label> -->
+                <label class="form-label" for="username">Username</label>
                 <input type="text" id="username" class="form-control" name="username" required />
                 <span id="sp-login"></span>
               </div>
 
               <div class="form-outline mb-4">
-                <label class="form-label" for="password">Mot de passe</label>
+                <!-- <label class="form-label" for="password">Mot de passe</label> -->
+                <label class="form-label" for="password">Password</label>
                 <input type="password" id="password" class="form-control" name="password" required />
                 <span id="sp-pass"></span>
               </div>
               <span id="match_pass" style="color:red;">{{erreur}}</span>
 
-              <button input type="submit" class="btn btn-primary btn-block mb-4">Connexion</button>
+              <button input type="submit" class="btn btn-primary btn-block mb-4">Login</button>
             </form>
-            <p><a href="/inscription">Vous n'êtes pas inscrit ?</a></p>
+            <!-- <p><a href="/inscription">Vous n'êtes pas inscrit ?</a></p> -->
+            <p><a href="/inscription">Don't have an account?</a></p>
             {% endif %}
 
           </div>
