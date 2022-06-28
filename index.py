@@ -217,8 +217,7 @@ def api_quiz():
         # Retourner une erreur si le numero n'est pas un entier
         err = "Le numero '" + html.escape(numero_raw) + "' n'existe pas."
         return render_template(
-            "404.html", title="Not found", err=err, username=get_username()),
-        404
+            "404.html", title="Not found", err=err, username=get_username()), 404
     except TypeError:
         # Retourner un statut 204 si aucun sujet n'a été trouvé
         return ('', 204)
@@ -226,14 +225,12 @@ def api_quiz():
         # Retourner une erreur si le nom du sous-sujet n'existe pas
         err = "Le sujet '" + html.escape(nom_sous_sujet) + "' n'existe pas."
         return render_template(
-            "404.html", title="Not found", err=err, username=get_username()),
-        404
+            "404.html", title="Not found", err=err, username=get_username()), 404
     except IndexError:
         # Retourner une erreur si le numero de la question du quiz n'existe pas
         err = "Le numero '" + str(numero) + "' n'existe pas."
         return render_template(
-            "404.html", title="Not found", err=err, username=get_username()),
-        404
+            "404.html", title="Not found", err=err, username=get_username()), 404
     return jsonify(quiz)
 
 
