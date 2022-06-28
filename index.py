@@ -79,7 +79,7 @@ def close_connection(exception):
 @app.before_first_request
 def init_database():
     db = get_db()
-    file = open(DATA_FILE_PATH)
+    file = open(DATA_FILE_PATH, encoding="utf-8")
     data = json.load(file)
     for i, key in enumerate(data):
         db.insert_sujet(i, key, json.dumps(data[key]))
