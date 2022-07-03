@@ -1,13 +1,56 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <div class="container-fluid p-5 bg-secondary text-white text-center">
-    <h1>Support</h1>
-  </div>
-  <div class="container mt-5">
-    <div class="row text-center">
-      
+
+<div class="container-fluid">
+  <section class=" text-center text-lg-start">
+
+    <div class="mb-3">
+      <div class="row g-0 d-flex align-items-center">
+        <div class="col-lg-4 d-none d-lg-flex">
+          <img src="/static/logo/connexion.png" alt="inscription EZCoding" class="w-100 rounded-t-5 rounded-tr-lg-0 
+  rounded-bl-lg-5" />
+        </div>
+        <div class="col-lg-8">
+          <div class="card-body py-5 px-md-5">
+            {% if error %}
+            <p style="color:#F00">{{error}}.</p>
+            {% endif %}
+            <form action="/support" id="inscription" method="POST">
+              <h2>Contact us</h2>
+              <br />
+              <div class="form-outline mb-4">
+                <label class="form-label" for="name">Name</label>
+                <input type="text" id="name" class="form-control" name="name" maxlength="40" required />
+                <span id="sp-login"></span>
+              </div>
+
+              <div class="form-outline mb-4">
+                <label class="form-label" for="email">E-mail
+                </label>
+                <input type="text" id="email" class="form-control" name="email" maxlength="40" required />
+                <span id="sp-login"></span>
+              </div>
+
+              <div class="form-outline mb-4">
+                <label class="form-label" for="message">Message</label>
+                <textarea id="message" class="form-control" name="message" maxlength="250" rows="4" required></textarea>
+                <span id="sp-pass"></span>
+              </div>
+
+              <button input type="submit" class="btn 
+  btn-primary btn-block mb-4">Send message
+              </button>
+              <span id="match_pass"></span>
+            </form>
+          </div>
+        </div>
+      </div>
     </div>
-    <br><br><br><br>
-  </div>
+  </section>
+  <br />
+</div>
+
+
+
 {% endblock %}
