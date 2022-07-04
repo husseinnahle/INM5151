@@ -1,7 +1,7 @@
 import sqlite3
 import json
 from .sujet import Sujet
-
+from .user import User
 
 class Database:
     def __init__(self):
@@ -43,22 +43,22 @@ class Database:
         sujet = cursor.fetchone()
         return Sujet(sujet[0], sujet[1], json.loads(sujet[2]))
 
-    def create_user(self, username, email, salt, hashed_password):
+    # Inserer un utilisateur
+    def insert_user(self, user):
         connection = self.get_connection()
-        connection.execute(("insert into users(utilisateur, email, salt, hash)"
-                            " values(?, ?, ?, ?)"), (username, email, salt,
-                                                     hashed_password))
+        connection.execute('insert into user(username, email, salt, hash)'
+                           'values(?, ?, ?, ?)', 
+                           (user.name, user.email, user.salt, user.hash))
         connection.commit()
-
-    def get_user_login_info(self, username):
+    
+    # Rechercher et retourner un utilisateur selon 'username'
+    def read_user_username(self, username):
         cursor = self.get_connection().cursor()
-        cursor.execute(("select salt, hash from users where utilisateur=?"),
-                       (username,))
+        cursor.execute('select * from user where username=?', (username,))
         user = cursor.fetchone()
         if user is None:
             return None
-        else:
-            return user[0], user[1]
+        return User(user[0], user[1], user[2], user[3], user[4])
 
     def save_session(self, id_session, username):
         connection = self.get_connection()

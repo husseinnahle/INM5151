@@ -4,9 +4,9 @@ create table sujet (
   informations text
 );
 
-create table users (
+create table user (
   id integer primary key,
-  utilisateur varchar(25),
+  username varchar(25) unique,
   email varchar(100),
   salt varchar(32),
   hash varchar(128)
