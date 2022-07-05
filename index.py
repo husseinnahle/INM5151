@@ -6,19 +6,18 @@ from flask import session
 from flask import g
 from flask import jsonify
 from flask import Response
+from flask import make_response
 from .modules.database import Database
+from .modules.user import create_user
 import json
 import html
 import hashlib
-import uuid
 from functools import wraps
-import re
 
 app = Flask(__name__)
 app.config['JSON_SORT_KEYS'] = False
-DATA_FILE_PATH = 'static/data.json'
 app.secret_key = "a6cd02e9b1104ac0*c2a02391284cb!0"
-
+DATA_FILE_PATH = 'static/data.json'
 
 def get_db():
     db = getattr(g, 'database', None)
@@ -28,39 +27,13 @@ def get_db():
 
 
 def get_username():
-    username = None
-    if "id" in session:
-        username = get_db().get_session(session["id"])
-    return username
+    if is_authenticated():
+        return session["user"]["name"]
+    return None
 
 
-def is_authenticated(session):
-    # TODO Next-level : Vérifier la session dans la base de données
-    return "id" in session
-
-
-def send_unauthorized():
-    return Response('Could not verify your access level for that URL.\n'
-                    'You have to login with proper credentials.', 401,
-                    {'WWW-Authenticate': 'Basic realm="Login Required"'})
-
-
-def evaluer(raw_data):
-    data = json.loads(raw_data)
-    sujet_obj = get_db().read_sujet_nom(data["Sujet"])
-    sous_sujet_index = sujet_obj.get_sous_sujet_index(data["Sous-sujet"])
-    note = 0
-    for i, choix in enumerate(data["Reponses"]):
-        reponse = sujet_obj.get_quiz_reponse(sous_sujet_index, i)
-        if reponse == choix:
-            note += 1
-    resultat = {
-        "Sujet": data["Sujet"],
-        "Sous-sujet": data["Sous-sujet"],
-        "Total": len(data["Reponses"]),
-        "Note": note
-    }
-    session["Resultat"] = resultat
+def is_authenticated():
+    return "user" in session and get_db().read_user_username(session["user"]["name"])
 
 
 @app.errorhandler(404)
@@ -92,12 +65,6 @@ def index():
         'index.html', title='Home', username=get_username()), 200
 
 
-@app.route('/login', methods=["GET"])
-def login():
-    return render_template(
-        'login.html', title='Login', username=get_username()), 200
-
-
 @app.route('/support', methods=["GET"])
 def aide():
     return render_template(
@@ -109,6 +76,102 @@ def a_propos():
     return render_template(
         'about_us.html', title='About', username=get_username()), 200
 
+
+# ================================  register  ================================
+
+# Retourner le formulaire de création de comptes utilisateur
+@app.route('/register', methods=["GET"])
+def register_get():
+    if is_authenticated():
+        return render_template("404.html", title="Not found", username=get_username()), 404
+    error = session["error"] and session.pop("error") if "error" in session else None
+    return render_template("register.html", title='Sign up', error=error, username=None)
+
+
+# Valider les données et créer un nouveau compte utilisateur
+@app.route('/register', methods=["POST"])
+def register_post():
+    try: 
+        db = get_db()
+        username = request.form["username"]
+        password = request.form["password"]
+        email = request.form["email"]
+        if db.read_user_username(username):
+            # Nom utilisateur invalide
+            session["error"] = "Username already exists. Please enter another one"
+            return redirect('/register')
+        user = create_user(username, email, password)  # ValueError        
+        db.insert_user(user)
+    except ValueError as error:
+        session["error"] = str(error) 
+        return redirect("/register")
+    session["message"] = "Account successfully created."
+    return redirect("/login")
+
+
+# ==================================  login  =================================
+
+# Retourner le formulaire d'authentification
+@app.route('/login', methods=["GET"])
+def login_get():
+    message = session['message'] and session.pop("message") if "message" in session else None
+    error = session["error"] and session.pop("error") if "error" in session else None
+    return render_template('login.html', title='Login', error=error, message=message, username=get_username()), 200
+
+
+# Valider les données et créer une nouvelle session
+@app.route('/login', methods=["POST"])
+def login_post():
+    username = request.form["username"]
+    password = request.form["password"]
+    user = is_authorized(username, password)
+    if user:
+        # Accès autorisé
+        session["user"] = user
+        return redirect("/")
+    return redirect('/login')
+
+
+def is_authorized(username, password):
+    if len(username) == 0 or len(password) == 0:
+        # Champs vide
+        session['error'] = 'Please, fill out all the fields'
+        return None
+    db = get_db()
+    user = db.read_user_username(username)
+    if user is None:
+        # Nom utilisateur inexistant
+        session['error'] = 'Incorrect username or password'
+        return None
+    hash = hashlib.sha512(str(password + user.salt).encode("utf-8")).hexdigest()
+    if user.hash != hash:
+        # Mot de passe incorrect
+        session['error'] = 'Incorrect password'
+        return None        
+    return user.session()
+
+
+# =================================  logout  =================================
+
+def authentication_required(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        if not is_authenticated():
+            return Response('Could not verify your access level for that URL.\n'
+                            'You have to login with proper credentials.', 401,
+                            {'WWW-Authenticate': 'Basic realm="Login Required"'})        
+        return f(*args, **kwargs)
+    return decorated
+
+
+@app.route('/logout')
+@authentication_required
+def logout():
+    session.pop('user')
+    return redirect("/")
+
+
+# ===============================  languages  ================================
 
 # Retourne la page qui contient tous les sujets
 @app.route('/languages', methods=["GET"])
@@ -201,6 +264,26 @@ def quiz_resultat():
         "404.html", title="Not found", username=get_username()), 404
 
 
+def evaluer(raw_data):
+    data = json.loads(raw_data)
+    sujet_obj = get_db().read_sujet_nom(data["Sujet"])
+    sous_sujet_index = sujet_obj.get_sous_sujet_index(data["Sous-sujet"])
+    note = 0
+    for i, choix in enumerate(data["Reponses"]):
+        reponse = sujet_obj.get_quiz_reponse(sous_sujet_index, i)
+        if reponse == choix:
+            note += 1
+    resultat = {
+        "Sujet": data["Sujet"],
+        "Sous-sujet": data["Sous-sujet"],
+        "Total": len(data["Reponses"]),
+        "Note": note
+    }
+    session["Resultat"] = resultat
+    
+
+# ==================================   api  ==================================
+
 # Retourner un quiz
 @app.route('/api/quiz', methods=["GET"])
 def api_quiz():
@@ -248,108 +331,3 @@ def api_sujets():
     except TypeError:
         return jsonify("Aucun sujet trouvé."), 204
     return jsonify({sujet.get_nom(): sujet.to_json()}), 200
-
-
-@app.route('/inscription', methods=["GET", "POST"])
-def inscription():
-    if request.method == "GET":
-        return render_template(
-            "inscription.html", title='Sign up', username=get_username())
-    else:
-        username = request.form["username"]
-        password = request.form["password"]
-        email = request.form["email"]
-
-        # Validation du formulaire
-        if username == "" or password == "" or email == "":
-            error = "Please, fill out all the fields in the form."
-            return render_template(
-                "inscription.html", title='Sign up', error=error, username=get_username())
-        if len(username) < 6:
-            error = "The username should have 6 characters or more"
-            return render_template(
-                "inscription.html", title='Sign up', error=error,
-                username=get_username())
-        if len(password) < 8:
-            error = "The password should have 8 characters or more"
-            return render_template(
-                "inscription.html", title='Sign up', error=error,
-                username=get_username())
-
-        regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
-        if not (re.fullmatch(regex, email)):
-            error = "Incorrect e-mail address"
-            return render_template(
-                "inscription.html", title='Sign up', error=error,
-                username=get_username())
-
-        user = get_db().get_user_login_info(username)
-        if user:
-            error = "Username already exists. Please enter another one"
-            return render_template(
-                "inscription.html", title='Sign up', error=error,
-                username=get_username())            
-
-        salt = uuid.uuid4().hex
-        hashed_password = hashlib.sha512(
-            str(password + salt).encode("utf-8")).hexdigest()
-        db = get_db()
-        db.create_user(username, email, salt, hashed_password)
-
-        return redirect("/confirm_inscription")
-
-
-# Confirmation de compte créé
-@app.route('/confirm_inscription')
-def confirmation_page():
-    return render_template('confirm_inscription.html', title="Confirmation",
-                           username=get_username())
-
-
-@app.route('/login', methods=["POST"])
-def log_user():
-    username = request.form["username"]
-    password = request.form["password"]
-    # Vérifier que les champs ne sont pas vides
-    if username == "" or password == "":
-        return render_template(
-            'login.html', title='Login', username=get_username(),
-            error='Please, fill out all the fields in the form'), 200
-
-    user = get_db().get_user_login_info(username)
-    if user is None:
-        return render_template(
-            'login.html', title='Login', username=get_username(),
-            error='Incorrect username or password'), 200
-
-    salt = user[0]
-    hashed_password = hashlib.sha512(
-        str(password + salt).encode("utf-8")).hexdigest()
-    if hashed_password == user[1]:
-        # Accès autorisé
-        id_session = uuid.uuid4().hex
-        get_db().save_session(id_session, username)
-        session["id"] = id_session
-        return redirect("/")
-    else:
-        return render_template(
-            'login.html', title='Login', username=get_username(),
-            error='Incorrect username or password'), 200
-
-
-def authentication_required(f):
-    @wraps(f)
-    def decorated(*args, **kwargs):
-        if not is_authenticated(session):
-            return send_unauthorized()
-        return f(*args, **kwargs)
-    return decorated
-
-
-@app.route('/logout')
-@authentication_required
-def logout():
-    id_session = session["id"]
-    session.pop('id', None)
-    get_db().delete_session(id_session)
-    return redirect("/")
