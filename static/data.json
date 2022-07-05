@@ -32,13 +32,13 @@
 				]
 			},
 			{
-				"Nom" : "Syntaxe"
+				"Nom" : "variables"
 			},
 			{
 				"Nom" : "Mots-clés du langage"
 			},
 			{
-				"Nom" : "Types de base"
+				"Nom" : "ensemble de données"
 			},
 			{
 				"Nom" : "Operateurs"
