@@ -6,6 +6,7 @@ from flask import session
 from flask import g
 from flask import jsonify
 from flask import Response
+from flask import make_response
 from .modules.database import Database
 from .modules.user import create_user
 import json
@@ -26,61 +27,13 @@ def get_db():
 
 
 def get_username():
-    if "user" in session:
+    if is_authenticated():
         return session["user"]["name"]
     return None
 
 
-def is_authenticated(session):
-    return "user" in session
-
-
-def is_authorized(username, password):
-    if len(username) == 0 or len(password) == 0:
-        # Champs vide
-        session['error'] = 'Please, fill out all the fields'
-        return None
-    db = get_db()
-    user = db.read_user_username(username)
-    if user is None:
-        # Nom utilisateur inexistant
-        session['error'] = 'Incorrect username or password'
-        return None
-    hash = hashlib.sha512(str(password + user.salt).encode("utf-8")).hexdigest()
-    if user.hash != hash:
-        # Mot de passe incorrect
-        session['error'] = 'Incorrect password'
-        return None        
-    return user.session()
-
-
-def authentication_required(f):
-    @wraps(f)
-    def decorated(*args, **kwargs):
-        if not is_authenticated(session):
-            return Response('Could not verify your access level for that URL.\n'
-                            'You have to login with proper credentials.', 401,
-                            {'WWW-Authenticate': 'Basic realm="Login Required"'})        
-        return f(*args, **kwargs)
-    return decorated
-
-
-def evaluer(raw_data):
-    data = json.loads(raw_data)
-    sujet_obj = get_db().read_sujet_nom(data["Sujet"])
-    sous_sujet_index = sujet_obj.get_sous_sujet_index(data["Sous-sujet"])
-    note = 0
-    for i, choix in enumerate(data["Reponses"]):
-        reponse = sujet_obj.get_quiz_reponse(sous_sujet_index, i)
-        if reponse == choix:
-            note += 1
-    resultat = {
-        "Sujet": data["Sujet"],
-        "Sous-sujet": data["Sous-sujet"],
-        "Total": len(data["Reponses"]),
-        "Note": note
-    }
-    session["Resultat"] = resultat
+def is_authenticated():
+    return "user" in session and get_db().read_user_username(session["user"]["name"])
 
 
 @app.errorhandler(404)
@@ -122,20 +75,15 @@ def aide():
 def a_propos():
     return render_template(
         'about_us.html', title='About', username=get_username()), 200
-    
-
-@app.route('/logout')
-@authentication_required
-def logout():
-    session.pop('user')
-    return redirect("/")
 
 
-# =================================  sign up  ================================
+# ================================  register  ================================
 
 # Retourner le formulaire de création de comptes utilisateur
 @app.route('/register', methods=["GET"])
 def register_get():
+    if is_authenticated():
+        return render_template("404.html", title="Not found", username=get_username()), 404
     error = session["error"] and session.pop("error") if "error" in session else None
     return render_template("register.html", title='Sign up', error=error, username=None)
 
@@ -161,7 +109,7 @@ def register_post():
     return redirect("/login")
 
 
-# =================================  sign in  ================================
+# ==================================  login  =================================
 
 # Retourner le formulaire d'authentification
 @app.route('/login', methods=["GET"])
@@ -182,6 +130,45 @@ def login_post():
         session["user"] = user
         return redirect("/")
     return redirect('/login')
+
+
+def is_authorized(username, password):
+    if len(username) == 0 or len(password) == 0:
+        # Champs vide
+        session['error'] = 'Please, fill out all the fields'
+        return None
+    db = get_db()
+    user = db.read_user_username(username)
+    if user is None:
+        # Nom utilisateur inexistant
+        session['error'] = 'Incorrect username or password'
+        return None
+    hash = hashlib.sha512(str(password + user.salt).encode("utf-8")).hexdigest()
+    if user.hash != hash:
+        # Mot de passe incorrect
+        session['error'] = 'Incorrect password'
+        return None        
+    return user.session()
+
+
+# =================================  logout  =================================
+
+def authentication_required(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        if not is_authenticated():
+            return Response('Could not verify your access level for that URL.\n'
+                            'You have to login with proper credentials.', 401,
+                            {'WWW-Authenticate': 'Basic realm="Login Required"'})        
+        return f(*args, **kwargs)
+    return decorated
+
+
+@app.route('/logout')
+@authentication_required
+def logout():
+    session.pop('user')
+    return redirect("/")
 
 
 # ===============================  languages  ================================
@@ -276,6 +263,24 @@ def quiz_resultat():
     return render_template(
         "404.html", title="Not found", username=get_username()), 404
 
+
+def evaluer(raw_data):
+    data = json.loads(raw_data)
+    sujet_obj = get_db().read_sujet_nom(data["Sujet"])
+    sous_sujet_index = sujet_obj.get_sous_sujet_index(data["Sous-sujet"])
+    note = 0
+    for i, choix in enumerate(data["Reponses"]):
+        reponse = sujet_obj.get_quiz_reponse(sous_sujet_index, i)
+        if reponse == choix:
+            note += 1
+    resultat = {
+        "Sujet": data["Sujet"],
+        "Sous-sujet": data["Sous-sujet"],
+        "Total": len(data["Reponses"]),
+        "Note": note
+    }
+    session["Resultat"] = resultat
+    
 
 # ==================================   api  ==================================
 
