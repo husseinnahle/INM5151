@@ -44,6 +44,10 @@
               </div>
               <span id="match_pass" style="color:red;">{{erreur}}</span>
 
+              <div class="form-outline mb-4">
+                <div class="h-captcha" data-sitekey="your_site_key"></div>
+              </div>
+
               <button input type="submit" class="btn btn-primary btn-block mb-4">Login</button>
             </form>
             <!-- <p><a href="/inscription">Vous n'êtes pas inscrit ?</a></p> -->
@@ -58,5 +62,7 @@
   </section>
   <br />
 </div>
+
+<script src="https://js.hcaptcha.com/1/api.js" async defer></script>
 
 {% endblock %}
