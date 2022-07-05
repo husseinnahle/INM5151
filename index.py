@@ -11,14 +11,12 @@ from .modules.user import create_user
 import json
 import html
 import hashlib
-import uuid
 from functools import wraps
 
 app = Flask(__name__)
 app.config['JSON_SORT_KEYS'] = False
 app.secret_key = "a6cd02e9b1104ac0*c2a02391284cb!0"
 DATA_FILE_PATH = 'static/data.json'
-
 
 def get_db():
     db = getattr(g, 'database', None)
@@ -28,33 +26,32 @@ def get_db():
 
 
 def get_username():
-    if "id" in session:
-        return get_db().get_session(session["id"])
+    if "user" in session:
+        return session["user"]["name"]
     return None
 
 
 def is_authenticated(session):
-    # TODO Next-level : Vérifier la session dans la base de données
-    return "id" in session
+    return "user" in session
 
 
 def is_authorized(username, password):
     if len(username) == 0 or len(password) == 0:
         # Champs vide
         session['error'] = 'Please, fill out all the fields'
-        return False
+        return None
     db = get_db()
     user = db.read_user_username(username)
     if user is None:
         # Nom utilisateur inexistant
         session['error'] = 'Incorrect username or password'
-        return False
+        return None
     hash = hashlib.sha512(str(password + user.salt).encode("utf-8")).hexdigest()
     if user.hash != hash:
         # Mot de passe incorrect
         session['error'] = 'Incorrect password'
-        return False        
-    return True
+        return None        
+    return user.session()
 
 
 def authentication_required(f):
@@ -130,9 +127,7 @@ def a_propos():
 @app.route('/logout')
 @authentication_required
 def logout():
-    id_session = session["id"]
-    session.pop('id', None)
-    get_db().delete_session(id_session)
+    session.pop('user')
     return redirect("/")
 
 
@@ -181,11 +176,10 @@ def login_get():
 def login_post():
     username = request.form["username"]
     password = request.form["password"]
-    if is_authorized(username, password):
+    user = is_authorized(username, password)
+    if user:
         # Accès autorisé
-        id_session = uuid.uuid4().hex
-        get_db().save_session(id_session, username)
-        session["id"] = id_session
+        session["user"] = user
         return redirect("/")
     return redirect('/login')
 

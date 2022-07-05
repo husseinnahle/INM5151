@@ -41,3 +41,10 @@ class User:
     self.email = email
     self.salt = salt
     self.hash = hash
+
+  def session(self):
+    session = {
+      "name": self.name,
+      "email": self.email
+    }
+    return session
