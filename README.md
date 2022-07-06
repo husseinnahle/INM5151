@@ -40,13 +40,13 @@ $ sudo pip install -r requirements.txt
 
 Ouvrir le fichier mentionné à continuation selon le système d'exploitation installé dans votre ordinateur : 
 
-| Système d'exploitation | Fichier !
+| Système d'exploitation | Fichier |
 |---|---|
 | Linux | /etc/hosts |
 | Mac OS X | /private/etc/hosts |
 | Windows | C:\Windows\System32\Drivers\etc\hosts |
 
-Et ajouter cette ligne et sauvegarder les changements :
+Ajouter cette ligne et sauvegarder les changements :
 ```
 127.0.0.1 test.ezcoding.com
 ```
