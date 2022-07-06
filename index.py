@@ -127,7 +127,7 @@ def login_post():
     user = is_authorized(username, password)
     if user:
         # Accès autorisé
-        session["user"] = user
+        session["user"] = user.session()
         return redirect("/")
     return redirect('/login')
 
@@ -148,7 +148,7 @@ def is_authorized(username, password):
         # Mot de passe incorrect
         session['error'] = 'Incorrect password'
         return None        
-    return user.session()
+    return user
 
 
 # =================================  logout  =================================
@@ -249,16 +249,17 @@ def quiz_resultat():
     if request.method == "POST":
         # Evaluer les reponses
         evaluer(request.form['data'])
+        if is_authenticated():
+            update_user_progress()
         return redirect('/languages/quiz/resultat')
     if "Resultat" in session:
         # Retourner le resultat du quiz
-        sujet = session["Resultat"]["Sujet"]
-        sous_sujet = session["Resultat"]["Sous-sujet"]
-        total = session["Resultat"]["Total"]
-        note = session["Resultat"]["Note"]
-        session.pop("Resultat")
+        sujet = session["result"]["sujet"]
+        sous_sujet = session["result"]["sous-sujet"]
+        note = session["result"]["note"]
+        session.pop("result")
         return render_template(
-            'resultat.html', sujet=sujet, sous_sujet=sous_sujet, total=total,
+            'resultat.html', sujet=sujet, sous_sujet=sous_sujet,
             note=note, title='Languages', username=get_username())
     return render_template(
         "404.html", title="Not found", username=get_username()), 404
@@ -266,21 +267,31 @@ def quiz_resultat():
 
 def evaluer(raw_data):
     data = json.loads(raw_data)
-    sujet_obj = get_db().read_sujet_nom(data["Sujet"])
-    sous_sujet_index = sujet_obj.get_sous_sujet_index(data["Sous-sujet"])
+    sujet_obj = get_db().read_sujet_nom(data["sujet"])
+    sous_sujet_index = sujet_obj.get_sous_sujet_index(data["sous-sujet"])
     note = 0
-    for i, choix in enumerate(data["Reponses"]):
+    for i, choix in enumerate(data["reponses"]):
         reponse = sujet_obj.get_quiz_reponse(sous_sujet_index, i)
         if reponse == choix:
             note += 1
+    note = ( note / len(data["reponses"]) ) * 100
     resultat = {
-        "Sujet": data["Sujet"],
-        "Sous-sujet": data["Sous-sujet"],
-        "Total": len(data["Reponses"]),
-        "Note": note
+        "sujet": data["sujet"],
+        "sous-sujet": data["sous-sujet"],
+        "note": note
     }
-    session["Resultat"] = resultat
+    session["result"] = resultat
     
+
+def update_user_progress():
+    db = get_db()
+    user = db.read_user_username(session["user"]["name"])
+    sujet = session["result"]["sujet"]
+    sous_sujet = session["result"]["sous-sujet"]
+    resultat = "S" if session["result"]["note"] > 79 else "E"
+    user.update_progress(sujet, sous_sujet, resultat)
+    db.update_user_progress(user.get_name())
+    session["user"] = user.session()
 
 # ==================================   api  ==================================
 
@@ -331,3 +342,11 @@ def api_sujets():
     except TypeError:
         return jsonify("Aucun sujet trouvé."), 204
     return jsonify({sujet.get_nom(): sujet.to_json()}), 200
+
+# Temporaire pour tester la progression
+@app.route('/test/session')
+def test_session():
+    user_session = None
+    if "user" in session:
+        user_session = session["user"]
+    return jsonify({"session": user_session}), 200

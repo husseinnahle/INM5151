@@ -59,9 +59,9 @@ function post(sujet, sous_sujet) {
   hiddenField.type = 'hidden';
   hiddenField.name = "data";
   var data = {
-    "Sujet": sujet,
-    "Sous-sujet": sous_sujet,
-    "Reponses": reponses 
+    "sujet": sujet,
+    "sous-sujet": sous_sujet,
+    "reponses": reponses 
   }
   hiddenField.value = JSON.stringify(data);
   form.appendChild(hiddenField);

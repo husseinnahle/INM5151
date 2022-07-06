@@ -59,3 +59,10 @@ class Database:
         if user is None:
             return None
         return User(user[0], user[1], user[2], user[3], user[4])
+    
+    # Mettre à jour la progression d'un utilisateur selon 'username'
+    def update_user_progress(self, username, progress):
+        connection = self.get_connection()
+        connection.execute('update user set progress = ? where username = ?',
+                           (progress, username))
+        connection.commit()

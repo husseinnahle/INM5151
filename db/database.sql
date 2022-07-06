@@ -9,5 +9,6 @@ create table user (
   username varchar(25) unique,
   email varchar(100),
   salt varchar(32),
-  hash varchar(128)
+  hash varchar(128),
+  progress text
 );
