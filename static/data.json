@@ -10,24 +10,29 @@
 				},
 				"Quiz" : [
 					{
-						"Question" : "Quelle est la syntaxe correcte pour afficher \"Hello World\" en Python ?",
+						"Question" : "What is a correct syntax to output \"Hello World\" in Python?",
 						"Choix" : ["echo \"Hello World\"", "p(\"Hello World\")", "print(\"Hello World\")","echo(\"Hello World\")"],
 						"Reponse" : "print(\"Hello World\")"
 					},
 					{
-						"Question" : "Comment insérer des COMMENTAIRES dans le code Python ?",
+						"Question" : "How do you insert COMMENTS in Python code?",
 						"Choix" : ["//COMMENTAIRES",	"/*COMMENTAIRES*/", "#COMMENTAIRES"],
 						"Reponse" : "#COMMENTAIRES"
 					},
 					{
-						"Question" : "Lequel n'est PAS un nom de variable légal ?",
+						"Question" : "Which one is NOT a legal variable name?",
 						"Choix" : ["my-var", "my_var", "_myvar", "Myvar"],
 						"Reponse" : "my-var"
 					},
 					{
-						"Question" : "Test avec vrai/faux",
-						"Choix" : ["vrai", "faux"],
-						"Reponse" : "vrai"
+						"Question" : "How do you create a variable with the numeric value 5?",
+						"Choix" : ["x = int(5)", "Both the other answers are correct", "x = 5"],
+						"Reponse" : "Both the other answers are correct"
+					},
+					{
+						"Question" : "In Python, 'Hello', is the same as \"Hello\"",
+						"Choix" : ["True", "False"],
+						"Reponse" : "True"
 					}
 				]
 			},
@@ -72,22 +77,22 @@
 				]
 			},
 			{
-				"Nom" : "Mots-clés du langage"
+				"Nom" : "Language keywords"
 			},
 			{
 				"Nom" : "ensemble de données"
 			},
 			{
-				"Nom" : "Operateurs"
+				"Nom" : "Operators"
 			},
 			{
-				"Nom" : "Erreurs et exceptions"
+				"Nom" : "Errors and Exceptions"
 			},
 			{
 				"Nom" : "Classes"
 			},
 			{
-				"Nom" : "Bibliothèque standard"
+				"Nom" : "Standard library"
 			}
 		]
 	},
