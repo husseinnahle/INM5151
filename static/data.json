@@ -37,7 +37,34 @@
 				]
 			},
 			{
-				"Nom" : "Syntax"
+				"Nom" : "Syntax",
+				"Quiz" : [
+					{
+						"Question" : "What is a correct syntax to output \"Hello World\" in Python?",
+						"Choix" : ["echo \"Hello World\"", "p(\"Hello World\")", "print(\"Hello World\")","echo(\"Hello World\")"],
+						"Reponse" : "print(\"Hello World\")"
+					},
+					{
+						"Question" : "How do you insert COMMENTS in Python code?",
+						"Choix" : ["//COMMENTAIRES",	"/*COMMENTAIRES*/", "#COMMENTAIRES"],
+						"Reponse" : "#COMMENTAIRES"
+					},
+					{
+						"Question" : "Which one is NOT a legal variable name?",
+						"Choix" : ["my-var", "my_var", "_myvar", "Myvar"],
+						"Reponse" : "my-var"
+					},
+					{
+						"Question" : "How do you create a variable with the numeric value 5?",
+						"Choix" : ["x = int(5)", "Both the other answers are correct", "x = 5"],
+						"Reponse" : "Both the other answers are correct"
+					},
+					{
+						"Question" : "In Python, 'Hello', is the same as \"Hello\"",
+						"Choix" : ["True", "False"],
+						"Reponse" : "True"
+					}
+				]
 			},
 			{
 				"Nom" : "Language keywords"

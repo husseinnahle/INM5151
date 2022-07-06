@@ -252,7 +252,7 @@ def quiz_resultat():
         if is_authenticated():
             update_user_progress()
         return redirect('/languages/quiz/resultat')
-    if "Resultat" in session:
+    if "result" in session:
         # Retourner le resultat du quiz
         sujet = session["result"]["sujet"]
         sous_sujet = session["result"]["sous-sujet"]
@@ -290,7 +290,7 @@ def update_user_progress():
     sous_sujet = session["result"]["sous-sujet"]
     resultat = "S" if session["result"]["note"] > 79 else "E"
     user.update_progress(sujet, sous_sujet, resultat)
-    db.update_user_progress(user.get_name())
+    db.update_user_progress(user)
     session["user"] = user.session()
 
 # ==================================   api  ==================================
