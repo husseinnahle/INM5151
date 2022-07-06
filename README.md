@@ -38,8 +38,21 @@ $ sudo pip install -r requirements.txt
 ```
 <br>
 
+Ouvrir le fichier mentionné à continuation selon le système d'exploitation installé dans votre ordinateur : 
+
+| Système d'exploitation | Fichier !
+|---|---|
+| Linux | /etc/hosts |
+| Mac OS X | /private/etc/hosts |
+| Windows | C:\Windows\System32\Drivers\etc\hosts |
+
+Et ajouter cette ligne et sauvegarder les changements :
+```
+127.0.0.1 test.ezcoding.com
+```
+
 # :rocket: Démarrer l'application flask
 ```
 $ make
 ```
-Une fois l'application lancée, utiliser un fureteur pour accéder à l'application Flask. Utiliser la première adresse IP affichée dans la console. Par exemple : `Running on http://127.0.0.1:5000`
+Ensuite, utiliser un fureteur pour accéder à l'application Flask, en écrivant `test.ezcoding.com:5000` dans la barre d'adresse.
