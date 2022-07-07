@@ -29,8 +29,8 @@
         </div>
         <div class="col-lg-8">
           <div class="card-body py-5 px-md-5">
-            {% if username %}
-              <p>You are logged in as {{ username }}</p>
+            {% if session['user'] %}
+              <p>You are logged in as {{ session['user']['name'] }}</p>
               <p><a href="/logout">Logout</a></p>
             {% else %}
               <form id="login" method="post" action="/login">
