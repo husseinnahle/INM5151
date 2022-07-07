@@ -25,19 +25,13 @@ def get_db():
     return g._database
 
 
-def get_username():
-    if is_authenticated():
-        return session["user"]["name"]
-    return None
-
-
 def is_authenticated():
     return "user" in session and get_db().read_user_username(session["user"]["name"])
 
 
 @app.errorhandler(404)
 def page_not_found(e):
-    return render_template('404.html', title='Not found', username=get_username()), 404
+    return render_template('404.html', title='Not found'), 404
 
 
 @app.teardown_appcontext
@@ -60,20 +54,17 @@ def init_database():
 
 @app.route('/', methods=["GET"])
 def index():
-    return render_template(
-        'index.html', title='Home', username=get_username()), 200
+    return render_template('index.html', title='Home'), 200
 
 
 @app.route('/support', methods=["GET"])
 def aide():
-    return render_template(
-        'support.html', title='Support', username=get_username()), 200
+    return render_template('support.html', title='Support'), 200
 
 
 @app.route('/about', methods=["GET"])
 def a_propos():
-    return render_template(
-        'about_us.html', title='About', username=get_username()), 200
+    return render_template('about_us.html', title='About'), 200
 
 
 # ================================  register  ================================
@@ -82,9 +73,9 @@ def a_propos():
 @app.route('/register', methods=["GET"])
 def register_get():
     if is_authenticated():
-        return render_template("404.html", title="Not found", username=get_username()), 404
+        return render_template("404.html", title="Not found"), 404
     error = session["error"] and session.pop("error") if "error" in session else None
-    return render_template("register.html", title='Sign up', error=error, username=None)
+    return render_template("register.html", title='Sign up', error=error)
 
 
 # Valider les données et créer un nouveau compte utilisateur
@@ -115,7 +106,7 @@ def register_post():
 def login_get():
     message = session['message'] and session.pop("message") if "message" in session else None
     error = session["error"] and session.pop("error") if "error" in session else None
-    return render_template('login.html', title='Login', error=error, message=message, username=get_username()), 200
+    return render_template('login.html', title='Login', error=error, message=message), 200
 
 
 # Valider les données et créer une nouvelle session
@@ -177,9 +168,7 @@ def logout():
 def languages():
     sujets = get_db().read_all_sujet()
     sujets_info = [sujet.to_json() for sujet in sujets]
-    return render_template(
-        'languages.html', sujets=sujets_info, title='Languages',
-        username=get_username()), 200
+    return render_template('languages.html', sujets=sujets_info, title='Languages'), 200
 
 
 # Retourne l'arbre de progression d'un sujet
@@ -191,21 +180,21 @@ def languages_sujet(sujet):
         if sous_sujet_nom is None or len(sous_sujet_nom) == 0:
             return render_template(
                 'arbre_de_progression.html', sujet=sujet.to_json(),
-                title='Languages', is_authorized=is_authenticated(), username=get_username()), 200
+                title='Languages', is_authorized=is_authenticated()), 200
         sous_sujet = sujet.get_sous_sujet(sous_sujet_nom)  # ValueError
     except TypeError:
         # Retourner un 404 si le sujet n'existe pas
         err = "Le sujet '" + html.escape(sujet) + "' n'existe pas."
-        return render_template("404.html", title="Not found", err=err, username=get_username()), 404
+        return render_template("404.html", title="Not found", err=err), 404
     except ValueError as error:
         # Retourner un 404 si le sous-sujet n'existe pas
-        return render_template("404.html", title="Not found", err=str(error), username=get_username()), 404
+        return render_template("404.html", title="Not found", err=str(error)), 404
     if not is_authenticated():
         # Retourner une erreur si l'utilisateur n'est pas authentifie
-        return render_template("404.html", title="Not found", username=None), 404
+        return render_template("404.html", title="Not found"), 404
     if sous_sujet_nom == "Introduction":
-        return render_template("sous_sujet_Python_Introduction.html", title="Languages", username=get_username()), 200
-    return render_template('sous_sujet.html', sujet=sujet.to_json()["Nom"], sous_sujet=sous_sujet, title='Languages', username=get_username()), 200
+        return render_template("sous_sujet_Python_Introduction.html", title="Languages"), 200
+    return render_template('sous_sujet.html', sujet=sujet.to_json()["Nom"], sous_sujet=sous_sujet, title='Languages'), 200
 
 
 # Retourner la premiere question du quiz d'un 'sous_sujet_nom' appartenant a un 'sujet_nom'
@@ -214,9 +203,7 @@ def quiz(sujet_nom):
     sous_sujet_nom = request.args.get('sous-sujet')
     if sous_sujet_nom is None or len(sous_sujet_nom) == 0:
         err = "Le parametre sous-sujet est obligatoire."
-        return render_template(
-            "404.html", title="Not found", err=err,
-            username=get_username()), 404
+        return render_template("404.html", title="Not found", err=err), 404
     try:
         sujet = get_db().read_sujet_nom(sujet_nom)  # TypeError
         sous_sujet_index = sujet.get_sous_sujet_index(
@@ -224,19 +211,16 @@ def quiz(sujet_nom):
     except TypeError:
         # Retourner un 404 si le sujet n'existe pas
         err = "Le sujet '" + html.escape(sujet) + "' n'existe pas."
-        return render_template(
-            "404.html", title="Not found", err=err,
-            username=get_username()), 404
+        return render_template("404.html", title="Not found", err=err), 404
     except ValueError as error:
         # Retourner un 404 si le sous-sujet n'existe pas
-        return render_template(
-            "404.html", title="Not found", err=str(error),
-            username=get_username()), 404
+        return render_template("404.html", title="Not found", err=str(error)), 404
     quiz = sujet.get_quiz_question(sous_sujet_index, 0)
-    return render_template(
-        'quiz.html', sujet=sujet_nom, sous_sujet=sous_sujet_nom, question=quiz
-        ['Question'], choix=quiz['Choix'], title='Languages',
-        username=get_username())
+    return render_template('quiz.html', sujet=sujet_nom,
+                           sous_sujet=sous_sujet_nom,
+                           question=quiz['Question'],
+                           choix=quiz['Choix'],
+                           title='Languages')
 
 
 # Retouner la page de resultat de quiz
@@ -254,11 +238,10 @@ def quiz_resultat():
         sous_sujet = session["result"]["sous-sujet"]
         note = session["result"]["note"]
         session.pop("result")
-        return render_template(
-            'resultat.html', sujet=sujet, sous_sujet=sous_sujet,
-            note=note, title='Languages', username=get_username())
-    return render_template(
-        "404.html", title="Not found", username=get_username()), 404
+        return render_template('resultat.html', sujet=sujet,
+                               sous_sujet=sous_sujet,note=note,
+                               title='Languages')
+    return render_template("404.html", title="Not found"), 404
 
 
 def evaluer(raw_data):
@@ -307,21 +290,18 @@ def api_quiz():
     except ValueError:
         # Retourner une erreur si le numero n'est pas un entier
         err = "Le numero '" + html.escape(numero_raw) + "' n'existe pas."
-        return render_template(
-            "404.html", title="Not found", err=err, username=get_username()), 404
+        return render_template("404.html", title="Not found", err=err), 404
     except TypeError:
         # Retourner un statut 204 si aucun sujet n'a été trouvé
         return ('', 204)
     except KeyError:
         # Retourner une erreur si le nom du sous-sujet n'existe pas
         err = "Le sujet '" + html.escape(nom_sous_sujet) + "' n'existe pas."
-        return render_template(
-            "404.html", title="Not found", err=err, username=get_username()), 404
+        return render_template("404.html", title="Not found", err=err), 404
     except IndexError:
         # Retourner une erreur si le numero de la question du quiz n'existe pas
         err = "Le numero '" + str(numero) + "' n'existe pas."
-        return render_template(
-            "404.html", title="Not found", err=err, username=get_username()), 404
+        return render_template("404.html", title="Not found", err=err), 404
     return jsonify(quiz)
 
 
