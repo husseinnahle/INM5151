@@ -85,15 +85,14 @@ function setTree() {
 function addArrows(nodes) {
   for (var i = 0; i < nodes.length; i++) {
     if (i+1 < nodes.length) {
-      line = new LeaderLine (
+      new LeaderLine (
         document.getElementById(nodes[i].id),
         document.getElementById(nodes[i+1].id),
         {
           color: "black",
-          dash: true // Optionelle
+          dash: true
         }
       );
-      line.id = "leader-line";
     }
   }
 }
