@@ -85,14 +85,25 @@ function setTree() {
 function addArrows(nodes) {
   for (var i = 0; i < nodes.length; i++) {
     if (i+1 < nodes.length) {
-      new LeaderLine (
+      line = new LeaderLine (
         document.getElementById(nodes[i].id),
         document.getElementById(nodes[i+1].id),
         {
           color: "black",
-          dash: {animation: true}  // Optionelle
+          dash: true // Optionelle
         }
       );
+      line.id = "leader-line";
     }
+  }
+}
+
+function openPopup() {
+  document.getElementById("popup").classList.add("open-popup");
+  document.getElementById("tree-container").style.pointerEvents = "none";
+  document.getElementById("tree-container").style.filter = "blur(10px)";
+  var arrows = document.getElementsByClassName("leader-line");
+  for(var i = 0; i < arrows.length; i++){
+    arrows[i].style.filter = "blur(10px)";
   }
 }

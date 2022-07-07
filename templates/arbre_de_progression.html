@@ -1,10 +1,42 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <div class="container-fluid p-5 bg-secondary text-white text-center">
-    <h1>{{ sujet["Nom"] }}</h1>
-  </div>
-  <div class="container mt-5">
+
+  {% if not is_authorized %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='assets/css/loginPopup.css') }}" />
+    <div class="popup" id="popup">
+      <div class="form-popup">
+        <div class="form-panel one">
+          <div class="form-header">
+            <h5>Login to continue</h5>
+          </div>
+          <div class="form-content">
+            <form>
+              <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" required="required"/>
+              </div>
+              <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required="required"/>
+              </div>
+              <div class="form-group">
+                <label class="form-remember">
+                  <input type="checkbox"/>Remember Me
+                </label><a class="form-recovery" href="#">Forgot Password?</a>
+              </div>
+              <div class="form-group">
+                <button type="submit">Log In</button>
+              </div>
+              <a class="form-register" href="/register">Create an account</a>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+  
+  <div class="container mt-5" id="tree-container">    
     <div class="tree" id="tree">
       {% for ss in sujet["Information"]["Sous-sujet"] %}
           <div class="node" id={{ ss["Nom"] }}>
@@ -24,5 +56,8 @@
   <script src="{{ url_for('static', filename='assets/javascript/leader-line.min.js') }}"></script>
   <script type="text/javascript">
     setTree();
+    {% if not is_authorized %}
+      openPopup();
+    {% endif %}  
   </script>
 {% endblock %}

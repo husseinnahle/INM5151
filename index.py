@@ -6,7 +6,6 @@ from flask import session
 from flask import g
 from flask import jsonify
 from flask import Response
-from flask import make_response
 from .modules.database import Database
 from .modules.user import create_user
 import json
@@ -192,24 +191,21 @@ def languages_sujet(sujet):
         if sous_sujet_nom is None or len(sous_sujet_nom) == 0:
             return render_template(
                 'arbre_de_progression.html', sujet=sujet.to_json(),
-                title='Languages', username=get_username()), 200
+                title='Languages', is_authorized=is_authenticated(), username=get_username()), 200
         sous_sujet = sujet.get_sous_sujet(sous_sujet_nom)  # ValueError
     except TypeError:
         # Retourner un 404 si le sujet n'existe pas
         err = "Le sujet '" + html.escape(sujet) + "' n'existe pas."
-        return render_template(
-            "404.html", title="Not found", err=err,
-            username=get_username()), 404
+        return render_template("404.html", title="Not found", err=err, username=get_username()), 404
     except ValueError as error:
         # Retourner un 404 si le sous-sujet n'existe pas
-        return render_template(
-            "404.html", title="Not found", err=str(error),
-            username=get_username()), 404
+        return render_template("404.html", title="Not found", err=str(error), username=get_username()), 404
+    if not is_authenticated():
+        # Retourner une erreur si l'utilisateur n'est pas authentifie
+        return render_template("404.html", title="Not found", username=None), 404
     if sous_sujet_nom == "Introduction":
         return render_template("sous_sujet_Python_Introduction.html", title="Languages", username=get_username()), 200
-    return render_template(
-        'sous_sujet.html', sujet=sujet.to_json()["Nom"], sous_sujet=sous_sujet,
-        title='Languages', username=get_username()), 200
+    return render_template('sous_sujet.html', sujet=sujet.to_json()["Nom"], sous_sujet=sous_sujet, title='Languages', username=get_username()), 200
 
 
 # Retourner la premiere question du quiz d'un 'sous_sujet_nom' appartenant a un 'sujet_nom'
@@ -288,6 +284,7 @@ def update_user_progress():
     user = db.read_user_username(session["user"]["name"])
     sujet = session["result"]["sujet"]
     sous_sujet = session["result"]["sous-sujet"]
+    # Seuil de réussite
     resultat = "S" if session["result"]["note"] > 79 else "E"
     user.update_progress(sujet, sous_sujet, resultat)
     db.update_user_progress(user)

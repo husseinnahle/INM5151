@@ -44,7 +44,6 @@ class User:
     self.progress = {}
 
   def update_progress(self, sujet, sous_sujet, resultat):
-    print(self.progress)
     if sujet not in self.progress:
       self.progress[sujet] = {sous_sujet: resultat}
       return
