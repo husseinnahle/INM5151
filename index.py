@@ -214,7 +214,9 @@ def languages_sujet(sujet):
         # Retourner une erreur si l'utilisateur n'est pas authentifie
         return render_template("404.html", title="Not found"), 404
     if sous_sujet_nom == "Introduction":
-        return render_template("sous_sujet_Python_Introduction.html", title="Languages"), 200
+        return render_template("python/introduction.html", title="Languages"), 200
+    if sous_sujet_nom == "Variables":
+        return render_template("python/variables.html", title="Languages"), 200
     return render_template('sous_sujet.html', sujet=sujet.to_json()["Nom"], sous_sujet=sous_sujet, title='Languages'), 200
 
 

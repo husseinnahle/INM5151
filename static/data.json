@@ -37,32 +37,42 @@
 				]
 			},
 			{
-				"Nom" : "Syntax",
+				"Nom" : "Variables",
+				"Tutoriel" : {
+					"Video" : "https://www.youtube.com/watch?v=cpPG0bKHYKc",
+					"Tuteur" : "Keven1999"
+				},
 				"Quiz" : [
 					{
-						"Question" : "What is a correct syntax to output \"Hello World\" in Python?",
-						"Choix" : ["echo \"Hello World\"", "p(\"Hello World\")", "print(\"Hello World\")","echo(\"Hello World\")"],
-						"Reponse" : "print(\"Hello World\")"
+						"Question" : "What will display : print( \"python\" + \" is\" + \"awesome\")",
+						"Choix" : ["python is awsome","An error message"],
+						"Reponse" : "python is awsome"
 					},
 					{
-						"Question" : "How do you insert COMMENTS in Python code?",
-						"Choix" : ["//COMMENTAIRES",	"/*COMMENTAIRES*/", "#COMMENTAIRES"],
-						"Reponse" : "#COMMENTAIRES"
+						"Question" : "What will display : print(3 + 8) ?",
+						"Choix" : ["38",	"An error message", "3+8","11"],
+						"Reponse" : "11"
 					},
 					{
-						"Question" : "Which one is NOT a legal variable name?",
-						"Choix" : ["my-var", "my_var", "_myvar", "Myvar"],
-						"Reponse" : "my-var"
+						"Question" : "What will display : print(3,\"spring\") ?",
+						"Choix" : ["3",	"An error message", "3spring"],
+						"Reponse" : "3spring"
 					},
 					{
-						"Question" : "How do you create a variable with the numeric value 5?",
-						"Choix" : ["x = int(5)", "Both the other answers are correct", "x = 5"],
-						"Reponse" : "Both the other answers are correct"
+						"Question" : "Which one is not a legal name for a variable in python?",
+						"Choix" : ["2myvar", "my_var", "_myvar", "Myvar"],
+						"Reponse" : "2myvar"
 					},
 					{
-						"Question" : "In Python, 'Hello', is the same as \"Hello\"",
-						"Choix" : ["True", "False"],
-						"Reponse" : "True"
+						"Question" : "What will display : print(3 + \"spring\") ?",
+						"Choix" : ["3",	"An error message", "3spring"],
+						"Reponse" : "An error message"
+					},
+					
+					{
+						"Question" : "It is not possible to modify a global variable",
+						"Choix" : ["true","false"],
+						"Reponse" : "false"
 					}
 				]
 			},
@@ -70,7 +80,7 @@
 				"Nom" : "Language keywords"
 			},
 			{
-				"Nom" : "Basic Types"
+				"Nom" : "ensemble de données"
 			},
 			{
 				"Nom" : "Operators"
