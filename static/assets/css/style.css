@@ -122,21 +122,14 @@
   color:rgb(0, 0, 0);
 }
 
-
-
-
-
-
-
 footer {
   margin-top: 25px;
+  margin: 0 auto;
   position: relative;
   bottom: 0;
   left: 0;
-  right: 0;
   background: #111;
   height: auto;
-  width: 100vw;
   padding-top: 40px;
   color: #fff;
 }
@@ -165,7 +158,6 @@ footer {
 
 .footer-bottom {
   background: #000;
-  width: 100vw;
   padding: 20px 0;
   text-align: center;
 }
