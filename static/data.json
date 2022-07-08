@@ -37,13 +37,50 @@
 				]
 			},
 			{
-				"Nom" : "Syntax"
+				"Nom" : "Variables",
+				"Tutoriel" : {
+					"Video" : "https://www.youtube.com/watch?v=cpPG0bKHYKc",
+					"Tuteur" : "Keven1999"
+				},
+				"Quiz" : [
+					{
+						"Question" : "What will display : print( \"python\" + \" is\" + \"awesome\")",
+						"Choix" : ["python is awsome","An error message"],
+						"Reponse" : "python is awsome"
+					},
+					{
+						"Question" : "What will display : print(3 + 8) ?",
+						"Choix" : ["38",	"An error message", "3+8","11"],
+						"Reponse" : "11"
+					},
+					{
+						"Question" : "What will display : print(3,\"spring\") ?",
+						"Choix" : ["3",	"An error message", "3spring"],
+						"Reponse" : "3spring"
+					},
+					{
+						"Question" : "Which one is not a legal name for a variable in python?",
+						"Choix" : ["2myvar", "my_var", "_myvar", "Myvar"],
+						"Reponse" : "2myvar"
+					},
+					{
+						"Question" : "What will display : print(3 + \"spring\") ?",
+						"Choix" : ["3",	"An error message", "3spring"],
+						"Reponse" : "An error message"
+					},
+					
+					{
+						"Question" : "It is not possible to modify a global variable",
+						"Choix" : ["true","false"],
+						"Reponse" : "false"
+					}
+				]
 			},
 			{
 				"Nom" : "Language keywords"
 			},
 			{
-				"Nom" : "Basic Types"
+				"Nom" : "ensemble de données"
 			},
 			{
 				"Nom" : "Operators"

@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container-fluid p-5 bg-secondary text-white text-center">
+    <h1> The variables</h1>
+</div>
+
+<div class="container mt-5">
+    <h4 class="tutoriel">Variable Names </h4>
+    <div class="tutoriel">
+        <p class="tutoriel">
+            The rules to define a variables in python:
+        <ul class="tutoriel">
+
+            <li> It must start with a letter or the underscore character</li>
+            <li> It <span style="color: red;">cannot </span> start with a number</li>
+            <li> It only contain alpha-numeric and underscore characters</li>
+            <li> Finally it is case sensitive</li>
+        </ul>
+        </p>
+    </div>
+    <br>
+    <h6 class="tutoriel"> Exemple</h6>
+    <div class="exemple">
+        <p>
+            myvar   = <span style="color: red;">"John"</span><br>
+            my_var  = <span style="color: red;">"John"</span><br>
+            _my_var = <span style="color: red;">"John"</span><br>
+        
+        </p>
+    </div>
+    <br><br>
+    <h4 class="tutoriel"> Multiple value assignement on one line</h4>
+    <div class="tutoriel">
+        <p class="tutoriel">
+            
+            <ul class="tutoriel">
+                <li>In python, it is possible to assign values to multiple variables in one line</li>
+                <li>You can also assign the same value to multiple variables in one line</li>
+                <li>If you have a collection of values, you can extract them into variables</li>
+            </ul>
+           
+
+        </p>
+    </div>
+    <br>
+    <h6 class="tutoriel"> Exemple :</h6>
+    <div class="exemple">
+        <p>
+            x, y, z = <span style="color: red;">"Orange", "Banana", "Cherry"</span><br>
+            x = y = z = <span style="color: red;">"Orange"</span><br>
+            fruits = [<span style="color: red;">"apple", "banana", "cherry"</span>]<br>
+        </p>
+    </div>
+    <br><br>
+    <h4 class="tutoriel"> Output Variables</h4>
+    <div class="tutoriel">
+        <p class="tutoriel">
+            <ul>
+                <li>The Python <span style="color: red;">print()</span> function is often used to output variables.</li>
+                <li>If you output multiple variables you can use a coma to separate them</li>    
+                <li> you can also use the <span style="color:red;"> + </span> operator</li>
+                <li> BUT for number, the operator <span style="color:red;"> + </span> work as mathematical operator</li>
+                <li> Finally if you mix number and String with the<br>
+                     operator <span style="color:red;"> + </span> you will have an error
+            </ul>
+        </p>
+    </div>
+    <br>
+    <h6 class="tutoriel"> Exemple :</h6>
+    <div class="exemple">
+        <p>
+            x = <span style="color: red;">"Python"</span><br>
+            y = <span style="color: red;">"is"</span><br>
+            z = <span style="color: red;">"awesome"</span><br>
+            <span style="color: blue;">print</span>(x,y,z) <span style="color: green;">#Valide syntax</span><br>
+            <span style="color: blue;">print</span>(x + y + z)<span style="color: green;">#Valide too</span><br>
+            <span style="color: blue;">print</span>(3 + 8) <span style="color: green;">#will display 11</span><br>
+            <span style="color: blue;">print</span>(3 + y) <span style="color: green;">#will display an error</span><br>
+            <span style="color: blue;">print</span>(3 , y) <span style="color: green;">#valide syntax</span><br>
+        </p>
+    </div>
+
+    <h4 class="tutoriel"> Global Variables</h4>
+
+    <div class="tutoriel">
+    <p class="tutoriel">
+        Variables that are created outside of a function are known as global variables.<br>
+        <ul>
+            <li>Global variables can be used from inside and outside of a function<br></li>
+            <li>If you create a variable with the same name inside a function, this variable will be local, and can only be used inside the function.<br></li>
+            <li>To change the value of a global variable inside a function, refer to the variable by using the global keyword<br></li>
+        </ul>
+        
+    </div>
+    <h6 class="tutoriel">Exemple : </h6>
+    <div class="exemple">
+        <p>
+            x = <span style="color: red;">"awesome"</span> <span style="color: green;">#global variables declaration</span><br>
+            <span style="color: blue;">def </span>myfunc() : <br>
+            <span style="color: blue;">global </span>x <span style="color: green;">#Refer to the global variable x</span><br>
+            x = <span style="color: red;">"fantastic" </span><span style="color: green;">#reassign "fantastic" to the global variable</span><br>
+            <span style="color: blue;">myfunc() </span><br>
+            <span style="color: blue;">print</span>(<span style="color: red;">"Python is"</span> + x ) 
+            <span style="color: green;">#the output is "Python is fantastic"</span><br>
+        </p>
+    </div>
+
+    <div>
+        <br>
+        <a href="/languages/quiz/Python?sous-sujet=Variables"><button>Take the quiz</button></a>
+    </div>
+</div>
+{% endblock %}

@@ -122,40 +122,14 @@
   color:rgb(0, 0, 0);
 }
 
-p.tutoriel, ul.tutoriel, h4.tutoriel{
-    text-align: left; 
-}
-
-h3.tutoriel{
-    text-align: center;
-}
-
-div.tutoriel{
-    background-color: rgba(255, 255, 255, 0.278);
-}
-div.exemple{
-    background-color: rgba(198, 198, 198, 0.856);
-    width: 40%;
-    height: auto;
-    text-align: left;
-    padding: 1%;
-    
-}
-form.tutoriel{
-    background-color: rgba(255, 255, 255, 0.278);
-    border:50%;
-    align-self: center;
-}
-
 footer {
   margin-top: 25px;
+  margin: 0 auto;
   position: relative;
   bottom: 0;
   left: 0;
-  right: 0;
   background: #111;
   height: auto;
-  width: 100vw;
   padding-top: 40px;
   color: #fff;
 }
@@ -184,7 +158,6 @@ footer {
 
 .footer-bottom {
   background: #000;
-  width: 100vw;
   padding: 20px 0;
   text-align: center;
 }
