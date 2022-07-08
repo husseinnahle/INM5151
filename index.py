@@ -296,6 +296,7 @@ def update_user_progress():
     db.update_user_progress(user)
     session["user"] = user.session()
 
+
 # ==================================   api  ==================================
 
 # Retourner un quiz
@@ -342,6 +343,7 @@ def api_sujets():
     except TypeError:
         return jsonify("Aucun sujet trouvé."), 204
     return jsonify({sujet.get_nom(): sujet.to_json()}), 200
+
 
 # Temporaire pour tester la progression
 @app.route('/test/session')
