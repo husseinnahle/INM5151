@@ -92,7 +92,6 @@
   border-radius: 40px;
   line-height: 50px;
   text-align: center;
-  border: 4px solid #19CE95;
   font-size: 15px;
   font-weight: bold;
   color: rgb(0, 0, 0);
@@ -304,21 +303,20 @@ footer {
 .form-group input {
   outline: none;
   display: block;
-  background: #9e9e9e;
+  background: #e4e4e4;
   width: 100%;
   border: 0;
   border-radius: 4px;
   box-sizing: border-box;
   padding: 12px 20px;
-  color: #9e9e9e;
+  color: #e4e4e4;
   font-family: inherit;
   font-size: inherit;
   font-weight: 500;
   line-height: inherit;
-  transition: 0.3s ease;
 }
-.form-group input:focus {
-  color: rgba(255, 255, 255, 0.8);
+.form-group input {
+  color: rgba(0, 0, 0, 0.8);
 }
 
 .form-group button {
@@ -356,18 +354,6 @@ footer {
 .form-panel {
   padding: 60px calc(5% + 60px) 60px 60px;
   box-sizing: border-box;
-}
-.form-panel.one:before {
-  content: "";
-  display: block;
-  opacity: 0;
-  visibility: hidden;
-  transition: 0.3s ease;
-}
-.form-panel.one.hidden:before {
-  display: block;
-  opacity: 1;
-  visibility: visible;
 }
 
 .form-header {
