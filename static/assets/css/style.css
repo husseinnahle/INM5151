@@ -280,6 +280,11 @@ footer {
   overflow: hidden;
 }
 
+#form-popup-error {
+  color: red;
+  font-weight: bold;
+}
+
 .form-group {
   display: flex;
   flex-wrap: wrap;

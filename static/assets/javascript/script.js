@@ -106,3 +106,20 @@ function openPopup() {
     arrows[i].style.filter = "blur(10px)";
   }
 }
+
+function is_authorized(){
+  const username = document.getElementById("username").value;
+  const password = document.getElementById("password").value;
+  fetch('/api/is_authorized?username=' + username + '&password=' + password + '&path=' + window.location.pathname)
+  .then(function(response) {
+    return response.text();
+  }).then(function(text) {
+    var response = JSON.parse(text);
+    if (response["is_authorized"] == false) {
+      document.getElementById("form-popup-error-container").innerHTML = `<span id="form-popup-error">${response["reason"]}</span><br>`;
+    } else {
+      document.getElementById("form-popup").submit();
+    }
+  });
+  return true;
+}

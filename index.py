@@ -115,11 +115,32 @@ def login_post():
     username = request.form["username"]
     password = request.form["password"]
     user = is_authorized(username, password)
-    if user:
-        # Accès autorisé
-        session["user"] = user.session()
-        return redirect("/")
-    return redirect('/login')
+    if not user:
+        # Accès non autorisé
+        return redirect('/login')
+    session["user"] = user.session()
+    if 'path' in session:
+        # L'authentification se fait depuis une page autre que '/login'
+        path = session['path'] and session.pop('path') if 'path' in session else None
+        return redirect(path)
+    return redirect("/")
+
+
+# Retourne True si les données sont valides
+@app.route('/api/is_authorized', methods=["GET"])
+def api_is_authorized():
+    username = request.args.get('username')
+    password = request.args.get('password')
+    path = request.args.get('path')
+    user = is_authorized(username, password)
+    if not user:
+        # Accès non autorisé
+        error = session["error"]
+        session.pop("error")
+        return jsonify({"is_authorized": False, "reason": error})
+    if len(path) != 0:
+        session['path'] = path
+    return jsonify({"is_authorized": True})
 
 
 def is_authorized(username, password):

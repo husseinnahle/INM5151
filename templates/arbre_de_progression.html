@@ -10,7 +10,7 @@
             <h5>Login to continue</h5>
           </div>
           <div class="form-content">
-            <form>
+            <form method="post" action="/login" id="form-popup">
               <div class="form-group">
                 <label for="username">Username</label>
                 <input type="text" id="username" name="username" required="required"/>
@@ -24,8 +24,10 @@
                   <input type="checkbox"/>Remember Me
                 </label><a class="form-recovery" href="#">Forgot Password?</a>
               </div>
+              <div id="form-popup-error-container"></div>   
+              <br>
               <div class="form-group">
-                <button type="submit">Log In</button>
+                <button type="button" onclick="is_authorized();">Log In</button>
               </div>
               <a class="form-register" href="/register">Create an account</a>
             </form>
