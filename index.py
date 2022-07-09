@@ -44,6 +44,8 @@ def close_connection(exception):
 # Initialiser la base de données
 @app.before_first_request
 def init_database():
+    if 'user' in session:
+        session.pop("user")
     db = get_db()
     file = open(DATA_FILE_PATH, encoding="utf-8")
     data = json.load(file)
@@ -199,9 +201,8 @@ def languages_sujet(sujet):
         sujet = get_db().read_sujet_nom(sujet)  # TypeError
         sous_sujet_nom = request.args.get('sous-sujet')
         if sous_sujet_nom is None or len(sous_sujet_nom) == 0:
-            return render_template(
-                'arbre_de_progression.html', sujet=sujet.to_json(),
-                title='Languages', is_authorized=is_authenticated()), 200
+            return render_template('arbre_de_progression.html', sujet=sujet.to_json(), 
+                                   title='Languages', is_authorized=is_authenticated()), 200
         sous_sujet = sujet.get_sous_sujet(sous_sujet_nom)  # ValueError
     except TypeError:
         # Retourner un 404 si le sujet n'existe pas
@@ -259,11 +260,10 @@ def quiz_resultat():
         # Retourner le resultat du quiz
         sujet = session["result"]["sujet"]
         sous_sujet = session["result"]["sous-sujet"]
+        resultats = session["result"]["resultats"]
         note = session["result"]["note"]
         session.pop("result")
-        return render_template('resultat.html', sujet=sujet,
-                               sous_sujet=sous_sujet,note=note,
-                               title='Languages')
+        return render_template('resultat.html', sujet=sujet, sous_sujet=sous_sujet, resultats=resultats, note=note, title='Languages')
     return render_template("404.html", title="Not found"), 404
 
 
@@ -272,17 +272,26 @@ def evaluer(raw_data):
     sujet_obj = get_db().read_sujet_nom(data["sujet"])
     sous_sujet_index = sujet_obj.get_sous_sujet_index(data["sous-sujet"])
     note = 0
+    resultats = []
     for i, choix in enumerate(data["reponses"]):
         reponse = sujet_obj.get_quiz_reponse(sous_sujet_index, i)
-        if reponse == choix:
+        question = {
+            "Question": reponse["Question"],
+            "Choix": choix,
+            "Etat": "incorrecte"
+        }
+        if reponse["Reponse"] == choix:
+            question["Etat"] = "correcte"
             note += 1
+        resultats.append(question)
     note = ( note / len(data["reponses"]) ) * 100
-    resultat = {
+    quiz = {
         "sujet": data["sujet"],
         "sous-sujet": data["sous-sujet"],
-        "note": note
+        "resultats": resultats,
+        "note": round(note)
     }
-    session["result"] = resultat
+    session["result"] = quiz
     
 
 def update_user_progress():
@@ -291,7 +300,9 @@ def update_user_progress():
     sujet = session["result"]["sujet"]
     sous_sujet = session["result"]["sous-sujet"]
     # Seuil de réussite
-    resultat = "S" if session["result"]["note"] > 79 else "E"
+    resultat = "E"
+    if session["result"]["note"] > 79:
+        resultat = "S"
     user.update_progress(sujet, sous_sujet, resultat)
     db.update_user_progress(user)
     session["user"] = user.session()

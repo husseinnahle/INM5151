@@ -4,10 +4,6 @@
 		"Sous-sujet" : [
 			{
 				"Nom" : "Introduction",
-				"Tutoriel" : {
-					"Video" : "https://www.youtube.com/watch?v=cpPG0bKHYKc",
-					"Tuteur" : "Keven1999"
-				},
 				"Quiz" : [
 					{
 						"Question" : "What is a correct syntax to output \"Hello World\" in Python?",
@@ -34,14 +30,14 @@
 						"Choix" : ["True", "False"],
 						"Reponse" : "True"
 					}
-				]
+				],
+				"Position" : {
+					"Left" : "-50px", 
+					"Top" : "5px"
+				}
 			},
 			{
 				"Nom" : "Variables",
-				"Tutoriel" : {
-					"Video" : "https://www.youtube.com/watch?v=cpPG0bKHYKc",
-					"Tuteur" : "Keven1999"
-				},
 				"Quiz" : [
 					{
 						"Question" : "What will display : print( \"python\" + \" is\" + \"awesome\")",
@@ -74,25 +70,53 @@
 						"Choix" : ["true","false"],
 						"Reponse" : "false"
 					}
-				]
+				],
+				"Position" : {
+					"Left" : "200px", 
+					"Top" : "50px"
+				}
 			},
 			{
-				"Nom" : "Language keywords"
+				"Nom" : "Language keywords",
+				"Position" : {
+					"Left" : "-250px", 
+					"Top" : "-20px"
+				}
 			},
 			{
-				"Nom" : "ensemble de données"
+				"Nom" : "ensemble de données",
+				"Position" : {
+					"Left" : "-80px", 
+					"Top" : "110px"
+				}
 			},
 			{
-				"Nom" : "Operators"
+				"Nom" : "Operators",
+				"Position" : {
+					"Left" : "220px", 
+					"Top" : "-150px"
+				}
 			},
 			{
-				"Nom" : "Errors and Exceptions"
+				"Nom" : "Errors and Exceptions",
+				"Position" : {
+					"Left" : "150px", 
+					"Top" : "0px"
+				}
 			},
 			{
-				"Nom" : "Classes"
+				"Nom" : "Classes",
+				"Position" : {
+					"Left" : "-200px", 
+					"Top" : "-100px"
+				}
 			},
 			{
-				"Nom" : "Standard library"
+				"Nom" : "Standard library",
+				"Position" : {
+					"Left" : "-50px", 
+					"Top" : "5px"
+				}
 			}
 		]
 	},

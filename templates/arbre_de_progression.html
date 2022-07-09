@@ -41,14 +41,16 @@
     <div class="tree" id="tree">
       {% set ns = namespace(blocked=false) %}
       {% for ss in sujet["Information"]["Sous-sujet"] %}
-        {% set sous_sujet = ss["Nom"] %}
         {% set sujet = sujet["Nom"] %}
+        {% set sous_sujet = ss["Nom"] %}
+        {% set left = ss["Position"]["Left"] %}
+        {% set top = ss["Position"]["Top"] %}
         {% if ('user' in session) and (sujet in session['user']['progress']) and (sous_sujet in session['user']['progress'][sujet]) and (session['user']['progress'][sujet][sous_sujet] == "S") %}
-          <div class="node" id="{{ sous_sujet }}" style="border: 4px solid #19CE95;">
+          <div class="node" id="{{ sous_sujet }}" name="done" style="border: 4px solid #19CE95; left:{{ left }}; top: {{ top }}">
         {% elif ns.blocked %}
-          <div class="node" id="{{ sous_sujet }}" style="border: 4px solid red; filter: grayscale(0.8); pointer-events: none;">
+          <div class="node" id="{{ sous_sujet }}" name="blocked" style="border: 4px solid red; filter:grayscale(1); pointer-events:none; left:{{ left }}; top: {{ top }}">
         {% else %}
-            <div class="node" id="{{ sous_sujet }}" style="border: 4px solid gold;">
+            <div class="node" id="{{ sous_sujet }}" name="current" style="border: 4px solid gold; left:{{ left }}; top: {{ top }}">
             {% set ns.blocked = true %}
         {% endif %}
           <a class="node__link__wrapper" href="/languages/{{ sujet }}?sous-sujet={{ sous_sujet }}">
@@ -66,7 +68,7 @@
   </div>
   <script src="{{ url_for('static', filename='assets/javascript/leader-line.min.js') }}"></script>
   <script type="text/javascript">
-    setTree();
+    addArrows();
     {% if not is_authorized %}
       openPopup();
     {% endif %}  

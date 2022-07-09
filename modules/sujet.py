@@ -20,7 +20,8 @@ class Sujet:
         raise ValueError("Le sous-sujet " + sous_sujet + " n'existe pas.")
 
     def get_quiz_reponse(self, sous_sujet_index, numero):
-        return self.info["Sous-sujet"][sous_sujet_index]["Quiz"][numero]["Reponse"]
+        quiz = self.info["Sous-sujet"][sous_sujet_index]["Quiz"]
+        return {"Question": quiz[numero]["Question"], "Reponse": quiz[numero]["Reponse"]}
     
     def get_quiz_question(self, sous_sujet_index, numero):
         quiz = self.info["Sous-sujet"][sous_sujet_index]["Quiz"]
