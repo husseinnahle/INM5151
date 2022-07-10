@@ -41,10 +41,29 @@ class User:
     self.email = email
     self.salt = salt
     self.hash = hash
+    self.progress = {}
 
+  def update_progress(self, sujet, sous_sujet, resultat):
+    if sujet not in self.progress:
+      self.progress[sujet] = {sous_sujet: resultat}
+      return
+    if sous_sujet in self.progress[sujet] and self.progress[sujet][sous_sujet] == "E":
+      self.progress[sujet][sous_sujet] = resultat
+    elif sous_sujet not in self.progress[sujet]:
+      self.progress[sujet][sous_sujet] = resultat
+  
+  def get_name(self):
+    return self.name
+  
+  def get_progress(self):
+    return self.progress
+  
+  def set_progress(self, progress):
+    self.progress = progress
+  
   def session(self):
     session = {
       "name": self.name,
-      "email": self.email
+      "progress": self.progress
     }
     return session
