@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <div class="cards">
+  <div class="cards" >
     {% for sujet in sujets %}
       <a href="/languages/{{ sujet["Nom"] }}">
         <div class="card">

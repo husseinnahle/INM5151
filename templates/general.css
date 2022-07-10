@@ -1,0 +1,6 @@
+.card{
+    background: url("/static/logo/whiteback.jpeg") no-repeat;
+    background-size: cover;
+    background-position: bottom;
+    padding-bottom: 100px;
+}

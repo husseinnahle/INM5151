@@ -2,135 +2,195 @@
 
 {% block content %}
 
-<div class="container-fluid p-5 bg-secondary text-white text-center">
-    <h1>Introduction</h1>
+<div class="container-fluid   text-white text-center">
+    <img
+    src="/static/logo/My project (1).png"
+    alt="Python Logo"
+    class="mx-5 w-100 rounded-t-3 rounded-tr-lg-0 rounded-bl-lg-4"
+    />
 </div>
+<hr>
 
-<div class="container mt-5">
-    <h4 class="tutoriel">Comments </h4>
-    <div class="tutoriel">
-        <p class="tutoriel">
-            Comments can be used for differents purposes :
-        <ul class="tutoriel">
+<div class="card-group mx-5">
+    <div class="card bg-light mb-3 my-5" style="max-width: 100%;">
+        <div class="card-header text-center"></div>
+        <div class="card-body">
+        <h5 class="card-title">Comments</h5>
+        <p class="my-4"> Comments can be used for differents purposes :<br></p>
+        <p class="card-text">
+            <ul class="tutoriel">
 
             <li> Explain Python code.</li>
             <li> Make the code more readable.</li>
             <li> Prevent execution when testing code.</li>
-        </ul>
+            </ul>
         </p>
-    </div>
-    <br>
-    <h6 class="tutoriel"> Exemple</h6>
-    <div class="exemple">
-        <p style="color: green">
-            #Put a comment here</p>
-        <p>print("Hello, World!")
-        </p>
-    </div>
-    <br><br>
-    <h4 class="tutoriel"> Variables</h4>
-    <div class="tutoriel">
-        <p class="tutoriel">
-            Variables are containers for storing data values.<br>
-            There is no command to declare a variable so it is created <br>
-            at the moment you first assign a value to it. It does not need a type <br>
-            and it can change type after they have been set.<br>
-            Finally it is possible to specify the type of a variable with a casting
-        </p>
-    </div>
-    <br>
-    <h6 class="tutoriel"> Exemple :</h6>
-    <div class="exemple">
-        <p>
-            x = <span style="color: red;">3</span> <span style="color: green;"> # x is type int</span><br>
-            x = <span style="color: red;">"test"</span> <span style="color: green;"> # x is now str</span><br>
-            y = <span style="color: blue;">str(</span><span style="color: red">4</span><span style="color: blue;">)
-            </span>
-            <span style="color: green;"> # y will be '4'</span><br>
-            z = <span style="color: blue;">float(</span><span style="color: red">4</span><span style="color: blue;">)
-            </span>
-            <span style="color: green;"> # y will be 4.0</span><br>
-        </p>
-    </div>
-    <br><br>
-    <h4 class="tutoriel"> Data Types</h4>
-    <div class="tutoriel">
-        <p class="tutoriel">
-
-        <ul style="list-style-type: none">
-            <li>Text Type: <span style="color:red"> str</span> </li><br>
-            <li>Numeric Types: <span style="color:red"> int, float, complex</span></li><br>
-            <li>Sequence Types: <span style="color:red"> list, tuple, range</span></li><br>
-            <li>Mapping Type: <span style="color:red"> dict</span> </li><br>
-            <li>Set Types: <span style="color:red"> set, frozenset</span> </li><br>
-            <li>Boolean Type: <span style="color:red"> : bool</span> </li><br>
-            <li>Binary Types: <span style="color:red"> bytes, bytearray, memoryview</span> </li><br>
-            <li>None Type: <span style="color:red"> NoneType</span> </li><br>
-        </ul>
-        </p>
-    </div>
-    <br>
-    <h6 class="tutoriel"> Exemple :</h6>
-    <p> In python the data type is set when you assign a value to a variable: <br></p>
-    <div class="exemple">
-        <p>
-
-
-            x = 3456 <span style="color: green;"> # x is type int</span><br>
-            y = "Hello World" <span style="color: green;"> # y is a str</span><br>
-            z = ["apple","banana","orange"]<span style="color: green;"># z is a list </span><br>
-
-        </p>
+        </div>
     </div>
 
-    <h4 class="tutoriel"> Python numbers</h4>
-    <br>
-    <div class="tutoriel">
-        <p class="tutoriel">
-            There are three types of numbers in Python. <br>
-            - Int<br>
-            - Floats<br>
-            - Complex
-        </p>
-    </div>
-    <h6 class="tutoriel">Exemple : </h6>
-        <p>The numbers can have positive and negative values.</p>
-        <br>
-    <div class="exemple">
-        <p>
-            x = -34 <span style="color: green;">#x is an int</span><br>
-            y = 12.3 <span style="color: green;">#y is a float</span><br>
-            z = 1j <span style="color: green;">#z is a complex</span><br>
-            w = -5j <span style="color: green;">#w is a negative complex</span><br>
-        </p>
-        <br>
-    </div>
-    <h4  class="tutoriel">Type conversion for numbers</h4>
-    <br>
-    <div class="tutoriel">
-        <p class="tutoriel">
-            You can convert from one type to another with the int(), float() and complex() methods.
-        </p>
-    </div>
-    <h6 class="tutoriel"> Exemple :</h6>
-    <p> The numbers can have positive and negative values. <br></p>
-    <div class="exemple">
-        <p>
-            x = 9 <span style="color: green;"> # x is an int</span><br>
-            y = 45.6 <span style="color: green;"> # y is a float</span><br>
-            z = 15j <span style="color: green;"> # z is a complex</span><br><br>
-            <span style="color: green;"># To convert from int to float: </span><br><br>
-            a = <span style="color: blue;">float(x)</span><br><br>
-            <span style="color: green;"># To convert from float to int: </span><br><br>
-            b = <span style="color: blue;">int(y)</span><br><br>
-            <span style="color: green;"># To convert from int to complex: </span><br><br>
-            c = <span style="color: blue;">complex(x)</span>
-        </p>
-        <br>
-    </div>
-    <div>
-        <br>
-        <a href="/languages/quiz/Python?sous-sujet=Introduction"><button>Take the quiz</button></a>
+    <div class="card bg-light mb-3 my-5" style="max-width: 100%;">
+        <div class="card-header text-center"></div>
+        <div class="mx-auto card-body">
+        <h5 class="card-title">Exemple</h5>
+        <div class="exemple">
+            <p style="color: green">
+                #Put a comment here</p>
+            <p>print("Hello, World!")
+            </p>
+        </div>
+        </div>
     </div>
 </div>
+
+<div class="card-group mx-5">
+    <div class="card bg-light mb-3 my-5" style="max-width: 100%;">
+        <div class="card-header text-center"></div>
+        <div class="card-body">
+        <h5 class="card-title">Variables</h5>
+        <div class="tutoriel">
+            <p class="tutoriel">
+                Variables are containers for storing data values.<br>
+                There is no command to declare a variable so it is created <br>
+                at the moment you first assign a value to it. It does not need a type <br>
+                and it can change type after they have been set.<br>
+                Finally it is possible to specify the type of a variable with a casting
+            </p>
+        </div>
+        </div>
+    </div>
+
+    <div class="card bg-light mb-3 my-5" style="max-width: 100%;">
+        <div class="card-header text-center"></div>
+        <div class="mx-auto card-body">
+        <h5 class="card-title">Exemple</h5>
+        <div class="exemple">
+            <p>
+                x = <span style="color: red;">3</span> <span style="color: green;"> # x is type int</span><br>
+                x = <span style="color: red;">"test"</span> <span style="color: green;"> # x is now str</span><br>
+                y = <span style="color: blue;">str(</span><span style="color: red">4</span><span style="color: blue;">)
+                </span>
+                <span style="color: green;"> # y will be '4'</span><br>
+                z = <span style="color: blue;">float(</span><span style="color: red">4</span><span style="color: blue;">)
+                </span>
+                <span style="color: green;"> # y will be 4.0</span><br>
+            </p>
+        </div>
+        </div>
+    </div>
+</div>
+
+<div class="card-group mx-5">
+    <div class="card bg-light mb-3 my-5" style="max-width: 100%;">
+        <div class="card-header text-center"></div>
+        <div class="card-body">
+        <h5 class="card-title">Data Types</h5>
+        <div class="tutoriel">
+            <p class="tutoriel">
+    
+            <ul style="list-style-type: none">
+                <li>Text Type: <span style="color:red"> str</span> </li><br>
+                <li>Numeric Types: <span style="color:red"> int, float, complex</span></li><br>
+                <li>Sequence Types: <span style="color:red"> list, tuple, range</span></li><br>
+                <li>Mapping Type: <span style="color:red"> dict</span> </li><br>
+                <li>Set Types: <span style="color:red"> set, frozenset</span> </li><br>
+                <li>Boolean Type: <span style="color:red"> : bool</span> </li><br>
+                <li>Binary Types: <span style="color:red"> bytes, bytearray, memoryview</span> </li><br>
+                <li>None Type: <span style="color:red"> NoneType</span> </li><br>
+            </ul>
+            </p>
+        </div>
+        </div>
+    </div>
+
+    <div class="card bg-light mb-3 my-5" style="max-width: 100%;">
+        <div class="card-header text-center"></div>
+        <p class="my-4"> In python the data type is set when you assign a value to a variable: <br></p>
+        <div class="mx-auto card-body my-4">
+        <h5 class="card-title">Exemple</h5>
+            <div class="exemple">
+                <p>
+                    x = 3456 <span style="color: green;"> # x is type int</span><br>
+                    y = "Hello World" <span style="color: green;"> # y is a str</span><br>
+                    z = ["apple","banana","orange"]<span style="color: green;"># z is a list </span><br>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="card-group mx-5">
+        <div class="card bg-light mb-3 my-5" style="max-width: 100%;">
+            <div class="card-header text-center"></div>
+            <div class="card-body">
+            <h5 class="card-title">Python Numbers</h5>
+            <div class="tutoriel">
+                <p class="tutoriel">
+                    There are three types of numbers in Python. <br>
+                    - Int<br>
+                    - Floats<br>
+                    - Complex
+                </p>
+            </div>
+            </div>
+        </div>
+    
+        <div class="card bg-light mb-3 my-5" style="max-width: 100%;">
+            <div class="card-header text-center"></div>
+            <p class="my-4"> The numbers can have positive and negative values.<br></p>
+            <div class="mx-auto card-body">
+            <h5 class="card-title">Exemple</h5>
+            <div class="exemple">
+                <p>
+                    x = -34 <span style="color: green;">#x is an int</span><br>
+                    y = 12.3 <span style="color: green;">#y is a float</span><br>
+                    z = 1j <span style="color: green;">#z is a complex</span><br>
+                    w = -5j <span style="color: green;">#w is a negative complex</span><br>
+                </p>
+            </div>
+            </div>
+        </div>
+</div>
+
+<div class="card-group mx-5">
+    <div class="card bg-light mb-3 my-5" style="max-width: 100%;">
+        <div class="card-header text-center"></div>
+        <div class="card-body">
+        <h5 class="card-title">Type conversion for numbers</h5>
+        <div class="tutoriel">
+            <p class="tutoriel">
+                You can convert from one type to another with the int(), float() and complex() methods.
+            </p>
+        </div>
+        </div>
+    </div>
+
+    <div class="card bg-light mb-3 my-5" style="max-width: 100%;">
+        <div class="card-header text-center"></div>
+        <p class="my-4"> The numbers can have positive and negative values. <br></p>
+        <div class="mx-auto card-body">
+        <h5 class="card-title">Exemple</h5>
+        <div class="exemple">
+            <p>
+                x = 9 <span style="color: green;"> # x is an int</span><br>
+                y = 45.6 <span style="color: green;"> # y is a float</span><br>
+                z = 15j <span style="color: green;"> # z is a complex</span><br><br>
+                <span style="color: green;"># To convert from int to float: </span><br><br>
+                a = <span style="color: blue;">float(x)</span><br><br>
+                <span style="color: green;"># To convert from float to int: </span><br><br>
+                b = <span style="color: blue;">int(y)</span><br><br>
+                <span style="color: green;"># To convert from int to complex: </span><br><br>
+                c = <span style="color: blue;">complex(x)</span>
+            </p>
+            <br>
+        </div>
+        </div>
+    </div>
+</div>
+<div class="text-center my-5">
+    <a href="/languages/quiz/Python?sous-sujet=Introduction">
+        <button class="btn btn-light btn btn-outline-dark" type="button"> Ready to take the Quiz </button>
+    </a>
+</div>
+
 {% endblock %}
