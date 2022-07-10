@@ -35,13 +35,12 @@
                 <input type="password" id="password" class="form-control" name="password" maxlength="40" required />
                 <span id="sp-pass"></span>
               </div>
+
+              {{ hcaptcha }}
+
               {% if error %}
               <p style="color:#F00">{{error}}.</p>
               {% endif %}
-
-              <div class="form-outline mb-4">
-                <div class="h-captcha" data-sitekey="3c18dd0a-63ab-4e65-bf31-18704c39f732"></div>
-              </div>
 
               <button input type="submit" class="btn btn-primary btn-block mb-4">Create my account
               </button>
@@ -54,7 +53,5 @@
   </section>
   <br />
 </div>
-
-<script src="https://js.hcaptcha.com/1/api.js" async defer></script>
 
 {% endblock %}

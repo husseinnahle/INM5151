@@ -8,16 +8,24 @@ from flask import jsonify
 from flask import Response
 from flask import make_response
 from .modules.database import Database
-from .modules.user import create_user
+from .modules.user import create_user, validate_support_form
 import json
 import html
 import hashlib
 from functools import wraps
+from flask_hcaptcha import hCaptcha
 
 app = Flask(__name__)
 app.config['JSON_SORT_KEYS'] = False
 app.secret_key = "a6cd02e9b1104ac0*c2a02391284cb!0"
 DATA_FILE_PATH = 'static/data.json'
+
+app.config['HCAPTCHA_ENABLED'] = True
+app.config['HCAPTCHA_SITE_KEY'] = "3c18dd0a-63ab-4e65-bf31-18704c39f732"
+app.config['HCAPTCHA_SECRET_KEY'] = "0x58956B96080BFdBA80d7B228B4c460e3F7CfDEFC"
+HCAPTCHA_ERROR = 'Error in hcaptcha. Please try again'
+hcaptcha = hCaptcha(app)
+
 
 def get_db():
     db = getattr(g, 'database', None)
@@ -66,9 +74,34 @@ def index():
 
 
 @app.route('/support', methods=["GET"])
-def aide():
-    return render_template(
-        'support.html', title='Support', username=get_username()), 200
+def support_get():
+    message = session['message'] and session.pop(
+        "message") if "message" in session else None
+    error = session["error"] and session.pop(
+        "error") if "error" in session else None
+    return render_template('support.html', title='Support', error=error,
+                           message=message, username=get_username()), 200
+
+
+@app.route('/support', methods=["POST"])
+def support_post():
+    try:
+        name = request.form["name"]
+        email = request.form["email"]
+        message = request.form["message"]
+        validate_support_form(name, email, message)
+    except ValueError as error:
+        session["error"] = str(error)
+        return redirect("/support")
+    if hcaptcha.verify():
+        # hCaptcha ok
+        # send_message(name, email, message) # Todo
+        session["message"] = "Message sent successfully."
+        return redirect('/support')
+    else:
+        # hCaptcha erreur
+        session['error'] = HCAPTCHA_ERROR
+        return redirect('/support')
 
 
 @app.route('/about', methods=["GET"])
@@ -84,14 +117,15 @@ def a_propos():
 def register_get():
     if is_authenticated():
         return render_template("404.html", title="Not found", username=get_username()), 404
-    error = session["error"] and session.pop("error") if "error" in session else None
+    error = session["error"] and session.pop(
+        "error") if "error" in session else None
     return render_template("register.html", title='Sign up', error=error, username=None)
 
 
 # Valider les données et créer un nouveau compte utilisateur
 @app.route('/register', methods=["POST"])
 def register_post():
-    try: 
+    try:
         db = get_db()
         username = request.form["username"]
         password = request.form["password"]
@@ -100,13 +134,19 @@ def register_post():
             # Nom utilisateur invalide
             session["error"] = "Username already exists. Please enter another one"
             return redirect('/register')
-        user = create_user(username, email, password)  # ValueError        
-        db.insert_user(user)
+        if hcaptcha.verify():
+            # hCaptcha ok
+            user = create_user(username, email, password)  # ValueError
+            db.insert_user(user)
+            session["message"] = "Account successfully created."
+            return redirect("/login")
+        else:
+            # hCaptcha erreur
+            session['error'] = HCAPTCHA_ERROR
+            return redirect('/register')
     except ValueError as error:
-        session["error"] = str(error) 
+        session["error"] = str(error)
         return redirect("/register")
-    session["message"] = "Account successfully created."
-    return redirect("/login")
 
 
 # ==================================  login  =================================
@@ -114,8 +154,10 @@ def register_post():
 # Retourner le formulaire d'authentification
 @app.route('/login', methods=["GET"])
 def login_get():
-    message = session['message'] and session.pop("message") if "message" in session else None
-    error = session["error"] and session.pop("error") if "error" in session else None
+    message = session['message'] and session.pop(
+        "message") if "message" in session else None
+    error = session["error"] and session.pop(
+        "error") if "error" in session else None
     return render_template('login.html', title='Login', error=error, message=message, username=get_username()), 200
 
 
@@ -126,9 +168,14 @@ def login_post():
     password = request.form["password"]
     user = is_authorized(username, password)
     if user:
-        # Accès autorisé
-        session["user"] = user
-        return redirect("/")
+        if hcaptcha.verify():
+            # hCaptcha ok, accès autorisé
+            session["user"] = user
+            return redirect("/")
+        else:
+            # hCaptcha erreur
+            session['error'] = HCAPTCHA_ERROR
+            return redirect('/login')
     return redirect('/login')
 
 
@@ -143,11 +190,12 @@ def is_authorized(username, password):
         # Nom utilisateur inexistant
         session['error'] = 'Incorrect username or password'
         return None
-    hash = hashlib.sha512(str(password + user.salt).encode("utf-8")).hexdigest()
+    hash = hashlib.sha512(
+        str(password + user.salt).encode("utf-8")).hexdigest()
     if user.hash != hash:
         # Mot de passe incorrect
         session['error'] = 'Incorrect password'
-        return None        
+        return None
     return user.session()
 
 
@@ -159,7 +207,7 @@ def authentication_required(f):
         if not is_authenticated():
             return Response('Could not verify your access level for that URL.\n'
                             'You have to login with proper credentials.', 401,
-                            {'WWW-Authenticate': 'Basic realm="Login Required"'})        
+                            {'WWW-Authenticate': 'Basic realm="Login Required"'})
         return f(*args, **kwargs)
     return decorated
 
@@ -280,7 +328,7 @@ def evaluer(raw_data):
         "Note": note
     }
     session["Resultat"] = resultat
-    
+
 
 # ==================================   api  ==================================
 

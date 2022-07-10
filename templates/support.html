@@ -14,11 +14,12 @@
         <div class="col-lg-8">
           <div class="card-body py-5 px-md-5">
 
-            {% if error %}
-            <p style="color:#F00">{{error}}.</p>
-            {% endif %}
-
             <form action="/support" id="inscription" method="POST">
+              {% if message %}
+              <h3>{{ message }}</h3>
+              <br>
+              {% endif %}
+
               <h2>Contact us</h2>
               <br />
               <div class="form-outline mb-4">
@@ -40,9 +41,11 @@
                 <span id="sp-pass"></span>
               </div>
 
-              <div class="form-outline mb-4">
-                <div class="h-captcha" data-sitekey="3c18dd0a-63ab-4e65-bf31-18704c39f732"></div>
-              </div>
+              {{ hcaptcha }}
+
+              {% if error %}
+              <p style="color:#F00">{{error}}.</p>
+              {% endif %}
 
               <button input type="submit" class="btn 
   btn-primary btn-block mb-4">Send message
@@ -56,7 +59,5 @@
   </section>
   <br />
 </div>
-
-<script src="https://js.hcaptcha.com/1/api.js" async defer></script>
 
 {% endblock %}
