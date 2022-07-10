@@ -21,7 +21,7 @@ class Sujet:
 
     def get_quiz_reponse(self, sous_sujet_index, numero):
         quiz = self.info["Sous-sujet"][sous_sujet_index]["Quiz"]
-        return {"Question": quiz[numero]["Question"], "Reponse": quiz[numero]["Reponse"]}
+        return {"Question": quiz[numero]["Question"], "Reponse": quiz[numero]["Reponse"], "Indice": quiz[numero]["Indice"]}
     
     def get_quiz_question(self, sous_sujet_index, numero):
         quiz = self.info["Sous-sujet"][sous_sujet_index]["Quiz"]

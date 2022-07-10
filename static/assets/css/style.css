@@ -464,3 +464,78 @@ footer {
   background-color: rgb(255, 255, 255);
   border-color: #000;
 }
+
+.hint-icon-container {
+  position: relative;
+  float: right;
+  margin-top: 2px;
+  margin-right: 5px;
+}
+
+#hint-icon {
+  width: 20px;
+  height: auto;
+}
+
+.qtip {
+  display: inline-block;
+  position: relative;
+  cursor: pointer;
+  box-sizing: border-box;
+  font-style: normal;
+  transition: all 0.25s ease-in-out;
+}
+
+.qtip:before {
+  content: attr(data-tip);
+  font-size: 14px;
+  position: absolute;
+  background: rgba(10, 20, 30, 0.85);
+  color: #fff;
+  line-height: 1.2em;
+  padding: 0.5em;
+  font-style: normal;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  min-width: 200px;
+  text-align: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease-in-out;
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+  font-family: sans-serif;
+  letter-spacing: 0;
+  font-weight: 600;
+}
+
+.qtip:after {
+  width: 0;
+  height: 0;
+  border-style: solid;
+  content: "";
+  position: absolute;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease-in-out;
+}
+.qtip:hover:before,
+.qtip:hover:after {
+  visibility: visible;
+  opacity: 1;
+}
+
+.qtip.tip-left:before {
+  left: 0;
+  top: 50%;
+  transform: translate(calc(-100% - 8px), -50%);
+  box-sizing: border-box;
+  border-radius: 3px;
+}
+.qtip.tip-left:after {
+  border-width: 8px 0 8px 8px;
+  border-color: transparent transparent transparent rgba(10, 20, 30, 0.85);
+  left: -8px;
+  top: 50%;
+  transform: translate(0, -50%);
+}
+
+

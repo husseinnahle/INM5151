@@ -278,6 +278,7 @@ def evaluer(raw_data):
         question = {
             "Question": reponse["Question"],
             "Choix": choix,
+            "Indice": reponse["Indice"],
             "Etat": "incorrecte"
         }
         if reponse["Reponse"] == choix:
