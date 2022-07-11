@@ -68,7 +68,9 @@ def aide():
 def a_propos():
     return render_template('about_us.html', title='About'), 200
 
-
+@app.route('/compte', methods=["GET"])
+def compteS():
+    return render_template('compte.html', title='About'), 200
 # ================================  register  ================================
 
 # Retourner le formulaire de création de comptes utilisateur
@@ -125,7 +127,7 @@ def login_post():
         # L'authentification se fait depuis une page autre que '/login'
         path = session['path'] and session.pop('path') if 'path' in session else None
         return redirect(path)
-    return redirect("/")
+    return redirect("/compte")
 
 
 # Retourne True si les données sont valides
