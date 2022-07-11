@@ -6,6 +6,10 @@ body{
   position: relative;
   min-height: 100vh;
 }
+
+.container-fluid{
+  height: 75%;
+}
 .navbar {
   max-height: 55px !important;
   z-index: 110;

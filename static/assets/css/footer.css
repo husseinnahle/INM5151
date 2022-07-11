@@ -1,12 +1,10 @@
 footer {
     position: absolute;
     padding-top: 3vh;
-    border: 2vh;
-    bottom: 0;
+    bottom: 0vh;
     width: 100%;
     background: #111;
-    height: 25%;
-    max-height: 30%;
+    height: auto;
     color: rgb(173, 173, 173);
   }
   
@@ -24,7 +22,7 @@ footer {
     padding-top: 2vh;
     padding-top: 2%;
     height: 30%;
-    bottom: 0%;
+    bottom: vh;
     text-align: center;
   }
   .footer-content h3 {
