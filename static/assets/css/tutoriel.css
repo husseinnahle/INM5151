@@ -36,3 +36,75 @@ p.tutoriel, ul.tutoriel, h4.tutoriel{
 h3.tutoriel{
     text-align: center;
 }
+
+
+.sujetTitle{
+    padding: 0.8rem 0;
+    font-size:3rem;
+    color:white;
+    background-color:darkolivegreen;
+    border-radius: 2rem;
+    -webkit-border-radius: 2rem;
+    -moz-border-radius: 2rem;
+    -ms-border-radius: 2rem;
+    -o-border-radius: 2rem;
+}
+
+
+div.quiz{
+    margin:3rem auto;
+    width:90vw;
+    padding: 2rem;
+    background-color:aliceblue;
+    cursor: default;
+    border-radius: 1rem;;
+    -webkit-border-radius: 1rem;
+    -moz-border-radius: 1rem;
+    -ms-border-radius: 1rem;
+    -o-border-radius: 1rem;
+}
+
+#question{
+    margin-bottom: 1rem;
+}
+
+#choix{
+    margin-bottom:0.5rem;
+    font-size: 1.2rem;
+    border-bottom: solid 0.1rem;
+    width:15rem;
+
+}
+#choix{
+    margin-bottom: 0.5rem;
+    font-size:1.0rem;
+    border-bottom:solid 0.1rem;
+    width:15rem;
+    background-color: lightgray;
+    border-radius: 1rem;;
+    -webkit-border-radius: 1rem;
+    -moz-border-radius: 1rem;
+    -ms-border-radius: 1rem;
+    -o-border-radius: 1rem;
+}
+
+.next{
+    padding:0.2rem 1.5rem;
+    border: none;
+    outline:none;
+    font-size:1.5rem;
+    border-radius:1.5rem;
+    color:black;
+    background-color:cadetblue;
+    -webkit-border-radius:1.5rem;
+    -moz-border-radius:1.5rem;
+    -ms-border-radius:1.5rem;
+    -o-border-radius:1.5rem;
+}
+
+.next:active{
+    background-color:grey;
+}
+
+
+

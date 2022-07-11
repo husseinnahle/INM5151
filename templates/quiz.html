@@ -1,23 +1,26 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <div style="display: flex;">
-    <h1 id="sujet">{{ sujet }}</h1>
-    <h1> - </h1>
-    <h1 id="sous_sujet">{{ sous_sujet }}</h1>
+  <div class="sujetTitle" style="display: flex;">
+    <h1 id="sujet" class="col text-center">{{ sujet }}'s Quiz</h1>
   </div>
-  <div style="display: flex;">
-    <p id="numero">1</p>
-    <p>.&nbsp;</p>
-    <p id="question">{{ question }}</p>
-  </div>
-  <div id="container">
-    {% for c in choix %}
-      <input type="radio" id="choix" name="choix">
-      <label id="choix" name="choix_label" for={{ c }}>{{ c }}</label>
-      <br>
-    {% endfor %}
-  </div>
+
+  <div class="quiz">
+    <div class="question" style="display: flex;">
+      <p id="numero">1</p>
+      <p>.&nbsp;</p>
+      <p id="question">{{ question }}</p>
+    </div>
+    <div class="quiz-container" id="container">
+      {% for c in choix %}
+        <input type="radio" id="choix" name="choix">
+        <label id="choix" name="choix_label" for={{ c }}>{{ c }}</label>
+        <br>
+      {% endfor %}
+    </div>
+ </div>
   <span id="erreur"></span><br>
-  <button onclick="questionSuivante();">Suivant</button>
+  <div class="col text-center">
+    <button class="next" onclick="questionSuivante();">Next</button>
+  </div>
 {% endblock %}
