@@ -2,7 +2,10 @@
   height: auto;
   width: 100px;
 }
-
+body{
+  position: relative;
+  min-height: 100vh;
+}
 .navbar {
   max-height: 55px !important;
   z-index: 110;
@@ -146,49 +149,50 @@
 }
 
 footer {
-  margin-top: 25px;
-  margin: 0 auto;
-  position: relative;
+  position: absolute;
+  padding-top: 3vh;
+  border: 2vh;
   bottom: 0;
-  left: 0;
+  width: 100%;
   background: #111;
-  height: auto;
-  padding-top: 40px;
-  color: #fff;
+  height: 25%;
+  max-height: 30%;
+  color: rgb(173, 173, 173);
 }
 
 .footer-content {
+  height: 70%;
+  padding-top: 2vh;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
   text-align: center;
 }
-
+.footer-bottom {
+  background: #000;
+  padding-top: 2vh;
+  padding-top: 2%;
+  height: 30%;
+  bottom: 0%;
+  text-align: center;
+}
 .footer-content h3 {
-  font-size: 1.8rem;
-  font-weight: 400;
-  text-transform: capitalize;
-  line-height: 3rem;
+  padding-top: 5%;
+  font-size: 2.5vh;
 }
 
 .footer-content p {
-  max-width: 500px;
-  margin: 10px auto;
-  line-height: 28px;
-  font-size: 14px;
+  width: 60%;
+  max-width: 80%;
+  font-size: 1.5vh;
 }
 
-.footer-bottom {
-  background: #000;
-  padding: 20px 0;
-  text-align: center;
-}
+
 
 .footer-bottom p {
-  font-size: 14px;
+  font-size: 2vh;
   word-spacing: 2 px;
-  text-transform: capitalize;
 }
 
 @import url('https://fonts.googleapis.com/css?family=Roboto:700');
