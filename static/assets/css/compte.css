@@ -1,5 +1,15 @@
 .infoCompte{
     width : 40%;
-    background-color: rgb(186, 203, 217);
+    background-color: rgb(145, 146, 146);
     border-left: 2%;
+}
+ul.info{
+
+    list-style-type: none;
+}
+#edit-button{
+    align-self: left;
+}
+#become-premium{
+    align-self: left;
 }
