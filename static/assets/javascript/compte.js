@@ -2,7 +2,6 @@
 
 
 function edit(){
-    alert("test")
     const email = document.getElementById("email");
     const name = document.getElementById("name");
     const password = document.getElementById("password");
@@ -12,14 +11,18 @@ function edit(){
         email.contentEditable = false;
         name.contentEditable = false;
         password.contentEditable = false;
-        paragraph.style.backgroundColor =  rgb(145, 146, 146);;
-        edit_button.innerText ="Edit"
+        email.style.backgroundColor =  "#5f8de3";
+        name.style.backgroundColor =  "#5f8de3";
+        password.style.backgroundColor =  "#5f8de3";
+        edit_button.innerText ="Edit";
     }else{
         email.contentEditable = true;
         name.contentEditable = true;
         password.contentEditable = true;
-        paragraph.style.backgroundColor = rgb(237, 248, 248);
-        edit_button.innerText ="Done"
+        email.style.backgroundColor =  "white";
+        name.style.backgroundColor =  "white";
+        password.style.backgroundColor =  "white";
+        edit_button.innerText ="Done";
     }
 }
 

@@ -2,10 +2,9 @@
 
 {% block content %}
 
-
-<div class="infoCompte">
-    <h3>Info Compte</h3>
-    <div id="edit"> 
+<div id="edit">
+    <div class="infoCompte">
+        <h3>Info Compte</h3>     
         <ul class="info">
             <li class = "title">Email</li>
             <li id="email">jmlandry867@gmail.com</li>
@@ -14,10 +13,11 @@
             <li class = "title" >Password</li>
             <li id="password">********</li>
         </ul>
+        <button onclick="edit()" id="edit-button">Edit</button>
+        <button href="/" id="become-premium">Become member</button>
     </div>
-    <button onclick="edit()" id="edit-button">Edit</button>
-    <button href="/" id="become-premium">Become member</button>
-    </div>
+    
+</div>
 <div class="langageCompte">
     <h3>Languages</h3>
 </div>

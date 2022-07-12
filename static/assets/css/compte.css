@@ -1,19 +1,20 @@
 #edit {
-    display: inline;
-    flex-direction: column;
+    display: flex; 
+    flex-direction:row;
 }
 
 .infoCompte{
     width : 40%;
-    background-color: rgb(95, 141, 227);
+    background-color:#5f8de3;
     padding:2vh 2vh 2vw 1vw;
     border-left: 2%;
     border-radius: 2%;
+    border-bottom: 2%;
 }
 
 .langageCompte{
     width : 40%;
-    background-color: rgb(95, 141, 227);
+    background-color: #5f8de3;
     padding:2vh 2vh 2vw 1vw;
     border-left: 2%;
     border-radius: 2%;
