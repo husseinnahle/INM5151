@@ -1,14 +1,38 @@
+#edit {
+    display: inline;
+    flex-direction: column;
+}
+
 .infoCompte{
     width : 40%;
-    background-color: rgb(145, 146, 146);
+    background-color: rgb(95, 141, 227);
+    padding:2vh 2vh 2vw 1vw;
     border-left: 2%;
+    border-radius: 2%;
+}
+
+.langageCompte{
+    width : 40%;
+    background-color: rgb(95, 141, 227);
+    padding:2vh 2vh 2vw 1vw;
+    border-left: 2%;
+    border-radius: 2%;
+}
+h3 {
+    
+    text-align: center;
 }
 ul.info{
 
     list-style-type: none;
 }
+li.title{
+    font-weight: bold;
+
+}
 #edit-button{
-    align-self: left;
+    align-self: center;
+    
 }
 #become-premium{
     align-self: left;

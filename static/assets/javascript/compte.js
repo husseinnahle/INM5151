@@ -2,6 +2,7 @@
 
 
 function edit(){
+    alert("test")
     const email = document.getElementById("email");
     const name = document.getElementById("name");
     const password = document.getElementById("password");
