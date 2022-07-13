@@ -11,7 +11,6 @@ body{
   height: 75%;
 }
 .navbar {
-  max-height: 55px !important;
   z-index: 110;
 }
 
@@ -152,52 +151,6 @@ body{
   color:rgb(0, 0, 0);
 }
 
-footer {
-  position: absolute;
-  padding-top: 3vh;
-  border: 2vh;
-  bottom: 0;
-  width: 100%;
-  background: #111;
-  height: 25%;
-  max-height: 30%;
-  color: rgb(173, 173, 173);
-}
-
-.footer-content {
-  height: 70%;
-  padding-top: 2vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  text-align: center;
-}
-.footer-bottom {
-  background: #000;
-  padding-top: 2vh;
-  padding-top: 2%;
-  height: 30%;
-  bottom: 0%;
-  text-align: center;
-}
-.footer-content h3 {
-  padding-top: 5%;
-  font-size: 2.5vh;
-}
-
-.footer-content p {
-  width: 60%;
-  max-width: 80%;
-  font-size: 1.5vh;
-}
-
-
-
-.footer-bottom p {
-  font-size: 2vh;
-  word-spacing: 2 px;
-}
 
 @import url('https://fonts.googleapis.com/css?family=Roboto:700');
 @keyframes showTopText {
