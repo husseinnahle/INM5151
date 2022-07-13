@@ -142,8 +142,6 @@ function editInput(){
     if (username == "" || email == "" || password == "") {
       document.getElementById("message-container").innerHTML = `<span style="color:red;">All fields are required!</span><br>`;
       return;
-    } else if (password == "********") {
-      url = '/api/compte/modifier?username=' + username + '&email=' + email;
     }
     fetch(url)
     .then(function(response) {
@@ -181,4 +179,12 @@ function disableField(input) {
   input.style.cursor = "default";
   input.style.background = "#2d3033";
   input.style.color = "#e4e4e4"; 
+}
+
+function clearField() {
+  var password = document.getElementById("password");
+  if (password.readOnly == true) {
+    return;
+  }
+  password.value = "";
 }
