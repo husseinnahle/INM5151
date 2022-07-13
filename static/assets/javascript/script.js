@@ -142,6 +142,8 @@ function editInput(){
     if (username == "" || email == "" || password == "") {
       document.getElementById("message-container").innerHTML = `<span style="color:red;">All fields are required!</span><br>`;
       return;
+    } else if (password == "********") {
+      url = '/api/compte/modifier?username=' + username + '&email=' + email;
     }
     fetch(url)
     .then(function(response) {
