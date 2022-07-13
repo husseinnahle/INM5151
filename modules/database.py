@@ -68,3 +68,10 @@ class Database:
         connection.execute('update user set progress = ? where username = ?',
                            (json.dumps(user.get_progress()), user.get_name()))
         connection.commit()
+
+    # Mettre à jour les info du compte d'un utilisateur selon 'username'
+    def update_user_info(self, user: User):
+        connection = self.get_connection()
+        connection.execute('update user set username = ?, email = ?, hash = ? where id = ?',
+                           (user.name, user.email, user.hash, user.id))
+        connection.commit()

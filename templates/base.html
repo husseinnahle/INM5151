@@ -28,7 +28,9 @@
             {% if session['user'] %}
               <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button"
                 data-bs-toggle="dropdown" aria-expanded="false">{{ session['user']['name'] }}</a>
+                
               <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
+                <li><a class="dropdown-item" href="/account">My account</a></li>
                 <li><a class="dropdown-item" href="/logout">Logout</a></li>
               </ul>
             {% else %}
@@ -53,12 +55,12 @@
   <br />
 
   <footer>
-    <div class="footer-content container-fluid">
+    <div class="footer-content">
       <h3>About us</h3>
       <p>Blal ipsyum dolor site, amet consctetur adipisicing elit. Illo iste corrupti doloribus odio
         sed!</p>
-      <a class="navbar-brand" href="/" id="ezcoding__link">
-        <img src="{{ url_for('static',filename='logo/ezcoding.png') }}" alt="EZCoding" id="ezcoding__logo"></a>
+      <a  href="/" id="ezcoding__link">
+        <img class="footerI" src="{{ url_for('static',filename='logo/ezcoding.png') }}" alt="EZCoding" id="ezcoding__logo"></a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
         <span class="navbar-toggler-icon"></span>
       </button>

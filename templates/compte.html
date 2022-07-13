@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='assets/css/compte.css') }}" />
+  <div class="compteContainer">
+        <div class="infoCompte">
+            <form method="post" action="/login">
+                <h2>My account</h2>
+                <div class="form-group">
+                    <label for="username">username</label>
+                    <input type="text" id="username" name="username" value="{{session['user']['name']}}" readonly="true"/>
+                </div>
+                <div class="form-group">
+                    <label for="email">email</label>
+                    <input type="text" id="email" name="email" value="{{session['user']['email']}}" readonly="true"/>
+                </div>
+                <div class="form-group">
+                    <label for="password">password</label>
+                    <input type="password" id="password" name="password" onfocus="clearField();" value="********" readonly="true"/>
+                </div>
+                <div id="message-container"></div>
+                <br>
+                <button type="button" onclick="editInput()" class="edit" id="edit">Edit</button>
+                <button type="button" onclick="#" class="member">Become a member</button>
+            </form>
+        </div>
+
+        <div class="langages">
+            <div class="langages-container">
+                <h2>Languages</h2>
+            </div>
+        </div>
+  </div>
+{% endblock %}

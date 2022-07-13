@@ -8,6 +8,7 @@ from flask import jsonify
 from flask import Response
 from .modules.database import Database
 from .modules.user import create_user
+from .modules.user import modify_user
 import json
 import html
 import hashlib
@@ -27,6 +28,17 @@ def get_db():
 
 def is_authenticated():
     return "user" in session and get_db().read_user_username(session["user"]["name"])
+
+
+def authentication_required(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        if not is_authenticated():
+            return Response('Could not verify your access level for that URL.\n'
+                            'You have to login with proper credentials.', 401,
+                            {'WWW-Authenticate': 'Basic realm="Login Required"'})        
+        return f(*args, **kwargs)
+    return decorated
 
 
 @app.errorhandler(404)
@@ -67,6 +79,11 @@ def aide():
 @app.route('/about', methods=["GET"])
 def a_propos():
     return render_template('about_us.html', title='About'), 200
+
+@app.route('/account', methods=["GET"])
+@authentication_required
+def compte():
+    return render_template('compte.html', title='My account'), 200
 
 
 # ================================  register  ================================
@@ -125,24 +142,7 @@ def login_post():
         # L'authentification se fait depuis une page autre que '/login'
         path = session['path'] and session.pop('path') if 'path' in session else None
         return redirect(path)
-    return redirect("/")
-
-
-# Retourne True si les données sont valides
-@app.route('/api/is_authorized', methods=["GET"])
-def api_is_authorized():
-    username = request.args.get('username')
-    password = request.args.get('password')
-    path = request.args.get('path')
-    user = is_authorized(username, password)
-    if not user:
-        # Accès non autorisé
-        error = session["error"]
-        session.pop("error")
-        return jsonify({"is_authorized": False, "reason": error})
-    if len(path) != 0:
-        session['path'] = path
-    return jsonify({"is_authorized": True})
+    return redirect("/account")
 
 
 def is_authorized(username, password):
@@ -165,17 +165,6 @@ def is_authorized(username, password):
 
 
 # =================================  logout  =================================
-
-def authentication_required(f):
-    @wraps(f)
-    def decorated(*args, **kwargs):
-        if not is_authenticated():
-            return Response('Could not verify your access level for that URL.\n'
-                            'You have to login with proper credentials.', 401,
-                            {'WWW-Authenticate': 'Basic realm="Login Required"'})        
-        return f(*args, **kwargs)
-    return decorated
-
 
 @app.route('/logout')
 @authentication_required
@@ -355,6 +344,44 @@ def api_sujets():
     except TypeError:
         return jsonify("Aucun sujet trouvé."), 204
     return jsonify({sujet.get_nom(): sujet.to_json()}), 200
+
+
+# Retourne True si les données sont valides
+@app.route('/api/is_authorized', methods=["GET"])
+def api_is_authorized():
+    username = request.args.get('username')
+    password = request.args.get('password')
+    path = request.args.get('path')
+    user = is_authorized(username, password)
+    if not user:
+        # Accès non autorisé
+        error = session["error"]
+        session.pop("error")
+        return jsonify({"is_authorized": False, "reason": error})
+    if len(path) != 0:
+        session['path'] = path
+    return jsonify({"is_authorized": True})
+
+
+# Modifier les informations d'un utilisateur
+@app.route('/api/compte/modifier', methods=["GET"])
+def api_modifier_compte():
+    username = request.args.get('username')
+    email = request.args.get('email')
+    password = request.args.get('password')
+    try:
+        db = get_db()
+        if username != session['user']['name'] and db.read_user_username(username):
+                # Nom utilisateur invalide
+                error = "Username already exists. Please enter another one"
+                return jsonify({"valid": False, "reason": error}), 404
+        user = db.read_user_username(session['user']['name'])
+        modify_user(user, username, email, password)  # ValueError
+        session["user"] = user.session()
+        db.update_user_info(user)
+    except ValueError as error:
+        return jsonify({"valid": False, "reason": str(error)}), 404
+    return jsonify({"valid": True}), 200
 
 
 # Temporaire pour tester la progression
