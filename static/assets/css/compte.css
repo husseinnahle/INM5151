@@ -1,9 +1,14 @@
 .compteContainer{
-    display: flex;
+    display: table;
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 100px;
+    margin-top: -50px;
     margin-bottom: 50px;
 }
 
 .infoCompte {
+    display: table-cell;
     position: relative;
     background: #212529;
     width: 550px;
@@ -11,11 +16,11 @@
     border-radius: 4px;
     box-shadow: 0 0 20px black;
     box-sizing: border-box;
-    margin: 50px 9% 10px;
     color: white;
 }
 
 .langages {
+    display: table-cell;
     position: relative;
     background: #212529;
     width: 550px;
@@ -23,7 +28,6 @@
     border-radius: 4px;
     box-shadow: 0 0 20px black;
     box-sizing: border-box;
-    margin: 50px 0 10px;
     color: white;
 }
 

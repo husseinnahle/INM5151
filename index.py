@@ -81,10 +81,11 @@ def aide():
 def a_propos():
     return render_template('about_us.html', title='About'), 200
 
-@app.route('/compte', methods=["GET"])
+@app.route('/account', methods=["GET"])
 @authentication_required
-def compteS():
-    return render_template('compte.html', title='About'), 200
+def compte():
+    return render_template('compte.html', title='My account'), 200
+
 
 # ================================  register  ================================
 
@@ -142,7 +143,7 @@ def login_post():
         # L'authentification se fait depuis une page autre que '/login'
         path = session['path'] and session.pop('path') if 'path' in session else None
         return redirect(path)
-    return redirect("/compte")
+    return redirect("/account")
 
 
 def is_authorized(username, password):
