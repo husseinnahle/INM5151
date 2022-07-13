@@ -2,15 +2,9 @@
   height: auto;
   width: 100px;
 }
-body{
-  position: relative;
-  min-height: 100vh;
-}
 
-.container-fluid{
-  height: 75%;
-}
 .navbar {
+  max-height: 55px !important;
   z-index: 110;
 }
 
@@ -151,6 +145,51 @@ body{
   color:rgb(0, 0, 0);
 }
 
+footer {
+  margin-top: 25px;
+  margin: 0 auto;
+  position: relative;
+  bottom: 0;
+  left: 0;
+  background: #111;
+  height: auto;
+  padding-top: 40px;
+  color: #fff;
+}
+
+.footer-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+}
+
+.footer-content h3 {
+  font-size: 1.8rem;
+  font-weight: 400;
+  text-transform: capitalize;
+  line-height: 3rem;
+}
+
+.footer-content p {
+  max-width: 500px;
+  margin: 10px auto;
+  line-height: 28px;
+  font-size: 14px;
+}
+
+.footer-bottom {
+  background: #000;
+  padding: 20px 0;
+  text-align: center;
+}
+
+.footer-bottom p {
+  font-size: 14px;
+  word-spacing: 2 px;
+  text-transform: capitalize;
+}
 
 @import url('https://fonts.googleapis.com/css?family=Roboto:700');
 @keyframes showTopText {
@@ -498,5 +537,3 @@ body{
   top: 50%;
   transform: translate(0, -50%);
 }
-
-

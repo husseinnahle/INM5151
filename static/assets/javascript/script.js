@@ -121,3 +121,32 @@ function is_authorized(){
   });
   return true;
 }
+
+function edit_input(){
+  var input = document.getElementsByTagName("input");
+  var edit_button = document.getElementById("edit");
+  
+  if ( edit_button.innerText == "Edit") {
+      for(var i = 0; i < input.length; i++) {
+        input[i].readOnly = false;
+        input[i].style.cursor = "text";
+        input[i].style.background = "#e4e4e4";
+        input[i].style.color = "#2d3033";  
+      }
+      edit_button.innerText ="Done";
+      edit_button.style.color = "#f83470";
+      edit_button.style.backgroundColor = "#2d3033";
+      edit_button.style.border = "2px solid #f83470";
+  } else {
+    for(var i = 0; i < input.length; i++) {
+      input[i].readOnly = true;
+      input[i].style.cursor = "default";
+      input[i].style.background = "#2d3033";
+      input[i].style.color = "#e4e4e4";  
+    }
+    edit_button.innerText ="Edit";
+    edit_button.style.color = "#e4e4e4";
+    edit_button.style.backgroundColor = "#f83470";
+    edit_button.style.border = "0";
+  }
+}

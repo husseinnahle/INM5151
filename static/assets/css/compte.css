@@ -1,40 +1,102 @@
-#edit {
-    display: flex; 
-    flex-direction:row;
+.compteContainer{
+    display: flex;
+    margin-bottom: 50px;
 }
 
-.infoCompte{
-    width : 40%;
-    background-color:#5f8de3;
-    padding:2vh 2vh 2vw 1vw;
-    border-left: 2%;
-    border-radius: 2%;
-    border-bottom: 2%;
+.infoCompte {
+    position: relative;
+    background: #212529;
+    width: 550px;
+    height: 550px;
+    border-radius: 4px;
+    box-shadow: 0 0 20px black;
+    box-sizing: border-box;
+    margin: 50px 9% 10px;
+    color: white;
 }
 
-.langageCompte{
-    width : 40%;
-    background-color: #5f8de3;
-    padding:2vh 2vh 2vw 1vw;
-    border-left: 2%;
-    border-radius: 2%;
+.langages {
+    position: relative;
+    background: #212529;
+    width: 550px;
+    height: 550px;
+    border-radius: 4px;
+    box-shadow: 0 0 20px black;
+    box-sizing: border-box;
+    margin: 50px 0 10px;
+    color: white;
 }
-h3 {
-    
+
+.langages-container {
+    margin: 70px;
+}
+
+h2 {
+    padding: 0px calc(5% + 10px) 30px 0px;
+    box-sizing: border-box;
+}
+
+form {
+    margin: 70px;
+}
+
+.form-group {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin: 0 0 20px;
+}
+  
+.form-group label {
+    display: block;
+    margin: 0 0 10px;
+    color: rgb(255, 255, 255);
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+}
+  
+.form-group input {
+    outline: none;
+    display: block;
+    background: #2d3033;
+    width: 100%;
+    border: 2px solid #e4e4e4;
+    border-radius: 4px;
+    box-sizing: border-box;
+    padding: 12px 20px;
+    color: #e4e4e4;
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: 500;
+    line-height: inherit;
+    cursor: default;
+}
+  
+button {
+    outline: none;
+    background: #f83470;
+    border: 0;
+    border-radius: 4px;
+    padding: 12px 20px;
+    color: #e4e4e4;
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: 500;
+    line-height: inherit;
+    cursor: pointer;
+    text-shadow: 0.5 0.1em 0.1em rgba(255, 255, 255, 0.253);
+}
+
+.member {
+    float: right;
+    white-space: nowrap;
     text-align: center;
 }
-ul.info{
 
-    list-style-type: none;
-}
-li.title{
-    font-weight: bold;
-
-}
-#edit-button{
-    align-self: center;
-    
-}
-#become-premium{
-    align-self: left;
+.edit {
+    transition: all 0.2s;
+    width: 80px;
 }
