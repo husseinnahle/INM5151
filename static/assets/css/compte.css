@@ -7,7 +7,7 @@
     position: relative;
     background: #212529;
     width: 550px;
-    height: 550px;
+    height: 560px;
     border-radius: 4px;
     box-shadow: 0 0 20px black;
     box-sizing: border-box;
@@ -19,7 +19,7 @@
     position: relative;
     background: #212529;
     width: 550px;
-    height: 550px;
+    height: 560px;
     border-radius: 4px;
     box-shadow: 0 0 20px black;
     box-sizing: border-box;
@@ -99,4 +99,9 @@ button {
 .edit {
     transition: all 0.2s;
     width: 80px;
+}
+
+#message_container {
+    margin: 0 0 20px;
+    font-weight: bold;
 }

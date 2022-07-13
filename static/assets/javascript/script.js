@@ -122,31 +122,63 @@ function is_authorized(){
   return true;
 }
 
-function edit_input(){
+function editInput(){
   var input = document.getElementsByTagName("input");
   var edit_button = document.getElementById("edit");
-  
+  document.getElementById("message-container").innerHTML = "";
   if ( edit_button.innerText == "Edit") {
-      for(var i = 0; i < input.length; i++) {
-        input[i].readOnly = false;
-        input[i].style.cursor = "text";
-        input[i].style.background = "#e4e4e4";
-        input[i].style.color = "#2d3033";  
-      }
-      edit_button.innerText ="Done";
-      edit_button.style.color = "#f83470";
-      edit_button.style.backgroundColor = "#2d3033";
-      edit_button.style.border = "2px solid #f83470";
-  } else {
     for(var i = 0; i < input.length; i++) {
-      input[i].readOnly = true;
-      input[i].style.cursor = "default";
-      input[i].style.background = "#2d3033";
-      input[i].style.color = "#e4e4e4";  
+      enableField(input[i]);
     }
-    edit_button.innerText ="Edit";
-    edit_button.style.color = "#e4e4e4";
-    edit_button.style.backgroundColor = "#f83470";
-    edit_button.style.border = "0";
+    edit_button.innerText ="Done";
+    edit_button.style.color = "#f83470";
+    edit_button.style.backgroundColor = "#2d3033";
+    edit_button.style.border = "2px solid #f83470";
+  } else {
+    var username = document.getElementById("username").value;
+    var email = document.getElementById("email").value;
+    var password = document.getElementById("password").value;  
+    var url = '/api/compte/modifier?username=' + username + '&password=' + password + '&email=' + email;
+    if (username == "" || email == "" || password == "") {
+      document.getElementById("message-container").innerHTML = `<span style="color:red;">All fields are required!</span><br>`;
+      return;
+    } else if (password == "********") {
+      url = '/api/compte/modifier?username=' + username + '&email=' + email;
+    }
+    fetch(url)
+    .then(function(response) {
+      if(response.status = 200) {
+        return response.text();
+      }
+    }).then(function(text) {
+      var response = JSON.parse(text);
+      if (response["valid"] == false){
+        document.getElementById("message-container").innerHTML = `<span style="color:red;">${response["reason"]}</span><br>`
+        return;
+      }
+      document.getElementById("message-container").innerHTML = `<span id="message-container">Account info updated!</span><br>`;
+      document.getElementById("navbarDarkDropdownMenuLink").innerText = username;
+      for(var i = 0; i < input.length; i++) {
+        disableField(input[i]);
+      }
+      edit_button.innerText ="Edit";
+      edit_button.style.color = "#e4e4e4";
+      edit_button.style.backgroundColor = "#f83470";
+      edit_button.style.border = "0";
+    });
   }
+}
+
+function enableField(input) {
+  input.readOnly = false;
+  input.style.cursor = "text";
+  input.style.background = "#e4e4e4";
+  input.style.color = "#2d3033"; 
+}
+
+function disableField(input) {
+  input.readOnly = true;
+  input.style.cursor = "default";
+  input.style.background = "#2d3033";
+  input.style.color = "#e4e4e4"; 
 }

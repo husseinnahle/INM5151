@@ -8,19 +8,19 @@
                 <h2>My account</h2>
                 <div class="form-group">
                     <label for="username">username</label>
-                    <input type="text" name="username" required="required" value="husseinnahle" readonly="true"/>
+                    <input type="text" id="username" name="username" value="{{session['user']['name']}}" readonly="true"/>
                 </div>
                 <div class="form-group">
                     <label for="email">email</label>
-                    <input type="text" name="email" required="required" value="hussein-188@hotmail.com" readonly="true"/>
+                    <input type="text" id="email" name="email" value="{{session['user']['email']}}" readonly="true"/>
                 </div>
                 <div class="form-group">
                     <label for="password">password</label>
-                    <input type="password" name="password" required="required" value="********" readonly="true"/>
+                    <input type="password" id="password" name="password" value="********" readonly="true"/>
                 </div>
+                <div id="message-container"></div>
                 <br>
-                <div id="form-popup-error-container"></div>   
-                <button type="button" onclick="edit_input()" class="edit" id="edit">Edit</button>
+                <button type="button" onclick="editInput()" class="edit" id="edit">Edit</button>
                 <button type="button" onclick="#" class="member">Become a member</button>
             </form>
         </div>
