@@ -11,6 +11,22 @@ def create_user(username, email, password):
   hash = hashlib.sha512(str(password + salt).encode("utf-8")).hexdigest()
   return User(0, username, email, salt, hash)
 
+def modify_user(user, username, email, password):
+  try:
+    if password == None:
+      _verify_username(username)
+      _verify_email(email)
+    else:
+      _validate_user(username, email, password)  # ValueError
+  except ValueError as error:
+    raise ValueError(error)
+  hash = ""
+  if password != None:
+    salt = user.get_salt()
+    hash = hashlib.sha512(str(password + salt).encode("utf-8")).hexdigest()
+    print(hash)
+  user._modify_info(username, email, hash)
+
 def _validate_user(username, email, password):
   if username == "" or email == "" or password == "":
     raise ValueError("All fields are required")
@@ -41,10 +57,39 @@ class User:
     self.email = email
     self.salt = salt
     self.hash = hash
+    self.progress = {}
 
+  def update_progress(self, sujet, sous_sujet, resultat):
+    if sujet not in self.progress:
+      self.progress[sujet] = {sous_sujet: resultat}
+      return
+    if sous_sujet in self.progress[sujet] and self.progress[sujet][sous_sujet] == "E":
+      self.progress[sujet][sous_sujet] = resultat
+    elif sous_sujet not in self.progress[sujet]:
+      self.progress[sujet][sous_sujet] = resultat
+  
+  def get_name(self):
+    return self.name
+  
+  def get_progress(self):
+    return self.progress
+  
+  def get_salt(self):
+    return self.salt
+  
+  def set_progress(self, progress):
+    self.progress = progress
+  
+  def _modify_info(self, name, email, hash):
+    self.name = name
+    self.email = email
+    if hash != "":
+      self.hash = hash
+  
   def session(self):
     session = {
       "name": self.name,
-      "email": self.email
+      "email": self.email,
+      "progress": self.progress
     }
     return session
