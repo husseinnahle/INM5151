@@ -7,6 +7,9 @@ class Sujet:
     def get_nom(self):
         return self.nom
     
+    def get_logo(self):
+        return self.info["Logo"]
+    
     def get_sous_sujet(self, sous_sujet):
         for item in self.info["Sous-sujet"]:
             if item["Nom"] == sous_sujet:

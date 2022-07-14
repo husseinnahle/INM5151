@@ -67,7 +67,7 @@ def init_database():
 
 
 @app.route('/', methods=["GET"])
-def index():
+def index():    
     return render_template('index.html', title='Home'), 200
 
 
@@ -83,7 +83,12 @@ def a_propos():
 @app.route('/account', methods=["GET"])
 @authentication_required
 def compte():
-    return render_template('compte.html', title='My account'), 200
+    sujets = get_db().read_all_sujet()
+    langages = []
+    for sujet in sujets:
+        if sujet.get_nom() in session['user']['progress']:
+            langages.append({"name": sujet.get_nom(), "logo" : sujet.get_logo()})
+    return render_template('compte.html', title='My account', langages=langages), 200
 
 
 # ================================  register  ================================
