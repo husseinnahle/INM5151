@@ -79,7 +79,7 @@ function addArrows() {
         endPlug = 'hand';
         _dash = {animation: true};
       } else if (nodes[i].getAttribute("name") == "done" && nodes[i+1].getAttribute("name") == "done") {
-        continue;
+        // continue;
       }
       new LeaderLine (
         document.getElementById(nodes[i].id),
