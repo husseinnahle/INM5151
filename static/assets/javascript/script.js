@@ -130,10 +130,12 @@ function editInput(){
     for(var i = 0; i < input.length; i++) {
       enableField(input[i]);
     }
+    document.getElementById("cancel").style.visibility = "visible";
     edit_button.innerText ="Done";
     edit_button.style.color = "#f83470";
     edit_button.style.backgroundColor = "#2d3033";
   } else {
+    document.getElementById("cancel").style.visibility = "hidden";
     var username = document.getElementById("username").value;
     var email = document.getElementById("email").value;
     var password = document.getElementById("password").value;  
@@ -167,6 +169,24 @@ function editInput(){
       edit_button.style.color = "#e4e4e4";
       edit_button.style.backgroundColor = "#f83470";
     });
+  }
+}
+
+function cancelEdit() {
+  document.getElementById("cancel").style.visibility = "hidden";
+  var input = document.getElementsByTagName("input");
+  var edit_button = document.getElementById("edit");
+  var username = document.getElementById("username");
+  var email = document.getElementById("email");
+  var password = document.getElementById("password");
+  username.value = username.className;
+  email.value = email.className;
+  password.value = password.className;
+  edit_button.innerText ="Edit";
+  edit_button.style.color = "#e4e4e4";
+  edit_button.style.backgroundColor = "#f83470";
+  for(var i = 0; i < input.length; i++) {
+    disableField(input[i]);
   }
 }
 

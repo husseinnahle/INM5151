@@ -26,7 +26,6 @@ def modify_user(user, username, email, password):
     if password is not None:
         salt = user.get_salt()
         hash = hashlib.sha512(str(password + salt).encode("utf-8")).hexdigest()
-        print(hash)
     user._modify_info(username, email, hash)
 
 

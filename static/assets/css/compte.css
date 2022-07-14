@@ -159,7 +159,7 @@ button {
     background: #f83470;
     border: 2px solid #f83470;
     border-radius: 4px;
-    padding: 12px 20px;
+    padding: 10px 20px;
     color: #e4e4e4;
     font-family: inherit;
     font-size: inherit;
@@ -178,6 +178,15 @@ button {
 .edit {
     transition: all 0.2s;
     width: 80px;
+}
+
+.cancel {
+    color: #f83470;
+    white-space: nowrap;
+    text-align: center;
+    background-color: #2d3033;
+    margin-left: 20px;
+    visibility: hidden;
 }
 
 #message-container {
