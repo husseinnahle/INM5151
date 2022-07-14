@@ -124,6 +124,7 @@
 
 footer {
   margin-top: 25px;
+  margin-bottom: 0%;
   margin: 0 auto;
   position: relative;
   bottom: 0;
@@ -228,18 +229,17 @@ footer {
   transform: translate(0, -100%);
 }
 
-.sujetTitle{
+.sujTitle{
   padding: 0.8rem 0;
   font-size:3rem;
   color:white;
-  background-color:darkolivegreen;
+  background-color:gray;
   border-radius: 2rem;
   -webkit-border-radius: 2rem;
   -moz-border-radius: 2rem;
   -ms-border-radius: 2rem;
   -o-border-radius: 2rem;
 }
-
 
 div.quiz{
   margin:3rem auto;
@@ -258,18 +258,9 @@ div.quiz{
   margin-bottom: 1rem;
 }
 
-#choix{
-  margin-bottom:0.5rem;
-  font-size: 1.2rem;
-  border-bottom: solid 0.1rem;
-  width:15rem;
 
-}
 #choix{
   margin-bottom: 0.5rem;
-  font-size:1.0rem;
-  border-bottom:solid 0.1rem;
-  width:15rem;
   background-color: lightgray;
   border-radius: 1rem;;
   -webkit-border-radius: 1rem;
