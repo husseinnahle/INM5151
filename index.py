@@ -67,6 +67,26 @@ def init_database():
     for i, key in enumerate(data):
         db.insert_sujet(i, key, json.dumps(data[key]))
     file.close()
+    # Temporaire pour tester
+    progress = {
+        "Python": {"Introduction": "S"},
+        "Ruby": {"Introduction": "S"},
+        "Java": {"Introduction": "S"},
+        "Bash": {"Introduction": "S"},
+        "C": {"Introduction": "S"},
+        "Javascript": {"Introduction": "S"},
+        "PHP": {"Introduction": "S"},
+        "HTML": {"Introduction": "S"},
+        "Go": {"Introduction": "S"},
+        "C++": {"Introduction": "S"},
+        "Swift": {"Introduction": "S"},
+        "C#": {"Introduction": "S"},
+        "Lua": {"Introduction": "S"}
+    }
+    user = create_user("username", "username@hotmail.com", "password")
+    user.set_progress(progress)
+    get_db().insert_user(user)
+
 
 
 @app.route('/', methods=["GET"])
