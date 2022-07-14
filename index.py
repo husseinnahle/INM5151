@@ -29,8 +29,8 @@ def get_db():
 
 
 def is_authenticated():
-    user = get_db().read_user_username(session["user"]["name"])
-    return "user" in session and user
+    return ("user" in session and
+                get_db().read_user_username(session["user"]["name"]))
 
 
 def authentication_required(f):
