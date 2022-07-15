@@ -194,8 +194,7 @@ button {
 }
 
 #message {
-    display: block;
-    position: absolute;
+    display: block; position: absolute;
 }
 
 .langages-content::-webkit-scrollbar {

@@ -88,7 +88,6 @@ def init_database():
     get_db().insert_user(user)
 
 
-
 @app.route('/', methods=["GET"])
 def index():
     return render_template('index.html', title='Home'), 200
@@ -143,7 +142,7 @@ def register_post():
     except ValueError as error:
         session["error"] = str(error)
         return redirect("/register")
-    session["message"] = "Account successfully created."
+    session["message"] = "Account created!"
     return redirect("/login")
 
 
@@ -169,7 +168,7 @@ def login_post():
         return redirect('/login')
     session["user"] = user.session()
     if 'path' in session:
-        # L'authentification se fait depuis une page autre que '/login'
+        # Redirection vers 'path' apres authentification
         path = session['path'] and session.pop('path') if 'path' in session else None
         return redirect(path)
     return redirect("/account")

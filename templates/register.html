@@ -1,69 +1,35 @@
 {% extends "base.html" %}
 
 {% block content %}
-
-<div class="container-fluid">
-  <section class=" text-center text-lg-start">
-    <style>
-      .rounded-t-5 {
-        border-top-left-radius: 0.5rem;
-        border-top-right-radius: 0.5rem;
-      }
-
-      @media (min-width: 992px) {
-        .rounded-tr-lg-0 {
-          border-top-right-radius: 0;
-        }
-
-        .rounded-bl-lg-5 {
-          border-bottom-left-radius: 0.5rem;
-        }
-      }
-    </style>
-    <div class="card mb-3">
-      <div class="row g-0 d-flex align-items-center">
-        <div class="col-lg-4 d-none d-lg-flex">
-          <img src="/static/logo/connexion.png" alt="inscription EZCoding"
-            class="w-100 rounded-t-5 rounded-tr-lg-0 rounded-bl-lg-5" />
-        </div>
-        <div class="col-lg-8">
-          <div class="card-body py-5 px-md-5">
-            <form action="/register" id="inscription" method="POST">
-              <!-- <h2>Créer un compte</h2> -->
-              <h2>Create an account</h2>
-              <br />
-              <div class="form-outline mb-4">
-                <!-- <label class="form-label" for="username">Nom d'utilisateur</label> -->
-                <label class="form-label" for="username">Username</label>
-                <input type="text" id="username" class="form-control" name="username" maxlength="40" required />
-                <span id="sp-login"></span>
-              </div>
-              <div class="form-outline mb-4">
-                <!-- <label class="form-label" for="email">Courriel</label> -->
-                <label class="form-label" for="email">E-mail
-                </label>
-                <input type="text" id="email" class="form-control" name="email" maxlength="40" required />
-                <span id="sp-login"></span>
-              </div>
-              <div class="form-outline mb-4">
-                <!-- <label class="form-label" for="password">Mot de passe</label> -->
-                <label class="form-label" for="password">Password</label>
-                <input type="password" id="password" class="form-control" name="password" maxlength="40" required />
-                <span id="sp-pass"></span>
-              </div>
-              {% if error %}
-                <p style="color:#F00">{{error}}.</p>
-              {% endif %}
-              <!-- <button input type="submit" class="btn btn-primary btn-block mb-4">Créez mon compte</button> -->
-              <button input type="submit" class="btn btn-primary btn-block mb-4">Create my account</button>
-            </form>
-          </div>
-        </div>
-      </div>
+<div class="form-popup" style="margin:60px auto 60px;">
+  <div class="form-panel one">
+    <div class="form-header">
+      <h5>Create an account</h5>
     </div>
-  </section>
-  <br />
+    <div class="form-content">
+      <form method="post" action="/register" id="form-popup">
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input type="text" id="username" name="username"/>
+        </div>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="text" id="email" name="email"/>
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password"/>
+        </div>
+        <div id="form-popup-error-container"></div>   
+        <br><br>
+        {% if error %}
+          <p id="form-popup-error">{{error}}!</p>
+        {% endif %}
+        <div class="form-group">
+          <button type="submit">Create my account</button>
+        </div>
+      </form>
+    </div>
+  </div>
 </div>
-
-
 {% endblock %}

@@ -105,10 +105,10 @@ function openPopup() {
   }
 }
 
-function is_authorized(){
+function is_authorized(pathname){
   const username = document.getElementById("username").value;
   const password = document.getElementById("password").value;
-  fetch('/api/is_authorized?username=' + username + '&password=' + password + '&path=' + window.location.pathname)
+  fetch('/api/is_authorized?username=' + username + '&password=' + password + '&path=' + pathname)
   .then(function(response) {
     return response.text();
   }).then(function(text) {
