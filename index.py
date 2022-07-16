@@ -1,3 +1,7 @@
+import json
+import html
+import hashlib
+
 from flask import Flask
 from flask import render_template
 from flask import request
@@ -9,15 +13,13 @@ from flask import Response
 from .modules.database import Database
 from .modules.user import create_user
 from .modules.user import modify_user
-import json
-import html
-import hashlib
 from functools import wraps
 
 app = Flask(__name__)
 app.config['JSON_SORT_KEYS'] = False
 app.secret_key = "a6cd02e9b1104ac0*c2a02391284cb!0"
 DATA_FILE_PATH = 'static/data.json'
+
 
 def get_db():
     db = getattr(g, 'database', None)
@@ -27,7 +29,8 @@ def get_db():
 
 
 def is_authenticated():
-    return "user" in session and get_db().read_user_username(session["user"]["name"])
+    return ("user" in session and
+                get_db().read_user_username(session["user"]["name"]))
 
 
 def authentication_required(f):
@@ -36,7 +39,7 @@ def authentication_required(f):
         if not is_authenticated():
             return Response('Could not verify your access level for that URL.\n'
                             'You have to login with proper credentials.', 401,
-                            {'WWW-Authenticate': 'Basic realm="Login Required"'})        
+                            {'WWW-Authenticate': 'Basic realm="Login Required"'})
         return f(*args, **kwargs)
     return decorated
 
@@ -64,6 +67,25 @@ def init_database():
     for i, key in enumerate(data):
         db.insert_sujet(i, key, json.dumps(data[key]))
     file.close()
+    # Temporaire pour tester
+    progress = {
+        "Python": {"Introduction": "S"},
+        "Ruby": {"Introduction": "S"},
+        "Java": {"Introduction": "S"},
+        "Bash": {"Introduction": "S"},
+        "C": {"Introduction": "S"},
+        "Javascript": {"Introduction": "S"},
+        "PHP": {"Introduction": "S"},
+        "HTML": {"Introduction": "S"},
+        "Go": {"Introduction": "S"},
+        "C++": {"Introduction": "S"},
+        "Swift": {"Introduction": "S"},
+        "C#": {"Introduction": "S"},
+        "Lua": {"Introduction": "S"}
+    }
+    user = create_user("username", "username@hotmail.com", "password")
+    user.set_progress(progress)
+    get_db().insert_user(user)
 
 
 @app.route('/', methods=["GET"])
@@ -80,10 +102,16 @@ def aide():
 def a_propos():
     return render_template('about_us.html', title='About'), 200
 
+
 @app.route('/account', methods=["GET"])
 @authentication_required
 def compte():
-    return render_template('compte.html', title='My account'), 200
+    sujets = get_db().read_all_sujet()
+    langages = []
+    for sujet in sujets:
+        if sujet.get_nom() in session['user']['progress']:
+            langages.append({"name": sujet.get_nom(), "logo": sujet.get_logo()})
+    return render_template('compte.html', title='My account', langages=langages), 200
 
 
 # ================================  register  ================================
@@ -100,7 +128,7 @@ def register_get():
 # Valider les données et créer un nouveau compte utilisateur
 @app.route('/register', methods=["POST"])
 def register_post():
-    try: 
+    try:
         db = get_db()
         username = request.form["username"]
         password = request.form["password"]
@@ -109,12 +137,12 @@ def register_post():
             # Nom utilisateur invalide
             session["error"] = "Username already exists. Please enter another one"
             return redirect('/register')
-        user = create_user(username, email, password)  # ValueError        
+        user = create_user(username, email, password)  # ValueError
         db.insert_user(user)
     except ValueError as error:
-        session["error"] = str(error) 
+        session["error"] = str(error)
         return redirect("/register")
-    session["message"] = "Account successfully created."
+    session["message"] = "Account created!"
     return redirect("/login")
 
 
@@ -125,7 +153,8 @@ def register_post():
 def login_get():
     message = session['message'] and session.pop("message") if "message" in session else None
     error = session["error"] and session.pop("error") if "error" in session else None
-    return render_template('login.html', title='Login', error=error, message=message), 200
+    return render_template('login.html', title='Login',
+                           error=error, message=message), 200
 
 
 # Valider les données et créer une nouvelle session
@@ -139,7 +168,7 @@ def login_post():
         return redirect('/login')
     session["user"] = user.session()
     if 'path' in session:
-        # L'authentification se fait depuis une page autre que '/login'
+        # Redirection vers 'path' apres authentification
         path = session['path'] and session.pop('path') if 'path' in session else None
         return redirect(path)
     return redirect("/account")
@@ -156,11 +185,12 @@ def is_authorized(username, password):
         # Nom utilisateur inexistant
         session['error'] = 'Incorrect username or password'
         return None
-    hash = hashlib.sha512(str(password + user.salt).encode("utf-8")).hexdigest()
+    hash = hashlib.sha512(str(password + user.salt)
+                          .encode("utf-8")).hexdigest()
     if user.hash != hash:
         # Mot de passe incorrect
         session['error'] = 'Incorrect password'
-        return None        
+        return None
     return user
 
 
@@ -180,7 +210,8 @@ def logout():
 def languages():
     sujets = get_db().read_all_sujet()
     sujets_info = [sujet.to_json() for sujet in sujets]
-    return render_template('languages.html', sujets=sujets_info, title='Languages'), 200
+    return render_template('languages.html', sujets=sujets_info,
+                           title='Languages'), 200
 
 
 # Retourne l'arbre de progression d'un sujet
@@ -190,8 +221,9 @@ def languages_sujet(sujet):
         sujet = get_db().read_sujet_nom(sujet)  # TypeError
         sous_sujet_nom = request.args.get('sous-sujet')
         if sous_sujet_nom is None or len(sous_sujet_nom) == 0:
-            return render_template('arbre_de_progression.html', sujet=sujet.to_json(), 
-                                   title='Languages', is_authorized=is_authenticated()), 200
+            return render_template('arbre_de_progression.html',
+                                   sujet=sujet.to_json(), title='Languages',
+                                   is_authorized=is_authenticated()), 200
         sous_sujet = sujet.get_sous_sujet(sous_sujet_nom)  # ValueError
     except TypeError:
         # Retourner un 404 si le sujet n'existe pas
@@ -204,10 +236,12 @@ def languages_sujet(sujet):
         # Retourner une erreur si l'utilisateur n'est pas authentifie
         return render_template("404.html", title="Not found"), 404
     if sous_sujet_nom == "Introduction":
-        return render_template("python/introduction.html", title="Languages"), 200
+        return render_template("python/introduction.html",
+                               title="Languages"), 200
     if sous_sujet_nom == "Variables":
         return render_template("python/variables.html", title="Languages"), 200
-    return render_template('sous_sujet.html', sujet=sujet.to_json()["Nom"], sous_sujet=sous_sujet, title='Languages'), 200
+    return render_template('sous_sujet.html', sujet=sujet.to_json()["Nom"],
+                           sous_sujet=sous_sujet, title='Languages'), 200
 
 
 # Retourner la premiere question du quiz d'un 'sous_sujet_nom' appartenant a un 'sujet_nom'
@@ -227,7 +261,8 @@ def quiz(sujet_nom):
         return render_template("404.html", title="Not found", err=err), 404
     except ValueError as error:
         # Retourner un 404 si le sous-sujet n'existe pas
-        return render_template("404.html", title="Not found", err=str(error)), 404
+        return render_template("404.html", title="Not found",
+                               err=str(error)), 404
     quiz = sujet.get_quiz_question(sous_sujet_index, 0)
     return render_template('quiz.html', sujet=sujet_nom,
                            sous_sujet=sous_sujet_nom,
@@ -252,7 +287,9 @@ def quiz_resultat():
         resultats = session["result"]["resultats"]
         note = session["result"]["note"]
         session.pop("result")
-        return render_template('resultat.html', sujet=sujet, sous_sujet=sous_sujet, resultats=resultats, note=note, title='Languages')
+        return render_template('resultat.html', sujet=sujet,
+                               sous_sujet=sous_sujet, resultats=resultats,
+                               note=note, title='Languages')
     return render_template("404.html", title="Not found"), 404
 
 
@@ -274,7 +311,7 @@ def evaluer(raw_data):
             question["Etat"] = "correcte"
             note += 1
         resultats.append(question)
-    note = ( note / len(data["reponses"]) ) * 100
+    note = (note / len(data["reponses"])) * 100
     quiz = {
         "sujet": data["sujet"],
         "sous-sujet": data["sous-sujet"],
@@ -282,7 +319,7 @@ def evaluer(raw_data):
         "note": round(note)
     }
     session["result"] = quiz
-    
+
 
 def update_user_progress():
     db = get_db()
@@ -371,10 +408,11 @@ def api_modifier_compte():
     password = request.args.get('password')
     try:
         db = get_db()
-        if username != session['user']['name'] and db.read_user_username(username):
-                # Nom utilisateur invalide
-                error = "Username already exists. Please enter another one"
-                return jsonify({"valid": False, "reason": error}), 404
+        if (username != session['user']['name']
+                and db.read_user_username(username)):
+            #  Nom utilisateur invalide
+            error = "Username already exists. Please enter another one"
+            return jsonify({"valid": False, "reason": error}), 404
         user = db.read_user_username(session['user']['name'])
         modify_user(user, username, email, password)  # ValueError
         session["user"] = user.session()

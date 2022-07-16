@@ -1,71 +1,44 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
-<div class="container-fluid">
-  <section class=" text-center text-lg-start">
-    <style>
-      .rounded-t-5 {
-        border-top-left-radius: 0.5rem;
-        border-top-right-radius: 0.5rem;
-      }
-
-      @media (min-width: 992px) {
-        .rounded-tr-lg-0 {
-          border-top-right-radius: 0;
-        }
-
-        .rounded-bl-lg-5 {
-          border-bottom-left-radius: 0.5rem;
-        }
-      }
-    </style>
-
-    <div class="mb-3">
-      <div class="row g-0 d-flex align-items-center">
-        <div class="col-lg-4 d-none d-lg-flex">
-          <img src="/static/logo/connexion.png" alt="image connexion EZCoding"
-            class="w-100 rounded-t-5 rounded-tr-lg-0 rounded-bl-lg-5" />
+  <div class="form-popup" style="margin:60px auto 60px;">
+    <div class="form-panel one">
+      {% if session['user'] %}
+        <div class="form-header">
+          <h5>You are logged in as {{ session['user']['name'] }}</h5>
+          <a href="/logout"><button type="button">Log Out</button></a>
         </div>
-        <div class="col-lg-8">
-          <div class="card-body py-5 px-md-5">
-            {% if session['user'] %}
-              <p>You are logged in as {{ session['user']['name'] }}</p>
-              <p><a href="/logout">Logout</a></p>
-            {% else %}
-              <form id="login" method="post" action="/login">
-                {% if message %}
-                  <h1>{{ message }}</h1>
-                  <br>
-                {% endif %}
-                <h2>Sign in</h2><br />
-                <div class="form-outline mb-4">
-                  <label class="form-label" for="username">Username</label>
-                  <input type="text" id="username" class="form-control" name="username" required />
-                  <span id="sp-login"></span>
-                </div>
-
-                <div class="form-outline mb-4">
-                  <label class="form-label" for="password">Password</label>
-                  <input type="password" id="password" class="form-control" name="password" required />
-                  <span id="sp-pass"></span>
-                </div>
-                <span id="match_pass"></span>
-                {% if error %}
-                  <p style="color:#F00">{{error}}.</p>
-                {% endif %}
-                <button input type="submit" class="btn btn-primary btn-block mb-4">Login</button>
-              </form>
-              <p><a href="/register">Don't have an account?</a></p>
-            {% endif %}
-
-          </div>
+      {% else %}
+        <div class="form-header">
+          <h5>Login</h5>
+          {% if message %}
+            <h4>{{ message }}</h4>
+          {% endif %}
         </div>
-      </div>
+        <div class="form-content">
+          <form method="post" action="/login" id="form-popup">
+            <div class="form-group">
+              <label for="username">Username</label>
+              <input type="text" id="username" name="username" required="required"/>
+            </div>
+            <div class="form-group">
+              <label for="password">Password</label>
+              <input type="password" id="password" name="password" required="required"/>
+            </div>
+            <div class="form-group">
+              <label class="form-remember">
+                <input type="checkbox"/>Remember Me
+              </label><a class="form-recovery" href="#">Forgot Password?</a>
+            </div>
+            <div id="form-popup-error-container"></div>   
+            <br>
+            <div class="form-group">
+              <button type="button" onclick="is_authorized('/account');">Log In</button>
+            </div>
+            <a class="form-register" href="/register">Create an account</a>
+          </form>
+        </div>
+      {% endif %}
     </div>
-
-  </section>
-  <br />
-</div>
-
+  </div>
 {% endblock %}

@@ -268,6 +268,11 @@ footer {
   font-weight: bold;
 }
 
+.form-register:hover {
+  color: white;
+  font-weight: bold;
+}
+
 .form-group {
   display: flex;
   flex-wrap: wrap;
@@ -346,6 +351,8 @@ footer {
 
 .form-header {
   margin: 0 0 30px;
+  display: flex;
+  justify-content: space-between;
 }
 
 .form-header h5 {
@@ -354,6 +361,15 @@ footer {
   font-size: 24px;
   font-weight: 700;
   text-transform: uppercase;
+}
+
+.form-header h4 {
+  text-align: right;
+  color: #ffffff;
+  font-size: 18px;
+  font-weight: 500;
+  text-transform: uppercase;
+  margin-top: 9px;
 }
 
 .pen-footer {

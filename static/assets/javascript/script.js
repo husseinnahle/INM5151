@@ -79,7 +79,7 @@ function addArrows() {
         endPlug = 'hand';
         _dash = {animation: true};
       } else if (nodes[i].getAttribute("name") == "done" && nodes[i+1].getAttribute("name") == "done") {
-        continue;
+        // continue;
       }
       new LeaderLine (
         document.getElementById(nodes[i].id),
@@ -105,10 +105,10 @@ function openPopup() {
   }
 }
 
-function is_authorized(){
+function is_authorized(pathname){
   const username = document.getElementById("username").value;
   const password = document.getElementById("password").value;
-  fetch('/api/is_authorized?username=' + username + '&password=' + password + '&path=' + window.location.pathname)
+  fetch('/api/is_authorized?username=' + username + '&password=' + password + '&path=' + pathname)
   .then(function(response) {
     return response.text();
   }).then(function(text) {
@@ -125,22 +125,24 @@ function is_authorized(){
 function editInput(){
   var input = document.getElementsByTagName("input");
   var edit_button = document.getElementById("edit");
-  document.getElementById("message-container").innerHTML = "";
+  document.getElementById("message").innerText = "";
   if ( edit_button.innerText == "Edit") {
     for(var i = 0; i < input.length; i++) {
       enableField(input[i]);
     }
+    document.getElementById("cancel").style.visibility = "visible";
     edit_button.innerText ="Done";
     edit_button.style.color = "#f83470";
     edit_button.style.backgroundColor = "#2d3033";
-    edit_button.style.border = "2px solid #f83470";
   } else {
+    document.getElementById("cancel").style.visibility = "hidden";
     var username = document.getElementById("username").value;
     var email = document.getElementById("email").value;
     var password = document.getElementById("password").value;  
     var url = '/api/compte/modifier?username=' + username + '&password=' + password + '&email=' + email;
     if (username == "" || email == "" || password == "") {
-      document.getElementById("message-container").innerHTML = `<span style="color:red;">All fields are required!</span><br>`;
+      document.getElementById("message").innerText = "All fields are required!";
+      document.getElementById("message").style.color = 'red';
       return;
     } else if (password == "********") {
       url = '/api/compte/modifier?username=' + username + '&email=' + email;
@@ -153,10 +155,12 @@ function editInput(){
     }).then(function(text) {
       var response = JSON.parse(text);
       if (response["valid"] == false){
-        document.getElementById("message-container").innerHTML = `<span style="color:red;">${response["reason"]}</span><br>`
+        document.getElementById("message").innerText = response["reason"];
+        document.getElementById("message").style.color = 'red';
         return;
       }
-      document.getElementById("message-container").innerHTML = `<span id="message-container">Account info updated!</span><br>`;
+      document.getElementById("message").innerText = "Account info updated!";
+      document.getElementById("message").style.color = 'white';
       document.getElementById("navbarDarkDropdownMenuLink").innerText = username;
       for(var i = 0; i < input.length; i++) {
         disableField(input[i]);
@@ -164,8 +168,25 @@ function editInput(){
       edit_button.innerText ="Edit";
       edit_button.style.color = "#e4e4e4";
       edit_button.style.backgroundColor = "#f83470";
-      edit_button.style.border = "0";
     });
+  }
+}
+
+function cancelEdit() {
+  document.getElementById("cancel").style.visibility = "hidden";
+  var input = document.getElementsByTagName("input");
+  var edit_button = document.getElementById("edit");
+  var username = document.getElementById("username");
+  var email = document.getElementById("email");
+  var password = document.getElementById("password");
+  username.value = username.className;
+  email.value = email.className;
+  password.value = password.className;
+  edit_button.innerText ="Edit";
+  edit_button.style.color = "#e4e4e4";
+  edit_button.style.backgroundColor = "#f83470";
+  for(var i = 0; i < input.length; i++) {
+    disableField(input[i]);
   }
 }
 
