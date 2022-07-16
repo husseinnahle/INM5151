@@ -29,13 +29,13 @@ footer{
 .languages {
   position: relative;
   background: #212529;
-  max-width: 1000px;
+  max-width: 850px;
   max-height: 1000px;
   border-radius: 5px;
   box-shadow: 0 0 50px black;
   box-sizing: border-box;
   margin: 0 auto;
-  padding: 40px 10px;
+  padding: 40px;
 }
 
 .languages-header {
@@ -49,8 +49,8 @@ footer{
   border-bottom-left-radius: 10px;
   background-color: #2d3033;
   margin: 70px auto;
-  width: 80%;
-  max-height: 500px;
+  width: 90%;
+  max-height: 600px;
   overflow-y: auto;
 }
 
