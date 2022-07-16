@@ -2,18 +2,22 @@
 
 {% block content %}
   <div class="languages">
-    <div class="cards-container">
-      <div class="cards">
-        {% for sujet in sujets %}
-          <a href="/languages/{{ sujet["Nom"] }}">
-            <div class="card">
-              <img class="card__image" src="{{ sujet["Information"]["Logo"] }}" alt="">
-              <div class="card__content">
-                <h4>{{ sujet["Nom"] }}</h4>
+    <div class="languages-header">
+        <h4>Programming languages</h4>
+    </div>
+      <div class="cards-container">
+        <div class="cards">
+          {% for sujet in sujets %}
+            <a href="/languages/{{ sujet["Nom"] }}">
+              <div class="card">
+                <img class="card__image" src="{{ sujet["Information"]["Logo"] }}" alt="">
+                <div class="card__content">
+                  <h4>{{ sujet["Nom"] }}</h4>
+                </div>
               </div>
-            </div>
-          </a>
-        {% endfor %}
+            </a>
+          {% endfor %}
+        </div>
       </div>
     </div>
   </div>
