@@ -1,12 +1,6 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<<<<<<< HEAD
-  <div class="container-fluid p-5 bg-secondary text-white text-center">
-    <h1>{{ sujet["Nom"] }}</h1>
-  </div>
-  <div class="container mt-5 me-5">
-=======
 
   {% if not is_authorized %}
     <div class="popup" id="popup">
@@ -33,7 +27,7 @@
               <div id="form-popup-error-container"></div>   
               <br>
               <div class="form-group">
-                <button type="button" onclick="is_authorized();">Log In</button>
+                <button type="button" onclick="is_authorized('/languages/{{sujet["Nom"]}}');">Log In</button>
               </div>
               <a class="form-register" href="/register">Create an account</a>
             </form>
@@ -44,7 +38,6 @@
   {% endif %}
   
   <div class="container mt-5" id="tree-container">    
->>>>>>> main
     <div class="tree" id="tree">
       {% set ns = namespace(blocked=false) %}
       {% for ss in sujet["Information"]["Sous-sujet"] %}
