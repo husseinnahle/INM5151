@@ -190,5 +190,35 @@
 	"C#" : {
 		"Logo" : "static/logo/csharp.png",
 		"Sous-sujet" : []
+	},
+
+	"R" : {
+		"Logo" : "static/logo/r.png",
+		"Sous-sujet" : []
+	},
+
+	"Haskell" : {
+		"Logo" : "static/logo/haskell.png",
+		"Sous-sujet" : []
+	},
+
+	"Fortran" : {
+		"Logo" : "static/logo/fortran.png",
+		"Sous-sujet" : []
+	},
+
+	"Perl" : {
+		"Logo" : "static/logo/perl.png",
+		"Sous-sujet" : []
+	},
+
+	"rust" : {
+		"Logo" : "static/logo/rust.png",
+		"Sous-sujet" : []
+	},
+
+	"matlab" : {
+		"Logo" : "static/logo/matlab.png",
+		"Sous-sujet" : []
 	}
 }

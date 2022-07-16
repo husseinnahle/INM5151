@@ -6,7 +6,10 @@ class Sujet:
 
     def get_nom(self):
         return self.nom
-    
+
+    def get_logo(self):
+        return self.info["Logo"]
+
     def get_sous_sujet(self, sous_sujet):
         for item in self.info["Sous-sujet"]:
             if item["Nom"] == sous_sujet:
@@ -21,12 +24,15 @@ class Sujet:
 
     def get_quiz_reponse(self, sous_sujet_index, numero):
         quiz = self.info["Sous-sujet"][sous_sujet_index]["Quiz"]
-        return {"Question": quiz[numero]["Question"], "Reponse": quiz[numero]["Reponse"], "Indice": quiz[numero]["Indice"]}
-    
+        return {"Question": quiz[numero]["Question"],
+                "Reponse": quiz[numero]["Reponse"],
+                "Indice": quiz[numero]["Indice"]}
+
     def get_quiz_question(self, sous_sujet_index, numero):
         quiz = self.info["Sous-sujet"][sous_sujet_index]["Quiz"]
-        return {"Question": quiz[numero]["Question"], "Choix": quiz[numero]["Choix"]}
-            
+        return {"Question": quiz[numero]["Question"],
+                "Choix": quiz[numero]["Choix"]}
+
     def to_json(self):
         sujet = {
             "Id": self.id,

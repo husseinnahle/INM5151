@@ -3,6 +3,7 @@ import json
 from .sujet import Sujet
 from .user import User
 
+
 class Database:
     def __init__(self):
         self.connection = None
@@ -46,11 +47,13 @@ class Database:
     # Inserer un utilisateur
     def insert_user(self, user):
         connection = self.get_connection()
-        connection.execute('insert into user(username, email, salt, hash, progress)'
-                           'values(?, ?, ?, ?, ?)', 
-                           (user.name, user.email, user.salt, user.hash, json.dumps(user.progress)))
+        connection.execute('insert into user'
+                           '(username, email, salt, hash, progress)'
+                           'values(?, ?, ?, ?, ?)',
+                           (user.name, user.email, user.salt, user.hash,
+                            json.dumps(user.progress)))
         connection.commit()
-    
+
     # Rechercher et retourner un utilisateur selon 'username'
     def read_user_username(self, username):
         cursor = self.get_connection().cursor()
@@ -61,7 +64,7 @@ class Database:
         user_obj = User(user[0], user[1], user[2], user[3], user[4])
         user_obj.set_progress(json.loads(user[5]))
         return user_obj
-    
+
     # Mettre à jour la progression d'un utilisateur selon 'username'
     def update_user_progress(self, user: User):
         connection = self.get_connection()
@@ -72,6 +75,7 @@ class Database:
     # Mettre à jour les info du compte d'un utilisateur selon 'username'
     def update_user_info(self, user: User):
         connection = self.get_connection()
-        connection.execute('update user set username = ?, email = ?, hash = ? where id = ?',
+        connection.execute('update user set username = ?, email = ?, hash = ?'
+                           'where id = ?',
                            (user.name, user.email, user.hash, user.id))
         connection.commit()
