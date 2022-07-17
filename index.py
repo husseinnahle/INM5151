@@ -1,3 +1,7 @@
+import json
+import html
+import hashlib
+
 from flask import Flask
 from flask import render_template
 from flask import request
@@ -6,12 +10,10 @@ from flask import session
 from flask import g
 from flask import jsonify
 from flask import Response
-from flask import make_response
 from .modules.database import Database
-from .modules.user import create_user, validate_support_form
-import json
-import html
-import hashlib
+from .modules.user import create_user
+from .modules.user import modify_user
+from .modules.user import validate_support_form
 from functools import wraps
 from flask_hcaptcha import hCaptcha
 from flask_mail import Mail, Message
@@ -23,7 +25,8 @@ DATA_FILE_PATH = 'static/data.json'
 
 app.config['HCAPTCHA_ENABLED'] = True
 app.config['HCAPTCHA_SITE_KEY'] = "3c18dd0a-63ab-4e65-bf31-18704c39f732"
-app.config['HCAPTCHA_SECRET_KEY'] = "0x58956B96080BFdBA80d7B228B4c460e3F7CfDEFC"
+app.config['HCAPTCHA_SECRET_KEY'] = "0x58956B96080BFdBA80d7B228B4c460e3F7C"\
+                                    "fDEFC"
 HCAPTCHA_ERROR = 'Error in hcaptcha. Please try again'
 hcaptcha = hCaptcha(app)
 mail = Mail(app)
@@ -36,19 +39,26 @@ def get_db():
     return g._database
 
 
-def get_username():
-    if is_authenticated():
-        return session["user"]["name"]
-    return None
-
-
 def is_authenticated():
-    return "user" in session and get_db().read_user_username(session["user"]["name"])
+    return ("user" in session and
+            get_db().read_user_username(session["user"]["name"]))
+
+
+def authentication_required(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        if not is_authenticated():
+            return Response('Could not verify your access level for that URL.'
+                            '\nYou have to login with proper credentials.',
+                            401, {'WWW-Authenticate': 'Basic realm="Login"\
+                                "Required"'})
+        return f(*args, **kwargs)
+    return decorated
 
 
 @app.errorhandler(404)
 def page_not_found(e):
-    return render_template('404.html', title='Not found', username=get_username()), 404
+    return render_template('404.html', title='Not found'), 404
 
 
 @app.teardown_appcontext
@@ -61,18 +71,38 @@ def close_connection(exception):
 # Initialiser la base de données
 @app.before_first_request
 def init_database():
+    if 'user' in session:
+        session.pop("user")
     db = get_db()
     file = open(DATA_FILE_PATH, encoding="utf-8")
     data = json.load(file)
     for i, key in enumerate(data):
         db.insert_sujet(i, key, json.dumps(data[key]))
     file.close()
+    # Temporaire pour tester
+    progress = {
+        "Python": {"Introduction": "S"},
+        "Ruby": {"Introduction": "S"},
+        "Java": {"Introduction": "S"},
+        "Bash": {"Introduction": "S"},
+        "C": {"Introduction": "S"},
+        "Javascript": {"Introduction": "S"},
+        "PHP": {"Introduction": "S"},
+        "HTML": {"Introduction": "S"},
+        "Go": {"Introduction": "S"},
+        "C++": {"Introduction": "S"},
+        "Swift": {"Introduction": "S"},
+        "C#": {"Introduction": "S"},
+        "Lua": {"Introduction": "S"}
+    }
+    user = create_user("username", "username@hotmail.com", "password")
+    user.set_progress(progress)
+    get_db().insert_user(user)
 
 
 @app.route('/', methods=["GET"])
 def index():
-    return render_template(
-        'index.html', title='Home', username=get_username()), 200
+    return render_template('index.html', title='Home'), 200
 
 
 @app.route('/support', methods=["GET"])
@@ -82,7 +112,7 @@ def support_get():
     error = session["error"] and session.pop(
         "error") if "error" in session else None
     return render_template('support.html', title='Support', error=error,
-                           message=message, username=get_username()), 200
+                           message=message), 200
 
 
 @app.route('/support', methods=["POST"])
@@ -127,8 +157,20 @@ def send_message(name, email, message):
 
 @app.route('/about', methods=["GET"])
 def a_propos():
-    return render_template(
-        'about_us.html', title='About', username=get_username()), 200
+    return render_template('about_us.html', title='About'), 200
+
+
+@app.route('/account', methods=["GET"])
+@authentication_required
+def compte():
+    sujets = get_db().read_all_sujet()
+    langages = []
+    for sujet in sujets:
+        if sujet.get_nom() in session['user']['progress']:
+            langages.append(
+                {"name": sujet.get_nom(), "logo": sujet.get_logo()})
+    return render_template('compte.html', title='My account',
+                           langages=langages), 200
 
 
 # ================================  register  ================================
@@ -137,10 +179,10 @@ def a_propos():
 @app.route('/register', methods=["GET"])
 def register_get():
     if is_authenticated():
-        return render_template("404.html", title="Not found", username=get_username()), 404
+        return render_template("404.html", title="Not found"), 404
     error = session["error"] and session.pop(
         "error") if "error" in session else None
-    return render_template("register.html", title='Sign up', error=error, username=None)
+    return render_template("register.html", title='Sign up', error=error)
 
 
 # Valider les données et créer un nouveau compte utilisateur
@@ -153,13 +195,14 @@ def register_post():
         email = request.form["email"]
         if db.read_user_username(username):
             # Nom utilisateur invalide
-            session["error"] = "Username already exists. Please enter another one"
+            session["error"] = "Username already exists. Please enter"\
+                " another one"
             return redirect('/register')
         if hcaptcha.verify():
             # hCaptcha ok
             user = create_user(username, email, password)  # ValueError
             db.insert_user(user)
-            session["message"] = "Account successfully created."
+            session["message"] = "Account created!"
             return redirect("/login")
         else:
             # hCaptcha erreur
@@ -179,7 +222,8 @@ def login_get():
         "message") if "message" in session else None
     error = session["error"] and session.pop(
         "error") if "error" in session else None
-    return render_template('login.html', title='Login', error=error, message=message, username=get_username()), 200
+    return render_template('login.html', title='Login',
+                           error=error, message=message), 200
 
 
 # Valider les données et créer une nouvelle session
@@ -188,16 +232,33 @@ def login_post():
     username = request.form["username"]
     password = request.form["password"]
     user = is_authorized(username, password)
-    if user:
-        if hcaptcha.verify():
-            # hCaptcha ok, accès autorisé
-            session["user"] = user
-            return redirect("/")
-        else:
-            # hCaptcha erreur
-            session['error'] = HCAPTCHA_ERROR
-            return redirect('/login')
-    return redirect('/login')
+    # if user:
+    # if hcaptcha.verify():
+    # hCaptcha ok, accès autorisé
+    # session["user"] = user
+    # return redirect("/")
+    # else:
+    # hCaptcha erreur
+    # session['error'] = HCAPTCHA_ERROR
+    # return redirect('/login')
+    # return redirect('/login')
+
+    if not user:
+        # Accès non autorisé
+        return redirect('/login')
+    if hcaptcha.verify():
+        # hCaptcha ok, accès autorisé
+        session["user"] = user.session()
+        if 'path' in session:
+            # Redirection vers 'path' apres authentification
+            path = session['path'] and session.pop(
+                'path') if 'path' in session else None
+            return redirect(path)
+        return redirect("/account")
+    else:
+        # hCaptcha erreur
+        session['error'] = HCAPTCHA_ERROR
+        return redirect('/login')
 
 
 def is_authorized(username, password):
@@ -211,27 +272,16 @@ def is_authorized(username, password):
         # Nom utilisateur inexistant
         session['error'] = 'Incorrect username or password'
         return None
-    hash = hashlib.sha512(
-        str(password + user.salt).encode("utf-8")).hexdigest()
+    hash = hashlib.sha512(str(password + user.salt)
+                          .encode("utf-8")).hexdigest()
     if user.hash != hash:
         # Mot de passe incorrect
         session['error'] = 'Incorrect password'
         return None
-    return user.session()
+    return user
 
 
 # =================================  logout  =================================
-
-def authentication_required(f):
-    @wraps(f)
-    def decorated(*args, **kwargs):
-        if not is_authenticated():
-            return Response('Could not verify your access level for that URL.\n'
-                            'You have to login with proper credentials.', 401,
-                            {'WWW-Authenticate': 'Basic realm="Login Required"'})
-        return f(*args, **kwargs)
-    return decorated
-
 
 @app.route('/logout')
 @authentication_required
@@ -247,9 +297,8 @@ def logout():
 def languages():
     sujets = get_db().read_all_sujet()
     sujets_info = [sujet.to_json() for sujet in sujets]
-    return render_template(
-        'languages.html', sujets=sujets_info, title='Languages',
-        username=get_username()), 200
+    return render_template('languages.html', sujets=sujets_info,
+                           title='Languages'), 200
 
 
 # Retourne l'arbre de progression d'un sujet
@@ -259,37 +308,38 @@ def languages_sujet(sujet):
         sujet = get_db().read_sujet_nom(sujet)  # TypeError
         sous_sujet_nom = request.args.get('sous-sujet')
         if sous_sujet_nom is None or len(sous_sujet_nom) == 0:
-            return render_template(
-                'arbre_de_progression.html', sujet=sujet.to_json(),
-                title='Languages', username=get_username()), 200
+            return render_template('arbre_de_progression.html',
+                                   sujet=sujet.to_json(), title='Languages',
+                                   is_authorized=is_authenticated()), 200
         sous_sujet = sujet.get_sous_sujet(sous_sujet_nom)  # ValueError
     except TypeError:
         # Retourner un 404 si le sujet n'existe pas
         err = "Le sujet '" + html.escape(sujet) + "' n'existe pas."
-        return render_template(
-            "404.html", title="Not found", err=err,
-            username=get_username()), 404
+        return render_template("404.html", title="Not found", err=err), 404
     except ValueError as error:
         # Retourner un 404 si le sous-sujet n'existe pas
-        return render_template(
-            "404.html", title="Not found", err=str(error),
-            username=get_username()), 404
+        return render_template("404.html", title="Not found",
+                               err=str(error)), 404
+    if not is_authenticated():
+        # Retourner une erreur si l'utilisateur n'est pas authentifie
+        return render_template("404.html", title="Not found"), 404
     if sous_sujet_nom == "Introduction":
-        return render_template("sous_sujet_Python_Introduction.html", title="Languages", username=get_username()), 200
-    return render_template(
-        'sous_sujet.html', sujet=sujet.to_json()["Nom"], sous_sujet=sous_sujet,
-        title='Languages', username=get_username()), 200
+        return render_template("python/introduction.html",
+                               title="Languages"), 200
+    if sous_sujet_nom == "Variables":
+        return render_template("python/variables.html", title="Languages"), 200
+    return render_template('sous_sujet.html', sujet=sujet.to_json()["Nom"],
+                           sous_sujet=sous_sujet, title='Languages'), 200
 
 
-# Retourner la premiere question du quiz d'un 'sous_sujet_nom' appartenant a un 'sujet_nom'
+# Retourner la première question du quiz d'un 'sous_sujet_nom' appartenant
+# à un 'sujet_nom'
 @app.route('/languages/quiz/<sujet_nom>', methods=["GET"])
 def quiz(sujet_nom):
     sous_sujet_nom = request.args.get('sous-sujet')
     if sous_sujet_nom is None or len(sous_sujet_nom) == 0:
         err = "Le parametre sous-sujet est obligatoire."
-        return render_template(
-            "404.html", title="Not found", err=err,
-            username=get_username()), 404
+        return render_template("404.html", title="Not found", err=err), 404
     try:
         sujet = get_db().read_sujet_nom(sujet_nom)  # TypeError
         sous_sujet_index = sujet.get_sous_sujet_index(
@@ -297,19 +347,17 @@ def quiz(sujet_nom):
     except TypeError:
         # Retourner un 404 si le sujet n'existe pas
         err = "Le sujet '" + html.escape(sujet) + "' n'existe pas."
-        return render_template(
-            "404.html", title="Not found", err=err,
-            username=get_username()), 404
+        return render_template("404.html", title="Not found", err=err), 404
     except ValueError as error:
         # Retourner un 404 si le sous-sujet n'existe pas
-        return render_template(
-            "404.html", title="Not found", err=str(error),
-            username=get_username()), 404
+        return render_template("404.html", title="Not found",
+                               err=str(error)), 404
     quiz = sujet.get_quiz_question(sous_sujet_index, 0)
-    return render_template(
-        'quiz.html', sujet=sujet_nom, sous_sujet=sous_sujet_nom, question=quiz
-        ['Question'], choix=quiz['Choix'], title='Languages',
-        username=get_username())
+    return render_template('quiz.html', sujet=sujet_nom,
+                           sous_sujet=sous_sujet_nom,
+                           question=quiz['Question'],
+                           choix=quiz['Choix'],
+                           title='Languages')
 
 
 # Retouner la page de resultat de quiz
@@ -318,37 +366,62 @@ def quiz_resultat():
     if request.method == "POST":
         # Evaluer les reponses
         evaluer(request.form['data'])
+        if is_authenticated():
+            update_user_progress()
         return redirect('/languages/quiz/resultat')
-    if "Resultat" in session:
+    if "result" in session:
         # Retourner le resultat du quiz
-        sujet = session["Resultat"]["Sujet"]
-        sous_sujet = session["Resultat"]["Sous-sujet"]
-        total = session["Resultat"]["Total"]
-        note = session["Resultat"]["Note"]
-        session.pop("Resultat")
-        return render_template(
-            'resultat.html', sujet=sujet, sous_sujet=sous_sujet, total=total,
-            note=note, title='Languages', username=get_username())
-    return render_template(
-        "404.html", title="Not found", username=get_username()), 404
+        sujet = session["result"]["sujet"]
+        sous_sujet = session["result"]["sous-sujet"]
+        resultats = session["result"]["resultats"]
+        note = session["result"]["note"]
+        session.pop("result")
+        return render_template('resultat.html', sujet=sujet,
+                               sous_sujet=sous_sujet, resultats=resultats,
+                               note=note, title='Languages')
+    return render_template("404.html", title="Not found"), 404
 
 
 def evaluer(raw_data):
     data = json.loads(raw_data)
-    sujet_obj = get_db().read_sujet_nom(data["Sujet"])
-    sous_sujet_index = sujet_obj.get_sous_sujet_index(data["Sous-sujet"])
+    sujet_obj = get_db().read_sujet_nom(data["sujet"])
+    sous_sujet_index = sujet_obj.get_sous_sujet_index(data["sous-sujet"])
     note = 0
-    for i, choix in enumerate(data["Reponses"]):
+    resultats = []
+    for i, choix in enumerate(data["reponses"]):
         reponse = sujet_obj.get_quiz_reponse(sous_sujet_index, i)
-        if reponse == choix:
+        question = {
+            "Question": reponse["Question"],
+            "Choix": choix,
+            "Indice": reponse["Indice"],
+            "Etat": "incorrecte"
+        }
+        if reponse["Reponse"] == choix:
+            question["Etat"] = "correcte"
             note += 1
-    resultat = {
-        "Sujet": data["Sujet"],
-        "Sous-sujet": data["Sous-sujet"],
-        "Total": len(data["Reponses"]),
-        "Note": note
+        resultats.append(question)
+    note = (note / len(data["reponses"])) * 100
+    quiz = {
+        "sujet": data["sujet"],
+        "sous-sujet": data["sous-sujet"],
+        "resultats": resultats,
+        "note": round(note)
     }
-    session["Resultat"] = resultat
+    session["result"] = quiz
+
+
+def update_user_progress():
+    db = get_db()
+    user = db.read_user_username(session["user"]["name"])
+    sujet = session["result"]["sujet"]
+    sous_sujet = session["result"]["sous-sujet"]
+    # Seuil de réussite
+    resultat = "E"
+    if session["result"]["note"] > 79:
+        resultat = "S"
+    user.update_progress(sujet, sous_sujet, resultat)
+    db.update_user_progress(user)
+    session["user"] = user.session()
 
 
 # ==================================   api  ==================================
@@ -368,21 +441,18 @@ def api_quiz():
     except ValueError:
         # Retourner une erreur si le numero n'est pas un entier
         err = "Le numero '" + html.escape(numero_raw) + "' n'existe pas."
-        return render_template(
-            "404.html", title="Not found", err=err, username=get_username()), 404
+        return render_template("404.html", title="Not found", err=err), 404
     except TypeError:
         # Retourner un statut 204 si aucun sujet n'a été trouvé
         return ('', 204)
     except KeyError:
         # Retourner une erreur si le nom du sous-sujet n'existe pas
         err = "Le sujet '" + html.escape(nom_sous_sujet) + "' n'existe pas."
-        return render_template(
-            "404.html", title="Not found", err=err, username=get_username()), 404
+        return render_template("404.html", title="Not found", err=err), 404
     except IndexError:
         # Retourner une erreur si le numero de la question du quiz n'existe pas
         err = "Le numero '" + str(numero) + "' n'existe pas."
-        return render_template(
-            "404.html", title="Not found", err=err, username=get_username()), 404
+        return render_template("404.html", title="Not found", err=err), 404
     return jsonify(quiz)
 
 
@@ -400,3 +470,51 @@ def api_sujets():
     except TypeError:
         return jsonify("Aucun sujet trouvé."), 204
     return jsonify({sujet.get_nom(): sujet.to_json()}), 200
+
+
+# Retourne True si les données sont valides
+@app.route('/api/is_authorized', methods=["GET"])
+def api_is_authorized():
+    username = request.args.get('username')
+    password = request.args.get('password')
+    path = request.args.get('path')
+    user = is_authorized(username, password)
+    if not user:
+        # Accès non autorisé
+        error = session["error"]
+        session.pop("error")
+        return jsonify({"is_authorized": False, "reason": error})
+    if len(path) != 0:
+        session['path'] = path
+    return jsonify({"is_authorized": True})
+
+
+# Modifier les informations d'un utilisateur
+@app.route('/api/compte/modifier', methods=["GET"])
+def api_modifier_compte():
+    username = request.args.get('username')
+    email = request.args.get('email')
+    password = request.args.get('password')
+    try:
+        db = get_db()
+        if (username != session['user']['name']
+                and db.read_user_username(username)):
+            #  Nom utilisateur invalide
+            error = "Username already exists. Please enter another one"
+            return jsonify({"valid": False, "reason": error}), 404
+        user = db.read_user_username(session['user']['name'])
+        modify_user(user, username, email, password)  # ValueError
+        session["user"] = user.session()
+        db.update_user_info(user)
+    except ValueError as error:
+        return jsonify({"valid": False, "reason": str(error)}), 404
+    return jsonify({"valid": True}), 200
+
+
+# Temporaire pour tester la progression
+@app.route('/test/session')
+def test_session():
+    user_session = None
+    if "user" in session:
+        user_session = session["user"]
+    return jsonify({"session": user_session}), 200

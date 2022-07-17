@@ -1,16 +1,24 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <div class="cards">
-    {% for sujet in sujets %}
-      <a href="/languages/{{ sujet["Nom"] }}">
-        <div class="card">
-          <img class="card__image" src="{{ sujet["Information"]["Logo"] }}" alt="">
-          <div class="card__content">
-            <h4>{{ sujet["Nom"] }}</h4>
-          </div>
+  <div class="languages">
+    <div class="languages-header">
+        <h4>Programming languages</h4>
+    </div>
+      <div class="cards-container">
+        <div class="cards">
+          {% for sujet in sujets %}
+            <a href="/languages/{{ sujet["Nom"] }}">
+              <div class="card">
+                <img class="card__image" src="{{ sujet["Information"]["Logo"] }}" alt="">
+                <div class="card__content">
+                  <h4>{{ sujet["Nom"] }}</h4>
+                </div>
+              </div>
+            </a>
+          {% endfor %}
         </div>
-      </a>
-    {% endfor %}
+      </div>
+    </div>
   </div>
 {% endblock %}

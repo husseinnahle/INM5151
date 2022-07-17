@@ -59,9 +59,9 @@ function post(sujet, sous_sujet) {
   hiddenField.type = 'hidden';
   hiddenField.name = "data";
   var data = {
-    "Sujet": sujet,
-    "Sous-sujet": sous_sujet,
-    "Reponses": reponses 
+    "sujet": sujet,
+    "sous-sujet": sous_sujet,
+    "reponses": reponses 
   }
   hiddenField.value = JSON.stringify(data);
   form.appendChild(hiddenField);
@@ -69,30 +69,145 @@ function post(sujet, sous_sujet) {
   form.submit();
 }
 
-function setTree() {
-  const position_left = ["-150px", "150px", "-200px", "-80px", "220px", "150px", "-200px"];
-  const position_top = ["5px", "80px", "-10px", "110px", "-150px", "0px", "-100px"];
-  const nodes = document.getElementsByClassName("node");
-  for (var i = 0; i < nodes.length; i++) {
-    nodes[i].style.left = position_left[i%7];
-    nodes[i].style.top = position_top[i%7];
-  }
-  addArrows(nodes);
-  document.getElementById("tree").style.visibility = "visible";
-  return true;
-}
-
-function addArrows(nodes) {
+function addArrows() {
+  var nodes = document.getElementsByClassName("node");
   for (var i = 0; i < nodes.length; i++) {
     if (i+1 < nodes.length) {
+      endPlug = 'behind';
+      _dash = null;
+      if (nodes[i].getAttribute("name") == "done" && nodes[i+1].getAttribute("name") == "current") {
+        endPlug = 'hand';
+        _dash = {animation: true};
+      } else if (nodes[i].getAttribute("name") == "done" && nodes[i+1].getAttribute("name") == "done") {
+        // continue;
+      }
       new LeaderLine (
         document.getElementById(nodes[i].id),
         document.getElementById(nodes[i+1].id),
         {
+          endPlug: endPlug,
+          endPlugSize: 0.9,
           color: "black",
-          dash: {animation: true}  // Optionelle
+          dash: _dash
         }
       );
     }
   }
+}
+
+function openPopup() {
+  document.getElementById("popup").classList.add("open-popup");
+  document.getElementById("tree-container").style.pointerEvents = "none";
+  document.getElementById("tree-container").style.filter = "blur(10px)";
+  var arrows = document.getElementsByClassName("leader-line");
+  for(var i = 0; i < arrows.length; i++){
+    arrows[i].style.filter = "blur(10px)";
+  }
+}
+
+function is_authorized(pathname){
+  const username = document.getElementById("username").value;
+  const password = document.getElementById("password").value;
+  fetch('/api/is_authorized?username=' + username + '&password=' + password + '&path=' + pathname)
+  .then(function(response) {
+    return response.text();
+  }).then(function(text) {
+    var response = JSON.parse(text);
+    if (response["is_authorized"] == false) {
+      document.getElementById("form-popup-error-container").innerHTML = `<span id="form-popup-error">${response["reason"]}</span><br>`;
+    } else {
+      document.getElementById("form-popup").submit();
+    }
+  });
+  return true;
+}
+
+function editInput(){
+  var input = document.getElementsByTagName("input");
+  var edit_button = document.getElementById("edit");
+  document.getElementById("message").innerText = "";
+  if ( edit_button.innerText == "Edit") {
+    for(var i = 0; i < input.length; i++) {
+      enableField(input[i]);
+    }
+    document.getElementById("cancel").style.visibility = "visible";
+    edit_button.innerText ="Done";
+    edit_button.style.color = "#f83470";
+    edit_button.style.backgroundColor = "#2d3033";
+  } else {
+    document.getElementById("cancel").style.visibility = "hidden";
+    var username = document.getElementById("username").value;
+    var email = document.getElementById("email").value;
+    var password = document.getElementById("password").value;  
+    var url = '/api/compte/modifier?username=' + username + '&password=' + password + '&email=' + email;
+    if (username == "" || email == "" || password == "") {
+      document.getElementById("message").innerText = "All fields are required!";
+      document.getElementById("message").style.color = 'red';
+      return;
+    } else if (password == "********") {
+      url = '/api/compte/modifier?username=' + username + '&email=' + email;
+    }
+    fetch(url)
+    .then(function(response) {
+      if(response.status = 200) {
+        return response.text();
+      }
+    }).then(function(text) {
+      var response = JSON.parse(text);
+      if (response["valid"] == false){
+        document.getElementById("message").innerText = response["reason"];
+        document.getElementById("message").style.color = 'red';
+        return;
+      }
+      document.getElementById("message").innerText = "Account info updated!";
+      document.getElementById("message").style.color = 'white';
+      document.getElementById("navbarDarkDropdownMenuLink").innerText = username;
+      for(var i = 0; i < input.length; i++) {
+        disableField(input[i]);
+      }
+      edit_button.innerText ="Edit";
+      edit_button.style.color = "#e4e4e4";
+      edit_button.style.backgroundColor = "#f83470";
+    });
+  }
+}
+
+function cancelEdit() {
+  document.getElementById("cancel").style.visibility = "hidden";
+  var input = document.getElementsByTagName("input");
+  var edit_button = document.getElementById("edit");
+  var username = document.getElementById("username");
+  var email = document.getElementById("email");
+  var password = document.getElementById("password");
+  username.value = username.className;
+  email.value = email.className;
+  password.value = password.className;
+  edit_button.innerText ="Edit";
+  edit_button.style.color = "#e4e4e4";
+  edit_button.style.backgroundColor = "#f83470";
+  for(var i = 0; i < input.length; i++) {
+    disableField(input[i]);
+  }
+}
+
+function enableField(input) {
+  input.readOnly = false;
+  input.style.cursor = "text";
+  input.style.background = "#e4e4e4";
+  input.style.color = "#2d3033"; 
+}
+
+function disableField(input) {
+  input.readOnly = true;
+  input.style.cursor = "default";
+  input.style.background = "#2d3033";
+  input.style.color = "#e4e4e4"; 
+}
+
+function clearField() {
+  var password = document.getElementById("password");
+  if (password.readOnly == true) {
+    return;
+  }
+  password.value = "";
 }

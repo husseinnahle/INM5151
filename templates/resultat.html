@@ -1,9 +1,38 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <h1 >{{ sujet }} - {{sous_sujet}}</h1>
-  <h3>Results : {{ note }} / {{ total }}</h3>
-  <p>
-    <a href="/languages/{{sujet}}?sous-sujet={{sous_sujet}}">Return</a>
-  </p>
+  <div class="resultats-container">
+    {% if note > 79 %}
+      <h3 class="result-note" style="color:#16af7f;">PASS</h3>
+      <img src="{{ url_for('static',filename='icons/pass.png') }}" alt="Pass" id="pass-icon">
+    {% else %}
+      <h3 class="result-note" style="color:#ce0303;">FAIL</h3>
+      <img src="{{ url_for('static',filename='icons/fail.png') }}" alt="Fail" id="fail-icon">
+    {% endif %}
+    <h3 class="result-sujet">{{ sujet }} - {{sous_sujet}}</h3>
+    <br>
+
+    {% set ns = namespace(counter=1) %}
+    {% for element in resultats %}
+      <div class="question-container" id="{{ element["Etat"] }}">
+        {% if element["Etat"] == "incorrecte" %}
+          <div class="hint-icon-container">
+            <i class="qtip tip-left" data-tip="{{ element["Indice"] }}">
+              <img src="{{ url_for('static',filename='icons/hint.png') }}" alt="Hint" id="hint-icon">
+            </i>
+          </div>
+        {% endif %}
+        <div class="resultat">
+          <p class="question">{{ ns.counter }}. {{element["Question"] }}</p>
+          <p class="reponse"><b>Answer: </b>{{ element["Choix"]}} </p>
+        </div>
+      </div>
+      <br>
+      {% set ns.counter = (ns.counter + 1) %}
+    {% endfor %}
+  </div>
+  <div class="result-button-container">
+    <a class="result-button" href="/languages/{{sujet}}">Return</a>
+  </div>
+  <br>
 {% endblock %}

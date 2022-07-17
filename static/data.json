@@ -4,58 +4,130 @@
 		"Sous-sujet" : [
 			{
 				"Nom" : "Introduction",
-				"Tutoriel" : {
-					"Video" : "https://www.youtube.com/watch?v=cpPG0bKHYKc",
-					"Tuteur" : "Keven1999"
-				},
 				"Quiz" : [
 					{
 						"Question" : "What is a correct syntax to output \"Hello World\" in Python?",
 						"Choix" : ["echo \"Hello World\"", "p(\"Hello World\")", "print(\"Hello World\")","echo(\"Hello World\")"],
-						"Reponse" : "print(\"Hello World\")"
+						"Reponse" : "print(\"Hello World\")",
+						"Indice": "This is a hint for the question over which you are hovering."
 					},
 					{
 						"Question" : "How do you insert COMMENTS in Python code?",
 						"Choix" : ["//COMMENTAIRES",	"/*COMMENTAIRES*/", "#COMMENTAIRES"],
-						"Reponse" : "#COMMENTAIRES"
+						"Reponse" : "#COMMENTAIRES",
+						"Indice": "This is a hint for the question over which you are hovering. In tegenstelling tot wat algemeen."
 					},
 					{
 						"Question" : "Which one is NOT a legal variable name?",
 						"Choix" : ["my-var", "my_var", "_myvar", "Myvar"],
-						"Reponse" : "my-var"
+						"Reponse" : "my-var",
+						"Indice": "This is a hint for the question over which you are hovering. Er zijn vele variaties van passages."
 					},
 					{
 						"Question" : "How do you create a variable with the numeric value 5?",
 						"Choix" : ["x = int(5)", "Both the other answers are correct", "x = 5"],
-						"Reponse" : "Both the other answers are correct"
+						"Reponse" : "Both the other answers are correct",
+						"Indice": "This is a hint for the question over which you are hovering. Het gebruikt een woordenlijst van 200."
 					},
 					{
 						"Question" : "In Python, 'Hello', is the same as \"Hello\"",
 						"Choix" : ["True", "False"],
-						"Reponse" : "True"
+						"Reponse" : "True",
+						"Indice": "This is a hint for the question over which you are hovering. De gegenereerde Lorum Ipsum is daardoor altijd vrij van herhaling, ingevoegde humor of ongebruikelijke woorden etc."
 					}
-				]
+				],
+				"Position" : {
+					"Left" : "-50px", 
+					"Top" : "5px"
+				}
 			},
 			{
-				"Nom" : "Syntax"
+				"Nom" : "Variables",
+				"Quiz" : [
+					{
+						"Question" : "What will display : print( \"python\" + \" is\" + \"awesome\")",
+						"Choix" : ["python is awsome","An error message"],
+						"Reponse" : "python is awsome",
+						"Indice": "This is a hint for the question over which you are hovering."
+					},
+					{
+						"Question" : "What will display : print(3 + 8) ?",
+						"Choix" : ["38",	"An error message", "3+8","11"],
+						"Reponse" : "11",
+						"Indice": "This is a hint for the question over which you are hovering. De eerste regel van Lorem Ipsum, \"Lorem ipsum dolor sit amet..\", komt uit een zin in sectie 1.10.32."
+					},
+					{
+						"Question" : "What will display : print(3,\"spring\") ?",
+						"Choix" : ["3",	"An error message", "3spring"],
+						"Reponse" : "3spring",
+						"Indice": "This is a hint for the question over which you are hovering. Het is in de jaren '60 populair geworden met de introductie."
+					},
+					{
+						"Question" : "Which one is not a legal name for a variable in python?",
+						"Choix" : ["2myvar", "my_var", "_myvar", "Myvar"],
+						"Reponse" : "2myvar",
+						"Indice": "This is a hint for the question over which you are hovering. Het heeft niet alleen vijf."
+					},
+					{
+						"Question" : "What will display : print(3 + \"spring\") ?",
+						"Choix" : ["3",	"An error message", "3spring"],
+						"Reponse" : "An error message",
+						"Indice": "This is a hint for the question over which you are hovering. Veel desktop publishing pakketten."
+					},
+					
+					{
+						"Question" : "It is not possible to modify a global variable",
+						"Choix" : ["true","false"],
+						"Reponse" : "false",
+						"Indice": "This is a hint for the question over which you are hovering. Sed ut perspiciatis unde omnis."
+					}
+				],
+				"Position" : {
+					"Left" : "200px", 
+					"Top" : "50px"
+				}
 			},
 			{
-				"Nom" : "Language keywords"
+				"Nom" : "Language keywords",
+				"Position" : {
+					"Left" : "-250px", 
+					"Top" : "-20px"
+				}
 			},
 			{
-				"Nom" : "Basic Types"
+				"Nom" : "ensemble de données",
+				"Position" : {
+					"Left" : "-80px", 
+					"Top" : "110px"
+				}
 			},
 			{
-				"Nom" : "Operators"
+				"Nom" : "Operators",
+				"Position" : {
+					"Left" : "220px", 
+					"Top" : "-150px"
+				}
 			},
 			{
-				"Nom" : "Errors and Exceptions"
+				"Nom" : "Errors and Exceptions",
+				"Position" : {
+					"Left" : "150px", 
+					"Top" : "0px"
+				}
 			},
 			{
-				"Nom" : "Classes"
+				"Nom" : "Classes",
+				"Position" : {
+					"Left" : "-200px", 
+					"Top" : "-100px"
+				}
 			},
 			{
-				"Nom" : "Standard library"
+				"Nom" : "Standard library",
+				"Position" : {
+					"Left" : "-50px", 
+					"Top" : "5px"
+				}
 			}
 		]
 	},
@@ -117,6 +189,36 @@
 
 	"C#" : {
 		"Logo" : "static/logo/csharp.png",
+		"Sous-sujet" : []
+	},
+
+	"R" : {
+		"Logo" : "static/logo/r.png",
+		"Sous-sujet" : []
+	},
+
+	"Haskell" : {
+		"Logo" : "static/logo/haskell.png",
+		"Sous-sujet" : []
+	},
+
+	"Fortran" : {
+		"Logo" : "static/logo/fortran.png",
+		"Sous-sujet" : []
+	},
+
+	"Perl" : {
+		"Logo" : "static/logo/perl.png",
+		"Sous-sujet" : []
+	},
+
+	"rust" : {
+		"Logo" : "static/logo/rust.png",
+		"Sous-sujet" : []
+	},
+
+	"matlab" : {
+		"Logo" : "static/logo/matlab.png",
 		"Sous-sujet" : []
 	}
 }

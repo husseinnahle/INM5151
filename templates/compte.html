@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='assets/css/compte.css') }}" />
+  <div class="compteContainer">
+        <div class="infoCompte">
+            <div class="infoCompte-form">
+                <h2>My account</h2>
+                <div class="form-group">
+                    <label for="username">username</label>
+                    <input type="text" id="username" class="{{session['user']['name']}}" name="username" value="{{session['user']['name']}}" readonly="true"/>
+                </div>
+                <div class="form-group">
+                    <label for="email">email</label>
+                    <input type="text" id="email" class="{{session['user']['email']}}" name="email" value="{{session['user']['email']}}" readonly="true"/>
+                </div>
+                <div class="form-group">
+                    <label for="password">password</label>
+                    <input type="password" id="password" class="********" name="password" onfocus="clearField();" value="********" readonly="true"/>
+                </div>
+                <div id="message-container"><span id="message"><span><br></div>
+                <br>
+                <div class="edit-buttons">
+                    <button type="button" onclick="editInput()" class="edit" id="edit">Edit</button>
+                    <button type="button" onclick="cancelEdit()" class="cancel" id="cancel">Cancel</button>                    
+                    <button type="button" onclick="#" class="member">Become a member</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="langages">
+            <div class="langages-container">
+                <h2>Languages</h2>
+                <div class="langages-content">
+                    <div class="langage-cards">
+                        {% for langage in langages %}
+                            <a href="/languages/{{ langage["name"] }}">
+                                <img class="langage-card" src="{{ langage["logo"] }}">
+                            </a>
+                        {% endfor %}
+                        <a href="/languages">
+                            <div class="langage-plus">
+                                <div class="plus alt">
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+  </div>
+{% endblock %}
