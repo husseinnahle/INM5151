@@ -114,6 +114,9 @@ def compte():
     return render_template('compte.html', title='My account', langages=langages), 200
 
 
+@app.route('/publicite', methods=["GET"])
+def publicite():
+    return render_template('publicite.html', title='Publicite'), 200
 # ================================  register  ================================
 
 # Retourner le formulaire de création de comptes utilisateur
