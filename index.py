@@ -88,10 +88,14 @@ def support_get():
 @app.route('/support', methods=["POST"])
 def support_post():
     try:
-        name = request.form["name"]
-        email = request.form["email"]
         message = request.form["message"]
-        validate_support_form(name, email, message)
+        if is_authenticated():
+            name = session["user"]["name"]
+            email = session["user"]["email"]
+        else:
+            name = request.form["name"]
+            email = request.form["email"]
+            validate_support_form(name, email, message)
     except ValueError as error:
         session["error"] = str(error)
         return redirect("/support")
