@@ -14,6 +14,7 @@ import html
 import hashlib
 from functools import wraps
 from flask_hcaptcha import hCaptcha
+from flask_mail import Mail, Message
 
 app = Flask(__name__)
 app.config['JSON_SORT_KEYS'] = False
@@ -25,6 +26,7 @@ app.config['HCAPTCHA_SITE_KEY'] = "3c18dd0a-63ab-4e65-bf31-18704c39f732"
 app.config['HCAPTCHA_SECRET_KEY'] = "0x58956B96080BFdBA80d7B228B4c460e3F7CfDEFC"
 HCAPTCHA_ERROR = 'Error in hcaptcha. Please try again'
 hcaptcha = hCaptcha(app)
+mail = Mail(app)
 
 
 def get_db():
@@ -95,13 +97,28 @@ def support_post():
         return redirect("/support")
     if hcaptcha.verify():
         # hCaptcha ok
-        # send_message(name, email, message) # Todo
-        session["message"] = "Message sent successfully."
-        return redirect('/support')
+        try:
+            send_message(name, email, message)
+            session["message"] = "Message sent successfully."
+        except Exception as error:
+            session["error"] = str(error)
+        return redirect("/support")
     else:
         # hCaptcha erreur
         session['error'] = HCAPTCHA_ERROR
         return redirect('/support')
+
+
+def send_message(name, email, message):
+    subject = "EZCoding - Message from Support form"
+    sender = "support_form@ezcoding.com"
+    emails = [name + "<" + email + ">", "support@ezcoding.com"]
+    for addr_email in emails:
+        mssg = Message(subject=subject,
+                       sender=sender,
+                       recipients=[addr_email])
+        mssg.body = message
+        mail.send(mssg)
 
 
 @app.route('/about', methods=["GET"])
