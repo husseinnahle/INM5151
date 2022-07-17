@@ -1,19 +1,30 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <div class="form-popup">
-    <div class="form-panel one">
-        <div class="form-header">
-         
-        </div>
-        <div class="form-header">
-
-        </div>
-        <div class="form-content">
-            <video autoplay="autoplay" preload="preload" width="80%">
+<script type="text/javascript" language="javascript">
+    window.onload=function()  
+    {
+        setTimeout(showLink, 7000);  
+        
+    };
+    function showLink()
+    {
+        document.getElementById("lien").className="show";
+    }
+    
+</script>
+  <div class="publicite-popup">
+    <div class="publicite-panel one">
+            <video autoplay="autoplay" preload="preload" >
                 <source src="static/video/publicite.mp4" type="video/mp4"></source>
             </video>
-        </div>
+            
+            <a href="/languages">
+                <div id ="lien" class="hide">
+                    Take the quiz
+                </div>
+                
+            </a>
     </div>
   </div>
 {% endblock %}

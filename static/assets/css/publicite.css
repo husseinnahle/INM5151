@@ -1,3 +1,32 @@
 video {
-    height: 90%;
+    width: 100%;
+    max-height: 80%;
+    height: auto;
 }
+.publicite-popup {
+    z-index: 15;
+    position: relative;
+    background: #212529;
+    width: 60%;
+    max-height: 80%;
+    border-radius: 2%;
+    box-shadow: 4% black;
+    box-sizing: border-box;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+  .publicite-panel {
+    padding: 7%;
+    box-sizing: border-box;
+  }
+  .hide {
+    display: none;
+  }
+
+  .show{
+    width: 80%;
+    text-align: center;
+    display: block;
+  }
