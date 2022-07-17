@@ -144,13 +144,16 @@ def support_post():
 
 
 def send_message(name, email, message):
-    subject = "EZCoding - Message from Support form"
     sender = "support_form@ezcoding.com"
-    emails = [name + "<" + email + ">", "support@ezcoding.com"]
-    for addr_email in emails:
-        mssg = Message(subject=subject,
+    user = name + "<" + email + ">"
+    emails = [user, "support@ezcoding.com"]
+    subject = []
+    subject.append("Your message from EZCoding support form")
+    subject.append("Support form - " + user)
+    for i in range(2):
+        mssg = Message(subject=subject[i],
                        sender=sender,
-                       recipients=[addr_email])
+                       recipients=[emails[i]])
         mssg.body = message
         mail.send(mssg)
 
@@ -232,17 +235,6 @@ def login_post():
     username = request.form["username"]
     password = request.form["password"]
     user = is_authorized(username, password)
-    # if user:
-    # if hcaptcha.verify():
-    # hCaptcha ok, accès autorisé
-    # session["user"] = user
-    # return redirect("/")
-    # else:
-    # hCaptcha erreur
-    # session['error'] = HCAPTCHA_ERROR
-    # return redirect('/login')
-    # return redirect('/login')
-
     if not user:
         # Accès non autorisé
         return redirect('/login')

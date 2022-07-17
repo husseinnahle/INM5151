@@ -23,7 +23,7 @@
               <h2>Contact us</h2>
               <br />
 
-              {% if not username %}
+              {% if not session['user'] %}
               <div class="form-outline mb-4">
                 <label class="form-label" for="name">Name</label>
                 <input type="text" id="name" class="form-control" name="name" maxlength="40" required />
