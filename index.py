@@ -1,7 +1,6 @@
 import json
 import html
 import hashlib
-import os
 import stripe
 
 from flask import Flask
@@ -15,6 +14,7 @@ from flask import Response
 from .modules.database import Database
 from .modules.user import create_user
 from .modules.user import modify_user
+from .modules.user import make_member
 from .modules.user import validate_support_form
 from functools import wraps
 from flask_hcaptcha import hCaptcha
@@ -114,6 +114,88 @@ def index():
     return render_template('index.html', title='Home'), 200
 
 
+@app.route('/about', methods=["GET"])
+def a_propos():
+    return render_template('about_us.html', title='About'), 200
+
+
+@app.route('/account', methods=["GET"])
+@authentication_required
+def compte():
+    sujets = get_db().read_all_sujet()
+    langages = []
+    for sujet in sujets:
+        if sujet.get_nom() in session['user']['progress']:
+            langages.append(
+                {"name": sujet.get_nom(), "logo": sujet.get_logo()})
+    return render_template('compte.html', title='My account',
+                           langages=langages), 200
+
+
+# ================================  devenir membre  ================================
+
+# Permettre a un utilisateur de devenir membre
+
+@app.route("/config")
+def get_publishable_key():
+    stripe_config = {"publicKey": stripe_keys["publishable_key"]}
+    return jsonify(stripe_config)
+
+    
+@app.route("/create-checkout-session")
+def create_checkout_session():
+    session["checkout"] = True
+    domain_url = "http://127.0.0.1:5000/"
+    stripe.api_key = stripe_keys["secret_key"]
+    try:        
+        checkout_session = stripe.checkout.Session.create(
+            success_url=domain_url + "success?session_id={CHECKOUT_SESSION_ID}",
+            cancel_url=domain_url + "cancelled",
+            payment_method_types=["card"],
+            mode="payment",
+            line_items=[
+                {
+                    "name": "Membership",
+                    "quantity": 1,
+                    "currency": "cad",
+                    "amount": "1000",
+                }
+            ]
+        )
+        return jsonify({"sessionId": checkout_session["id"]})
+    except Exception as e:
+        return jsonify(error=str(e)), 403
+
+@app.route("/success")
+def success():
+    if "checkout" not in session:
+        return render_template("404.html", title="Not found"), 404
+    session.pop("checkout")
+    db = get_db()
+    user = db.read_user_username(session['user']['name'])
+    make_member(user)
+    db.update_user_membership(user)
+    session['user'] = user.session()
+    return render_template("success.html")
+
+
+@app.route("/cancelled")
+def cancelled():
+    if "checkout" not in session:
+            return render_template("404.html", title="Not found"), 404
+    session.pop("checkout")
+    return render_template("cancelled.html")
+
+
+@app.route("/membership")
+def paiement():
+    if not is_authenticated() or session['user']['member'] == True:
+        return render_template("404.html", title="Not found"), 404
+    return render_template("paiement.html")
+
+
+# ================================  support  ================================
+
 @app.route('/support', methods=["GET"])
 def support_get():
     message = session['message'] and session.pop(
@@ -163,24 +245,6 @@ def send_message(name, email, message):
         mail.send(mssg)
 
 
-@app.route('/about', methods=["GET"])
-def a_propos():
-    return render_template('about_us.html', title='About'), 200
-
-
-@app.route('/account', methods=["GET"])
-@authentication_required
-def compte():
-    sujets = get_db().read_all_sujet()
-    langages = []
-    for sujet in sujets:
-        if sujet.get_nom() in session['user']['progress']:
-            langages.append(
-                {"name": sujet.get_nom(), "logo": sujet.get_logo()})
-    return render_template('compte.html', title='My account',
-                           langages=langages), 200
-
-
 # ================================  register  ================================
 
 # Retourner le formulaire de création de comptes utilisateur
@@ -191,56 +255,6 @@ def register_get():
     error = session["error"] and session.pop(
         "error") if "error" in session else None
     return render_template("register.html", title='Sign up', error=error)
-
-
-   # ================================  paiement  ================================
-
-# Permettre a un utilisateur de devenir membre
-
-@app.route("/config")
-def get_publishable_key():
-    stripe_config = {"publicKey": stripe_keys["publishable_key"]}
-    return jsonify(stripe_config)
-
-    
-@app.route("/create-checkout-session")
-def create_checkout_session():
-    domain_url = "http://127.0.0.1:5000/"
-    stripe.api_key = stripe_keys["secret_key"]
-
-    try:        
-        checkout_session = stripe.checkout.Session.create(
-            success_url=domain_url + "success?session_id={CHECKOUT_SESSION_ID}",
-            cancel_url=domain_url + "cancelled",
-            payment_method_types=["card"],
-            mode="payment",
-            line_items=[
-                {
-                    "name": "Membership",
-                    "quantity": 1,
-                    "currency": "cad",
-                    "amount": "1000",
-                }
-            ]
-        )
-        return jsonify({"sessionId": checkout_session["id"]})
-    except Exception as e:
-        return jsonify(error=str(e)), 403
-
-@app.route("/success")
-def success():
-    return render_template("success.html")
-
-
-@app.route("/cancelled")
-def cancelled():
-    return render_template("cancelled.html")
-
-@app.route("/paiement")
-def paiement():
-    return render_template("paiement.html")
-
-
 
 
 # Valider les données et créer un nouveau compte utilisateur

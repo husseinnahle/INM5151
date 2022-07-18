@@ -2,32 +2,19 @@
 
 {% block content %}
   
-<div class="successContainer">
-  <div class="successText">   
-  <br><br><br>
-  <p>Your payment succeeded</p>
-  <br>
-  <p>You are now a member of EZCoding!</p>
-</div>
-
-<br><br>
-
-<div class="imageSuccess">
-<img src="../static/icons/checks.png">
-</div>
-
-<section class="section">
-  <div class="container">
-     <button type="button" class="btn-paiement btn-success" id="submitBtn" onclick="window.location.href='/'">Back to the main page</button>
+  <div class="successContainer">
+    <div class="successText">   
+    <br><br><br>
+    <p>Your payment succeeded</p>
+    <br>
+    <p>You are now a member of EZCoding!</p>
+    </div>
+    <br><br>
+    <img class="imageSuccess" src="../static/icons/checks.png">
+    <div id="paiement-button-container">
+      <button type="button" class="btn-paiement btn-success" onclick="window.location.href='/'">Back to the main page</button>
+    </div>
+    <br><br>
   </div>
-</section>
- <br><br>
-
-</div>
-
-   
-
-  
-
 
 {% endblock %}
