@@ -1,6 +1,8 @@
 import json
 import html
 import hashlib
+import os
+import stripe
 
 from flask import Flask
 from flask import render_template
@@ -21,6 +23,13 @@ from flask_mail import Mail, Message
 app = Flask(__name__)
 app.config['JSON_SORT_KEYS'] = False
 app.secret_key = "a6cd02e9b1104ac0*c2a02391284cb!0"
+
+stripe_keys = {
+    "secret_key" : "sk_test_51LKsa0A5hdrVdRtKeyX3nEfmneDW2AcxnXF3KToFivuuttwyNih5Mqyd7RL562hu8BuHfgdI3wpf9ZZBAI6kiJRw006N97T3JI",
+    "publishable_key": "pk_test_51LKsa0A5hdrVdRtKZhTWSDWZ7a49RgwH58gOCJ9uTWs1VKvaNLaHGv2hTA2KIL29hloRYZwpfGlMzxHSYgAvSMdH00vr5bZ3rk"
+}
+stripe.api_key = stripe_keys["secret_key"]
+
 DATA_FILE_PATH = 'static/data.json'
 
 app.config['HCAPTCHA_ENABLED'] = True
@@ -182,6 +191,56 @@ def register_get():
     error = session["error"] and session.pop(
         "error") if "error" in session else None
     return render_template("register.html", title='Sign up', error=error)
+
+
+   # ================================  paiement  ================================
+
+# Permettre a un utilisateur de devenir membre
+
+@app.route("/config")
+def get_publishable_key():
+    stripe_config = {"publicKey": stripe_keys["publishable_key"]}
+    return jsonify(stripe_config)
+
+    
+@app.route("/create-checkout-session")
+def create_checkout_session():
+    domain_url = "http://127.0.0.1:5000/"
+    stripe.api_key = stripe_keys["secret_key"]
+
+    try:        
+        checkout_session = stripe.checkout.Session.create(
+            success_url=domain_url + "success?session_id={CHECKOUT_SESSION_ID}",
+            cancel_url=domain_url + "cancelled",
+            payment_method_types=["card"],
+            mode="payment",
+            line_items=[
+                {
+                    "name": "Membership",
+                    "quantity": 1,
+                    "currency": "cad",
+                    "amount": "1000",
+                }
+            ]
+        )
+        return jsonify({"sessionId": checkout_session["id"]})
+    except Exception as e:
+        return jsonify(error=str(e)), 403
+
+@app.route("/success")
+def success():
+    return render_template("success.html")
+
+
+@app.route("/cancelled")
+def cancelled():
+    return render_template("cancelled.html")
+
+@app.route("/paiement")
+def paiement():
+    return render_template("paiement.html")
+
+
 
 
 # Valider les données et créer un nouveau compte utilisateur
