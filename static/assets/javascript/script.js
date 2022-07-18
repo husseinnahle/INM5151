@@ -211,3 +211,11 @@ function clearField() {
   }
   password.value = "";
 }
+
+function closeAd() {
+  document.getElementById("publicite-popup").remove();
+}
+
+function showSkip() {
+  document.getElementById("skip").style.visibility = "visible";
+}
