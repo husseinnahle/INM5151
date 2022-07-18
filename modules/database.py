@@ -48,9 +48,10 @@ class Database:
     def insert_user(self, user):
         connection = self.get_connection()
         connection.execute('insert into user'
-                           '(username, email, salt, hash, progress)'
-                           'values(?, ?, ?, ?, ?)',
+                           '(username, email, salt, hash, member, progress)'
+                           'values(?, ?, ?, ?, ?, ?)',
                            (user.name, user.email, user.salt, user.hash,
+                            1 if user.member else 0,
                             json.dumps(user.progress)))
         connection.commit()
 
@@ -62,7 +63,8 @@ class Database:
         if user is None:
             return None
         user_obj = User(user[0], user[1], user[2], user[3], user[4])
-        user_obj.set_progress(json.loads(user[5]))
+        user_obj.set_progress(json.loads(user[6]))
+        user_obj.set_member(True if user[5] == 1 else False)    
         return user_obj
 
     # Mettre à jour la progression d'un utilisateur selon 'username'
@@ -78,4 +80,11 @@ class Database:
         connection.execute('update user set username = ?, email = ?, hash = ?'
                            'where id = ?',
                            (user.name, user.email, user.hash, user.id))
+        connection.commit()
+
+    def update_user_membership(self, user: User):
+        connection = self.get_connection()
+        connection.execute('update user set member = ?'
+                           'where id = ?',
+                           (1 if user.member else 0, user.id))
         connection.commit()

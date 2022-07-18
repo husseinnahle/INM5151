@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+  
+  <div class="successContainer">
+    <div class="successText">   
+    <br><br><br>
+    <p>Your payment succeeded</p>
+    <br>
+    <p>You are now a member of EZCoding!</p>
+    </div>
+    <br><br>
+    <img class="imageSuccess" src="../static/icons/checks.png">
+    <div id="paiement-button-container">
+      <button type="button" class="btn-paiement btn-success" onclick="window.location.href='/'">Back to the main page</button>
+    </div>
+    <br><br>
+  </div>
+
+{% endblock %}

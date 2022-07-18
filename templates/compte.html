@@ -22,8 +22,10 @@
                 <br>
                 <div class="edit-buttons">
                     <button type="button" onclick="editInput()" class="edit" id="edit">Edit</button>
-                    <button type="button" onclick="cancelEdit()" class="cancel" id="cancel">Cancel</button>                    
-                    <button type="button" onclick="#" class="member">Become a member</button>
+                    <button type="button" onclick="cancelEdit()" class="cancel" id="cancel">Cancel</button>
+                    {% if not session['user']['member'] %}
+                        <button type="button" class="member" id="submitBtn" onclick="window.location.href='/membership'">Become a member</button>
+                    {% endif %}
                 </div>
             </div>
         </div>

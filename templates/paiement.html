@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="containerPaiement">
+    <div class="price-column">
+      <div class="price">
+        <div class="dollar-sign">$</div>
+        10
+        <div class="per-month">/mo        
+        </div>
+        <div class="plan-name">Membership</div>
+      </div>
+      <div class="divider"></div>
+      <div class="feature">
+        <ul class="feature-list">
+          <li>EZCoding ad-free</li>
+          <li>Become a part of EZCoding community</li>
+        </ul>
+      </div>
+    </div>    
+    <div id="paiement-button-container">
+      <button class="btn-paiement" id="submitBtn">Purchase membership</button>
+    </div>
+  </div>
+  <script type="text/javascript">
+    paiement();
+  </script>
+{% endblock %}

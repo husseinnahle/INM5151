@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div class="successContainer">
+    <div class="successText">   
+    <br><br><br>
+    <p>Your payment was cancelled</p> 
+  </div>
+  <br><br>
+  <img class="imageSuccess" src="../static/icons/cross.png">
+  <div id="paiement-button-container">
+      <button type="button" class="btn-paiement btn-success" id="submitBtn" onclick="window.location.href='/'">Back to the main page</button>
+  </div>
+  <br><br>
+  </div>
+{% endblock %}

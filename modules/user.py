@@ -29,6 +29,10 @@ def modify_user(user, username, email, password):
     user._modify_info(username, email, hash)
 
 
+def make_member(user):
+    user.set_member(True)
+
+
 def _validate_user(username, email, password):
     if username == "" or email == "" or password == "":
         raise ValueError("All fields are required")
@@ -56,6 +60,15 @@ def _verify_email(email):
         raise ValueError("Invalid email")
 
 
+def validate_support_form(name, email, message):
+    if name == "" or email == "" or message == "":
+        raise ValueError("All fields are required")
+    try:
+        _verify_email(email)
+    except ValueError as error:
+        raise ValueError(error)
+
+
 class User:
     def __init__(self, id: int, username: str, email: str, salt: str,
                  hash: str):
@@ -64,6 +77,7 @@ class User:
         self.email = email
         self.salt = salt
         self.hash = hash
+        self.member = False
         self.progress = {}
 
     def update_progress(self, sujet, sous_sujet, resultat):
@@ -94,9 +108,13 @@ class User:
         if hash != "":
             self.hash = hash
 
+    def set_member(self, value):
+        self.member = value
+
     def session(self):
         session = {
             "name": self.name,
+            "member": self.member,
             "email": self.email,
             "progress": self.progress
         }
