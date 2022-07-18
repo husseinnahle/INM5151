@@ -286,7 +286,6 @@ footer{
   border-radius: 4px;
   box-shadow: 0 0 50px black;
   box-sizing: border-box;
-  position: fixed;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);

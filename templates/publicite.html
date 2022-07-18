@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<script type="text/javascript" language="javascript">
+    window.onload=function()  
+    {
+        setTimeout(showLink, 7000);  
+        
+    };
+    function showLink()
+    {
+        document.getElementById("lien").className="show";
+    }
+    
+</script>
+  <div class="publicite-popup">
+    <div class="publicite-panel one">
+            <video autoplay="autoplay" preload="preload" >
+                <source src="static/video/publicite.mp4" type="video/mp4"></source>
+            </video>
+            
+            <a href="/languages/quiz/Python?sous-sujet=Introduction">
+                <div id ="lien" class="hide">
+                    Skip
+                </div>               
+            </a>
+    </div>
+  </div>
+{% endblock %}

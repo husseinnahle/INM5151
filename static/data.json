@@ -212,12 +212,12 @@
 		"Sous-sujet" : []
 	},
 
-	"rust" : {
+	"Rust" : {
 		"Logo" : "static/logo/rust.png",
 		"Sous-sujet" : []
 	},
 
-	"matlab" : {
+	"Matlab" : {
 		"Logo" : "static/logo/matlab.png",
 		"Sous-sujet" : []
 	}

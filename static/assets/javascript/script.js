@@ -108,14 +108,6 @@ function openPopup() {
 function is_authorized(pathname) {
   const username = document.getElementById("username").value;
   const password = document.getElementById("password").value;
-  const hcaptchaVal =
-    document.querySelector('[name="h-captcha-response"]').value;
-  if (hcaptchaVal === "") {
-    const msg = "Please complete the hCaptcha"
-    document.getElementById("form-popup-error-container").innerHTML =
-      `<span id="form-popup-error">` + msg + `</span><br>`;
-    return false;
-  }
   fetch('/api/is_authorized?username=' + username + '&password=' + password + '&path=' + pathname)
     .then(function (response) {
       return response.text();
@@ -219,6 +211,16 @@ function clearField() {
     return;
   }
   password.value = "";
+}
+
+function closeAd() {
+  document.getElementById("publicite-popup").remove();
+  document.getElementById("quiz-container").style.filter = "blur(0px)";
+  document.getElementById("quiz-container").style.pointerEvents = "all";
+}
+
+function showSkip() {
+  document.getElementById("skip").style.visibility = "visible";
 }
 
 function paiement() {

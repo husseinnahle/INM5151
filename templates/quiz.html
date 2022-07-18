@@ -1,23 +1,48 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <div style="display: flex;">
-    <h1 id="sujet">{{ sujet }}</h1>
-    <h1> - </h1>
-    <h1 id="sous_sujet">{{ sous_sujet }}</h1>
+  {% if not session['user']['member'] %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='assets/css/publicite.css') }}" />
+    <div class="publicite-popup" id="publicite-popup">
+      <div class="publicite-panel one">
+        <video autoplay="autoplay" preload="preload" >
+          <source src="{{ url_for('static',filename='video/publicite.mp4') }}" type="video/mp4"></source>
+        </video>
+        <div id="skip-wrapper">
+          <button class="skip-button" id="skip" onclick="closeAd();">Skip</button>
+        </div>
+      </div>
+    </div>
+    <script type="text/javascript" language="javascript">
+      window.onload=function()  
+      {
+        setTimeout(showSkip, 7000);          
+      };
+    </script>
+  {% endif %}
+  {% if not session['user']['member'] %}
+    <div id="quiz-container" style="filter:blur(10px); pointer-events:none;">
+  {% else %}
+    <div id="quiz-container">  
+  {% endif %}
+      <div style="display: flex;">
+      <h1 id="sujet">{{ sujet }}</h1>
+      <h1> - </h1>
+      <h1 id="sous_sujet">{{ sous_sujet }}</h1>
+    </div>
+    <div style="display: flex;">
+      <p id="numero">1</p>
+      <p>.&nbsp;</p>
+      <p id="question">{{ question }}</p>
+    </div>
+    <div id="container">
+      {% for c in choix %}
+        <input type="radio" id="choix" name="choix">
+        <label id="choix" name="choix_label" for={{ c }}>{{ c }}</label>
+        <br>
+      {% endfor %}
+    </div>
+    <span id="erreur"></span><br>
+    <button onclick="questionSuivante();">Suivant</button>
   </div>
-  <div style="display: flex;">
-    <p id="numero">1</p>
-    <p>.&nbsp;</p>
-    <p id="question">{{ question }}</p>
-  </div>
-  <div id="container">
-    {% for c in choix %}
-      <input type="radio" id="choix" name="choix">
-      <label id="choix" name="choix_label" for={{ c }}>{{ c }}</label>
-      <br>
-    {% endfor %}
-  </div>
-  <span id="erreur"></span><br>
-  <button onclick="questionSuivante();">Suivant</button>
 {% endblock %}
