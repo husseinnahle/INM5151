@@ -245,9 +245,6 @@ def send_message(name, email, message):
         mail.send(mssg)
 
 
-@app.route('/publicite', methods=["GET"])
-def publicite():
-    return render_template('publicite.html', title='Publicite'), 200
 # ================================  register  ================================
 
 # Retourner le formulaire de création de comptes utilisateur
@@ -306,25 +303,17 @@ def login_get():
 def login_post():
     username = request.form["username"]
     password = request.form["password"]
-    session['error'] = ""
-
-    if hcaptcha.verify():
-        user = is_authorized(username, password)
-        if not user:
-            # Accès non autorisé
-            return redirect('/login')
-        # hCaptcha ok
-        session["user"] = user.session()
-        if 'path' in session:
-            # Redirection vers 'path' apres authentification
-            path = session['path'] and session.pop(
-                'path') if 'path' in session else None
-            return redirect(path)
-        return redirect("/account")
-    else:
-        # hCaptcha erreur
-        session['error'] = HCAPTCHA_ERROR
+    user = is_authorized(username, password)
+    if not user:
+        # Accès non autorisé
         return redirect('/login')
+    session["user"] = user.session()
+    if 'path' in session:
+        # Redirection vers 'path' apres authentification
+        path = session['path'] and session.pop(
+            'path') if 'path' in session else None
+        return redirect(path)
+    return redirect("/account")
 
 
 def is_authorized(username, password):
