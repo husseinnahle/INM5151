@@ -9,6 +9,10 @@
   <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='assets/css/style.css') }}" />
   <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='assets/css/tutoriel.css') }}" />
   <link rel="icon" type="image/png" href="{{ url_for('static',filename='logo/ezcoding-window.png') }}" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css">
+  <script src="https://js.stripe.com/v3/"></script>
+  <script src="{{ url_for('static', filename='assets/javascript/main.js') }}"></script>
+  <script defer src="https://use.fontawesome.com/releases/v5.14.0/js/all.js"></script>
 </head>
 
 <body>
@@ -56,7 +60,7 @@
 
   <footer>
     <div class="footer-content">
-      <p>copyright &copy; 2022 EZCoding.</p>
+      <p>Copyright &copy; 2022 EZCoding.</p>
     </div>
   </footer>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
