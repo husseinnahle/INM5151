@@ -1,9 +1,25 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <section class="section">
-    <div class="container">
-      <p>Your payment was cancelled.</p>
-    </div>
-  </section>
+<div class="successContainer">
+  <div class="successText">   
+  <br><br><br>
+  <p>Your payment was cancelled</p>
+ 
+</div>
+
+<br><br>
+
+<div class="imageSuccess">
+<img src="../static/icons/cross.png">
+</div>
+
+<section class="section">
+  <div class="container">
+     <button type="button" class="btn-paiement btn-success" id="submitBtn" onclick="window.location.href='/'">Back to the main page</button>
+  </div>
+</section>
+ <br><br>
+
+</div>
 {% endblock %}
