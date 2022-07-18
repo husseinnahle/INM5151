@@ -15,7 +15,10 @@ from flask import Response
 from .modules.database import Database
 from .modules.user import create_user
 from .modules.user import modify_user
+from .modules.user import validate_support_form
 from functools import wraps
+from flask_hcaptcha import hCaptcha
+from flask_mail import Mail, Message
 
 app = Flask(__name__)
 app.config['JSON_SORT_KEYS'] = False
@@ -29,6 +32,14 @@ stripe.api_key = stripe_keys["secret_key"]
 
 DATA_FILE_PATH = 'static/data.json'
 
+app.config['HCAPTCHA_ENABLED'] = True
+app.config['HCAPTCHA_SITE_KEY'] = "3c18dd0a-63ab-4e65-bf31-18704c39f732"
+app.config['HCAPTCHA_SECRET_KEY'] = "0x58956B96080BFdBA80d7B228B4c460e3F7C"\
+                                    "fDEFC"
+HCAPTCHA_ERROR = 'Error in hCaptcha. Please try again'
+hcaptcha = hCaptcha(app)
+mail = Mail(app)
+
 
 def get_db():
     db = getattr(g, 'database', None)
@@ -39,16 +50,17 @@ def get_db():
 
 def is_authenticated():
     return ("user" in session and
-                get_db().read_user_username(session["user"]["name"]))
+            get_db().read_user_username(session["user"]["name"]))
 
 
 def authentication_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
         if not is_authenticated():
-            return Response('Could not verify your access level for that URL.\n'
-                            'You have to login with proper credentials.', 401,
-                            {'WWW-Authenticate': 'Basic realm="Login Required"'})
+            return Response('Could not verify your access level for that URL.'
+                            '\nYou have to login with proper credentials.',
+                            401, {'WWW-Authenticate': 'Basic realm="Login"\
+                                "Required"'})
         return f(*args, **kwargs)
     return decorated
 
@@ -103,8 +115,52 @@ def index():
 
 
 @app.route('/support', methods=["GET"])
-def aide():
-    return render_template('support.html', title='Support'), 200
+def support_get():
+    message = session['message'] and session.pop(
+        "message") if "message" in session else None
+    error = session["error"] and session.pop(
+        "error") if "error" in session else None
+    return render_template('support.html', title='Support', error=error,
+                           message=message), 200
+
+
+@app.route('/support', methods=["POST"])
+def support_post():
+    message = request.form["message"]
+    if is_authenticated():
+        name = session["user"]["name"]
+        email = session["user"]["email"]
+    else:
+        name = request.form["name"]
+        email = request.form["email"]
+    if hcaptcha.verify():
+        # hCaptcha ok
+        try:
+            validate_support_form(name, email, message)
+            send_message(name, email, message)
+            session["message"] = "Message sent successfully."
+        except Exception as error:
+            session["error"] = str(error)
+        return redirect("/support")
+    else:
+        # hCaptcha erreur
+        session['error'] = HCAPTCHA_ERROR
+        return redirect('/support')
+
+
+def send_message(name, email, message):
+    sender = "support_form@ezcoding.com"
+    user = name + "<" + email + ">"
+    emails = [user, "support@ezcoding.com"]
+    subject = []
+    subject.append("Your message from EZCoding support form")
+    subject.append("Support form - " + user)
+    for i in range(2):
+        mssg = Message(subject=subject[i],
+                       sender=sender,
+                       recipients=[emails[i]])
+        mssg.body = message
+        mail.send(mssg)
 
 
 @app.route('/about', methods=["GET"])
@@ -119,8 +175,10 @@ def compte():
     langages = []
     for sujet in sujets:
         if sujet.get_nom() in session['user']['progress']:
-            langages.append({"name": sujet.get_nom(), "logo": sujet.get_logo()})
-    return render_template('compte.html', title='My account', langages=langages), 200
+            langages.append(
+                {"name": sujet.get_nom(), "logo": sujet.get_logo()})
+    return render_template('compte.html', title='My account',
+                           langages=langages), 200
 
 
 # ================================  register  ================================
@@ -130,7 +188,8 @@ def compte():
 def register_get():
     if is_authenticated():
         return render_template("404.html", title="Not found"), 404
-    error = session["error"] and session.pop("error") if "error" in session else None
+    error = session["error"] and session.pop(
+        "error") if "error" in session else None
     return render_template("register.html", title='Sign up', error=error)
 
 
@@ -194,15 +253,22 @@ def register_post():
         email = request.form["email"]
         if db.read_user_username(username):
             # Nom utilisateur invalide
-            session["error"] = "Username already exists. Please enter another one"
+            session["error"] = "Username already exists. Please enter"\
+                " another one"
             return redirect('/register')
-        user = create_user(username, email, password)  # ValueError
-        db.insert_user(user)
+        if hcaptcha.verify():
+            # hCaptcha ok
+            user = create_user(username, email, password)  # ValueError
+            db.insert_user(user)
+            session["message"] = "Account created!"
+            return redirect("/login")
+        else:
+            # hCaptcha erreur
+            session['error'] = HCAPTCHA_ERROR
+            return redirect('/register')
     except ValueError as error:
         session["error"] = str(error)
         return redirect("/register")
-    session["message"] = "Account created!"
-    return redirect("/login")
 
 
 # ==================================  login  =================================
@@ -210,8 +276,10 @@ def register_post():
 # Retourner le formulaire d'authentification
 @app.route('/login', methods=["GET"])
 def login_get():
-    message = session['message'] and session.pop("message") if "message" in session else None
-    error = session["error"] and session.pop("error") if "error" in session else None
+    message = session['message'] and session.pop(
+        "message") if "message" in session else None
+    error = session["error"] and session.pop(
+        "error") if "error" in session else None
     return render_template('login.html', title='Login',
                            error=error, message=message), 200
 
@@ -221,16 +289,25 @@ def login_get():
 def login_post():
     username = request.form["username"]
     password = request.form["password"]
-    user = is_authorized(username, password)
-    if not user:
-        # Accès non autorisé
+    session['error'] = ""
+
+    if hcaptcha.verify():
+        user = is_authorized(username, password)
+        if not user:
+            # Accès non autorisé
+            return redirect('/login')
+        # hCaptcha ok
+        session["user"] = user.session()
+        if 'path' in session:
+            # Redirection vers 'path' apres authentification
+            path = session['path'] and session.pop(
+                'path') if 'path' in session else None
+            return redirect(path)
+        return redirect("/account")
+    else:
+        # hCaptcha erreur
+        session['error'] = HCAPTCHA_ERROR
         return redirect('/login')
-    session["user"] = user.session()
-    if 'path' in session:
-        # Redirection vers 'path' apres authentification
-        path = session['path'] and session.pop('path') if 'path' in session else None
-        return redirect(path)
-    return redirect("/account")
 
 
 def is_authorized(username, password):
@@ -290,7 +367,8 @@ def languages_sujet(sujet):
         return render_template("404.html", title="Not found", err=err), 404
     except ValueError as error:
         # Retourner un 404 si le sous-sujet n'existe pas
-        return render_template("404.html", title="Not found", err=str(error)), 404
+        return render_template("404.html", title="Not found",
+                               err=str(error)), 404
     if not is_authenticated():
         # Retourner une erreur si l'utilisateur n'est pas authentifie
         return render_template("404.html", title="Not found"), 404
@@ -303,7 +381,8 @@ def languages_sujet(sujet):
                            sous_sujet=sous_sujet, title='Languages'), 200
 
 
-# Retourner la premiere question du quiz d'un 'sous_sujet_nom' appartenant a un 'sujet_nom'
+# Retourner la première question du quiz d'un 'sous_sujet_nom' appartenant
+# à un 'sujet_nom'
 @app.route('/languages/quiz/<sujet_nom>', methods=["GET"])
 def quiz(sujet_nom):
     sous_sujet_nom = request.args.get('sous-sujet')

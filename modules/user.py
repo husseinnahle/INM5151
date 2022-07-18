@@ -56,6 +56,15 @@ def _verify_email(email):
         raise ValueError("Invalid email")
 
 
+def validate_support_form(name, email, message):
+    if name == "" or email == "" or message == "":
+        raise ValueError("All fields are required")
+    try:
+        _verify_email(email)
+    except ValueError as error:
+        raise ValueError(error)
+
+
 class User:
     def __init__(self, id: int, username: str, email: str, salt: str,
                  hash: str):
