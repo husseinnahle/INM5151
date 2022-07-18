@@ -27,7 +27,7 @@ app.config['HCAPTCHA_ENABLED'] = True
 app.config['HCAPTCHA_SITE_KEY'] = "3c18dd0a-63ab-4e65-bf31-18704c39f732"
 app.config['HCAPTCHA_SECRET_KEY'] = "0x58956B96080BFdBA80d7B228B4c460e3F7C"\
                                     "fDEFC"
-HCAPTCHA_ERROR = 'Error in hcaptcha. Please try again'
+HCAPTCHA_ERROR = 'Error in hCaptcha. Please try again'
 hcaptcha = hCaptcha(app)
 mail = Mail(app)
 
@@ -117,21 +117,17 @@ def support_get():
 
 @app.route('/support', methods=["POST"])
 def support_post():
-    try:
-        message = request.form["message"]
-        if is_authenticated():
-            name = session["user"]["name"]
-            email = session["user"]["email"]
-        else:
-            name = request.form["name"]
-            email = request.form["email"]
-            validate_support_form(name, email, message)
-    except ValueError as error:
-        session["error"] = str(error)
-        return redirect("/support")
+    message = request.form["message"]
+    if is_authenticated():
+        name = session["user"]["name"]
+        email = session["user"]["email"]
+    else:
+        name = request.form["name"]
+        email = request.form["email"]
     if hcaptcha.verify():
         # hCaptcha ok
         try:
+            validate_support_form(name, email, message)
             send_message(name, email, message)
             session["message"] = "Message sent successfully."
         except Exception as error:
@@ -234,12 +230,14 @@ def login_get():
 def login_post():
     username = request.form["username"]
     password = request.form["password"]
-    user = is_authorized(username, password)
-    if not user:
-        # Accès non autorisé
-        return redirect('/login')
+    session['error'] = ""
+
     if hcaptcha.verify():
-        # hCaptcha ok, accès autorisé
+        user = is_authorized(username, password)
+        if not user:
+            # Accès non autorisé
+            return redirect('/login')
+        # hCaptcha ok
         session["user"] = user.session()
         if 'path' in session:
             # Redirection vers 'path' apres authentification
