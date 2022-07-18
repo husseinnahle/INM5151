@@ -32,6 +32,7 @@ def modify_user(user, username, email, password):
 def make_member(user):
     user.set_member(True)
 
+
 def _validate_user(username, email, password):
     if username == "" or email == "" or password == "":
         raise ValueError("All fields are required")
@@ -57,6 +58,15 @@ def _verify_email(email):
     regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
     if not re.fullmatch(regex, email):
         raise ValueError("Invalid email")
+
+
+def validate_support_form(name, email, message):
+    if name == "" or email == "" or message == "":
+        raise ValueError("All fields are required")
+    try:
+        _verify_email(email)
+    except ValueError as error:
+        raise ValueError(error)
 
 
 class User:

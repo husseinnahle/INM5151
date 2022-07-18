@@ -64,7 +64,7 @@ class Database:
             return None
         user_obj = User(user[0], user[1], user[2], user[3], user[4])
         user_obj.set_progress(json.loads(user[6]))
-        user_obj.set_member(True if user[5] == 0 else False)    
+        user_obj.set_member(True if user[5] == 1 else False)    
         return user_obj
 
     # Mettre à jour la progression d'un utilisateur selon 'username'
