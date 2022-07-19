@@ -135,7 +135,6 @@ function editInput() {
     edit_button.style.color = "#f83470";
     edit_button.style.backgroundColor = "#2d3033";
   } else {
-    document.getElementById("cancel").style.visibility = "hidden";
     var username = document.getElementById("username").value;
     var email = document.getElementById("email").value;
     var password = document.getElementById("password").value;
@@ -159,6 +158,7 @@ function editInput() {
           document.getElementById("message").style.color = 'red';
           return;
         }
+        document.getElementById("cancel").style.visibility = "hidden";
         document.getElementById("message").innerText = "Account info updated!";
         document.getElementById("message").style.color = 'white';
         document.getElementById("navbarDarkDropdownMenuLink").innerText = username;
