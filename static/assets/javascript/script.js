@@ -31,10 +31,9 @@ function chercherQuestion(sujet, sous_sujet, numero_str) {
 function modifierQuestion(numero, question, choix) {
   document.getElementById('numero').innerText = numero;
   document.getElementById('question').innerText = question;
-  document.getElementById("container").innerHTML = "";
+  document.getElementById("quiz-choix").innerHTML = "";
   for (var i = 0; i < choix.length; i++) {
-    document.getElementById("container").innerHTML += `<input type="radio" id="choix" name="choix">
-    <label id="choix" name="choix_label" for=${choix[i]}>${choix[i]}</label><br>`;
+    document.getElementById("quiz-choix").innerHTML += `<label><input type="radio" id="choix" name="choix"/><span id="choix" name="choix_label" for=${choix[i]}>${choix[i]}</span></label>`;
   }
 }
 

@@ -280,7 +280,7 @@ footer{
 
 .form-popup {
   z-index: 15;
-  position: relative;
+  position: absolute;
   background: #212529;
   width: 550px;
   border-radius: 4px;
@@ -641,7 +641,10 @@ footer{
   padding: 70px;
   width: 600px;
   height: 550px;
-  margin: 0 auto;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .price-column {
@@ -654,7 +657,6 @@ footer{
 }
 
 .successContainer {
-  margin: 0 auto;
   background: #212529; 
   border-radius: 4px;
   box-shadow: 0 0 20px black;
@@ -662,6 +664,10 @@ footer{
   color: white;
   width: 500px;
   height: 550px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .successText {

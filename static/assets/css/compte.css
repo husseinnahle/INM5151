@@ -4,8 +4,10 @@
     max-height: 70vh;
     border-collapse: separate;
     border-spacing: 100px;
-    margin-top: -50px;
-    margin-bottom: 50px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
 }
 
 .infoCompte {
@@ -166,7 +168,7 @@ button {
     font-weight: 500;
     line-height: inherit;
     cursor: pointer;
-    text-shadow: 0.5 0.1em 0.1em rgba(255, 255, 255, 0.253);
+    text-shadow: 0.5 0.1em 0.1em #ffffff41;
 }
 
 .member {

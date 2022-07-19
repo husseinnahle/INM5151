@@ -20,29 +20,35 @@
       };
     </script>
   {% endif %}
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='assets/css/quiz.css') }}" />
   {% if not session['user']['member'] %}
     <div id="quiz-container" style="filter:blur(10px); pointer-events:none;">
   {% else %}
     <div id="quiz-container">  
   {% endif %}
-      <div style="display: flex;">
-      <h1 id="sujet">{{ sujet }}</h1>
-      <h1> - </h1>
-      <h1 id="sous_sujet">{{ sous_sujet }}</h1>
-    </div>
-    <div style="display: flex;">
-      <p id="numero">1</p>
-      <p>.&nbsp;</p>
-      <p id="question">{{ question }}</p>
-    </div>
-    <div id="container">
-      {% for c in choix %}
-        <input type="radio" id="choix" name="choix">
-        <label id="choix" name="choix_label" for={{ c }}>{{ c }}</label>
-        <br>
-      {% endfor %}
-    </div>
-    <span id="erreur"></span><br>
-    <button onclick="questionSuivante();">Suivant</button>
+      <div class="quiz-header" style="display: flex;">
+        <h1 id="sujet">{{ sujet }}</h1>
+        <h1> - </h1>
+        <h1 id="sous_sujet">{{ sous_sujet }}</h1>
+      </div>
+      <div class="quiz-content">
+        <div class="quiz-question" style="display: flex;">
+          <p id="numero">1</p>
+          <p>.&nbsp;</p>
+          <p id="question">{{ question }}</p>
+        </div>
+        <div id="quiz-choix">
+          {% for c in choix %}
+            <label>
+              <input type="radio" id="choix" name="choix"/>
+              <span id="choix" name="choix_label" for={{ c }}>{{ c }}</span>
+            </label>
+          {% endfor %}
+        </div>
+      </div>
+      <span id="erreur"></span><br>
+      <div class="button-container">
+        <button onclick="questionSuivante();">Suivant</button>
+      </div>
   </div>
 {% endblock %}
