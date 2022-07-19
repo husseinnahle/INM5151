@@ -7,7 +7,8 @@ div.exemple{
     width: 40%;
     height: auto;
     text-align: left;
-    padding: 1%;    
+    padding: 1%;
+    font-family: 'Courier New', Courier, monospace;  
 }
 
 p.tutoriel, ul.tutoriel, h4.tutoriel{

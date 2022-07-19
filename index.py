@@ -106,6 +106,7 @@ def init_database():
     }
     user = create_user("username", "username@hotmail.com", "password")
     user.set_progress(progress)
+    user.set_member(True)
     get_db().insert_user(user)
 
 
