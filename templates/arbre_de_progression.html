@@ -2,75 +2,74 @@
 
 {% block content %}
 
-  {% if not is_authorized %}
-    <div class="popup" id="popup">
-      <div class="form-popup" style="position:fixed;">
-        <div class="form-panel one">
-          <div class="form-header">
-            <h5>Login to continue</h5>
+{% if not is_authorized %}
+<div class="popup" id="popup">
+  <div class="form-popup" style="position:fixed;">
+    <div class="form-panel one">
+      <div class="form-header">
+        <h5>Login to continue</h5>
+      </div>
+      <div class="form-content">
+        <form method="post" action="/login" id="form-popup">
+          <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" required="required" />
           </div>
-          <div class="form-content">
-            <form method="post" action="/login" id="form-popup">
-              <div class="form-group">
-                <label for="username">Username</label>
-                <input type="text" id="username" name="username" required="required"/>
-              </div>
-              <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password" required="required"/>
-              </div>
-              <div class="form-group">
-                <label class="form-remember">
-                  <input type="checkbox"/>Remember Me
-                </label><a class="form-recovery" href="#">Forgot Password?</a>
-              </div>
-              <div id="form-popup-error-container"></div>   
-              <br>
-              <div class="form-group">
-                <button type="button" onclick="is_authorized('/languages/{{sujet["Nom"]}}');">Log In</button>
-              </div>
-              <a class="form-register" href="/register">Create an account</a>
-            </form>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required="required" />
           </div>
-        </div>
+          <div id="form-popup-error-container"></div>
+          <br>
+          <div class="form-group">
+            <button type="button" onclick="is_authorized('/languages/{{sujet[" Nom"]}}');">Log In</button>
+          </div>
+          <a class="form-register" href="/register">Create an account</a>
+        </form>
       </div>
     </div>
-  {% endif %}
-  
-  <div class="container mt-5" id="tree-container">    
-    <div class="tree" id="tree">
-      {% set ns = namespace(blocked=false) %}
-      {% for ss in sujet["Information"]["Sous-sujet"] %}
-        {% set sujet = sujet["Nom"] %}
-        {% set sous_sujet = ss["Nom"] %}
-        {% set left = ss["Position"]["Left"] %}
-        {% set top = ss["Position"]["Top"] %}
-        {% if ('user' in session) and (sujet in session['user']['progress']) and (sous_sujet in session['user']['progress'][sujet]) and (session['user']['progress'][sujet][sous_sujet] == "S") %}
-          <div class="node" id="{{ sous_sujet }}" name="done" style="border: 4px solid #19CE95; left:{{ left }}; top: {{ top }}">
-        {% elif ns.blocked %}
-          <div class="node" id="{{ sous_sujet }}" name="blocked" style="border: 4px solid red; filter:grayscale(1); pointer-events:none; left:{{ left }}; top: {{ top }}">
+  </div>
+</div>
+{% endif %}
+
+<div class="container mt-5" id="tree-container">
+  <div class="tree" id="tree">
+    {% set ns = namespace(blocked=false) %}
+    {% for ss in sujet["Information"]["Sous-sujet"] %}
+    {% set sujet = sujet["Nom"] %}
+    {% set sous_sujet = ss["Nom"] %}
+    {% set left = ss["Position"]["Left"] %}
+    {% set top = ss["Position"]["Top"] %}
+    {% if ('user' in session) and (sujet in session['user']['progress']) and (sous_sujet in
+    session['user']['progress'][sujet]) and (session['user']['progress'][sujet][sous_sujet] == "S") %}
+    <div class="node" id="{{ sous_sujet }}" name="done"
+      style="border: 4px solid #19CE95; left:{{ left }}; top: {{ top }}">
+      {% elif ns.blocked %}
+      <div class="node" id="{{ sous_sujet }}" name="blocked"
+        style="border: 4px solid red; filter:grayscale(1); pointer-events:none; left:{{ left }}; top: {{ top }}">
         {% else %}
-            <div class="node" id="{{ sous_sujet }}" name="current" style="border: 4px solid gold; left:{{ left }}; top: {{ top }}">
-            {% set ns.blocked = true %}
-        {% endif %}
+        <div class="node" id="{{ sous_sujet }}" name="current"
+          style="border: 4px solid gold; left:{{ left }}; top: {{ top }}">
+          {% set ns.blocked = true %}
+          {% endif %}
           <a class="node__link__wrapper" href="/languages/{{ sujet }}?sous-sujet={{ sous_sujet }}">
-              <span class="node__name">{{ ss["Nom"] }}</span>
-              <div class="node__score__wrapper">
-                <img class="node__score" src="{{ url_for('static', filename='icons/fire.png') }}" alt="Fire icon">
-                <img class="node__score" src="{{ url_for('static', filename='icons/empty_fire.png') }}" alt="Fire icon">
-                <img class="node__score" src="{{ url_for('static', filename='icons/empty_fire.png') }}" alt="Fire icon">
-              </div>
-              <span class="node__score__xp"> --/--XP</span>
+            <span class="node__name">{{ ss["Nom"] }}</span>
+            <div class="node__score__wrapper">
+              <img class="node__score" src="{{ url_for('static', filename='icons/fire.png') }}" alt="Fire icon">
+              <img class="node__score" src="{{ url_for('static', filename='icons/empty_fire.png') }}" alt="Fire icon">
+              <img class="node__score" src="{{ url_for('static', filename='icons/empty_fire.png') }}" alt="Fire icon">
+            </div>
+            <span class="node__score__xp"> --/--XP</span>
           </a>
         </div>
-      {% endfor %}
-    </div>    
-  </div>
-  <script src="{{ url_for('static', filename='assets/javascript/leader-line.min.js') }}"></script>
-  <script type="text/javascript">
-    addArrows();
-    {% if not is_authorized %}
+        {% endfor %}
+      </div>
+    </div>
+    <script src="{{ url_for('static', filename='assets/javascript/leader-line.min.js') }}"></script>
+    <script type="text/javascript">
+      addArrows();
+      {% if not is_authorized %}
       openPopup();
-    {% endif %}  
-  </script>
-{% endblock %}
+      {% endif %}  
+    </script>
+    {% endblock %}
