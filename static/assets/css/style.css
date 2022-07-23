@@ -708,3 +708,6 @@ footer{
   transform-origin: bottom left;
   transform: rotate(45deg);
 }
+ .shortcut{
+   left: 50px;
+ }

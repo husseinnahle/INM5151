@@ -71,7 +71,7 @@ function post(sujet, sous_sujet) {
 function addArrows() {
   var nodes = document.getElementsByClassName("node");
   for (var i = 0; i < nodes.length; i++) {
-    if (i + 1 < nodes.length) {
+    if (i + 2 < nodes.length) {
       endPlug = 'behind';
       _dash = null;
       if (nodes[i].getAttribute("name") == "done" && nodes[i + 1].getAttribute("name") == "current") {
