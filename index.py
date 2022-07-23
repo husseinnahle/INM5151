@@ -106,7 +106,6 @@ def init_database():
     }
     user = create_user("username", "username@hotmail.com", "password")
     user.set_progress(progress)
-    user.set_member(True)
     get_db().insert_user(user)
 
 
@@ -118,6 +117,16 @@ def index():
 @app.route('/about', methods=["GET"])
 def a_propos():
     return render_template('about_us.html', title='About'), 200
+
+@app.route('/admin', methods=["GET"])
+def compteAdmin():
+    return render_template('admin/compteAdmin.html', title='Admin'), 200
+
+
+
+@app.route('/editLangage', methods=["GET"])
+def editLang():
+    return render_template('admin/editLangage.html', title='editLangage'), 200
 
 
 @app.route('/account', methods=["GET"])
