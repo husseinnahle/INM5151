@@ -3,7 +3,7 @@ table {
     max-height: 40%;
 }
 .fixed_header{
-    width: 90%;
+    width: 100%;
     table-layout: fixed;
     border-collapse: collapse;
 }
@@ -25,7 +25,7 @@ table {
 }
 
 .fixed_header th, .fixed_header td {
-  padding: 5px;
+  padding: 1vh;
   text-align: center;
   width: 200px;
 }
