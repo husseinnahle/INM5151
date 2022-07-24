@@ -1,3 +1,9 @@
+/*general*/
+h2 {
+  text-align: center;
+}
+
+/*right div*/
 table {
     background-color:#ffffff41;
     max-height: 40%;
@@ -28,4 +34,31 @@ table {
   padding: 1vh;
   text-align: center;
   width: 200px;
+}
+
+/* left div */
+.langages-container-admin {
+    margin-top: 2vh;
+    margin-bottom: 2vh;
+    margin-right: 2vw;
+    margin-left: 2vw;
+}
+
+.cards-container-admin {
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  background-color: #2d3033;
+  margin: 70px auto;
+  width: 90%;
+  height: 600px;
+  overflow: auto;
+}
+
+.cards-admin {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  grid-auto-rows: auto;
+  gap: 9px;
+  margin-left: 15px;
+  font-family: sans-serif;
 }

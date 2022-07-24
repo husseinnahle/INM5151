@@ -120,7 +120,9 @@ def a_propos():
 
 @app.route('/admin', methods=["GET"])
 def compteAdmin():
-    return render_template('admin/compteAdmin.html', title='Admin'), 200
+    sujets = get_db().read_all_sujet()
+    sujets_info = [sujet.to_json() for sujet in sujets]
+    return render_template('admin/compteAdmin.html', sujets=sujets_info, title='Admin'), 200
 
 
 
