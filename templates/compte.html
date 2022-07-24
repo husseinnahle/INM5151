@@ -48,6 +48,12 @@
                         </a>
                     </div>
                 </div>
+                <br>
+                {% if session['user']['type'] == 2 %}
+                <div>
+                    <button type="button" id="im">Instant messaging</button>
+                </div>
+                {% endif %}
             </div>
         </div>
   </div>
