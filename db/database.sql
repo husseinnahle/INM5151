@@ -12,14 +12,5 @@ create table user (
   hash varchar(128),
   member integer,
   progress text,
-  type_id integer references user_type (id)
+  id_type integer  -- voir modules/user_type.py
 );
-
-create table user_type (
-  id integer primary key,
-  description varchar (20) unique
-);
-
-insert into user_type (id, description) values (1, 'admin');
-insert into user_type (id, description) values (2, 'instructor');
-insert into user_type (id, description) values (3, 'user');
