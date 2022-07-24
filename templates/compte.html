@@ -53,6 +53,11 @@
                 <div>
                     <button type="button" id="im">Instant messaging</button>
                 </div>
+                {% elif session['user']['type'] == 3 %}
+                <div>
+                    <button type="button" id="become_inst">
+                        Become an instructor</button>
+                </div>                
                 {% endif %}
             </div>
         </div>
