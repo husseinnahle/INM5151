@@ -67,6 +67,24 @@ class Database:
         user_obj.set_member(True if user[5] == 1 else False)    
         return user_obj
 
+
+    # Rechercher et retourner un utilisateur selon 'username'
+    def read_users(self):
+        cursor = self.get_connection().cursor()
+        cursor.execute('select * from user')
+        users = cursor.fetchall()
+        if users is None:
+            return None
+        return ( User(user[0], user[1], user[2], user[3], user[4]) for user in users)
+
+    # Rechercher et retourner un utilisateur selon 'username'
+    def delete_users(self,id):
+        connection = self.get_connection()
+        connection.execute('Delete FROM user where id = ?',(id,))
+        connection.commit()
+        
+
+
     # Mettre à jour la progression d'un utilisateur selon 'username'
     def update_user_progress(self, user: User):
         connection = self.get_connection()

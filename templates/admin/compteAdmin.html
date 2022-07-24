@@ -33,131 +33,31 @@
                     <thead>
                         <tr>
                             <th>Select</th>
+                            <th scope="col">Id</th>
                             <th scope="col">Username</th>
                             <th scope="col">Email</th>
                             <th scope="col">Type</th>
                             <th scope="col">Status</th>
                             <th scope="col"></th>
+                            <th scope="col"></th>
                         </tr>
                      </thead>
                     <tbody>
-                        <tr>
+                        {% for user in users %}
+                        <tr id ="{{user.id}}">
                             <td><input type="checkbox" name="record"></td>
-                            <th scope="row">user123</th>
-                            <td>jmlandry@gmail.com</td>
-                            <td>user</td>
-                            <td>active</td>
+                            <th scope="row"id ="id" >{{user.id}}</th>
+                            <td scope="row"id="name">{{user.name}}</th>
+                            <td id="email">{{user.email}}</td>
+                            <td id="type">user</td>
+                            <td id="type">active</td>
                             <td> <button type="button" class="edit-row" id="editBtn">Edit</button></td>
                             <td> <button type="button" class="delete-row" id="editBtn">Delete</button></td>
-                        <tr>
-                            <td><input type="checkbox" name="record"></td>
-                            <th scope="row">jmlandry</th>
-                            <td>jmlandry@gmail.com</td>
-                            <td>User</td>
-                            <td>active</td>
-                            <td> <button type="button" class="edit-row" id="editBtn">Edit</button></td>
-                            <td> <button type="button" class="delete-row" id="editBtn">Delete</button></td>
-                        </tr>    
-                        <tr>
-                            <td><input type="checkbox" name="record"></td>
-                            <th scope="row">user123</th>
-                            <td>jmlandry@gmail.com</td>
-                            <td>User</td>
-                            <td>active</td>
-                            <td> <button type="button" class="edit-row" id="editBtn">Edit</button></td>
-                            <td> <button type="button" class="delete-row" id="editBtn">Delete</button></td>
+
+                        </tr>
+                        {%endfor%}
                         
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox" name="record"></td>
-                            <th scope="row">jmlandry</th>
-                            <td>jmlandry@gmail.com</td>
-                            <td>User</td>
-                            <td>active</td>
-                            <td> <button type="button" class="edit-row" id="editBtn">Edit</button></td>
-                            <td> <button type="button" class="delete-row" id="editBtn">Delete</button></td>
-                        </tr>    
-                        <tr>
-                            <td><input type="checkbox" name="record"></td>
-                            <th scope="row">user123</th>
-                            <td>jmlandry@gmail.com</td>
-                            <td>user</td>
-                            <td>active</td>
-                            <td> <button type="button" class="edit-row" id="editBtn">Edit</button></td>
-                            <td> <button type="button" class="delete-row" id="editBtn">Delete</button></td>
-                        <tr>
-                            <td><input type="checkbox" name="record"></td>
-                            <th scope="row">jmlandry</th>
-                            <td>jmlandry@gmail.com</td>
-                            <td>User</td>
-                            <td>active</td>
-                            <td> <button type="button" class="edit-row" id="editBtn">Edit</button></td>
-                            <td> <button type="button" class="delete-row" id="editBtn">Delete</button></td>
-                        </tr>    
-                        <tr>
-                            <td><input type="checkbox" name="record"></td>
-                            <th scope="row">user123</th>
-                            <td>jmlandry@gmail.com</td>
-                            <td>User</td>
-                            <td>active</td>
-                            <td> <button type="button" class="edit-row" id="editBtn">Edit</button></td>
-                            <td> <button type="button" class="delete-row" id="editBtn">Delete</button></td>
-                        
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox" name="record"></td>
-                            <th scope="row">jmlandry</th>
-                            <td>jmlandry@gmail.com</td>
-                            <td>User</td>
-                            <td>active</td>
-                            <td> <button type="button" class="edit-row" id="editBtn">Edit</button></td>
-                            <td> <button type="button" class="delete-row" id="editBtn">Delete</button></td>
-                        </tr>    
-                        <tr>
-                            <td><input type="checkbox" name="record"></td>
-                            <th scope="row">user123</th>
-                            <td>jmlandry@gmail.com</td>
-                            <td>user</td>
-                            <td>active</td>
-                            <td> <button type="button" class="edit-row" id="editBtn">Edit</button></td>
-                            <td> <button type="button" class="delete-row" id="editBtn">Delete</button></td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox" name="record"></td>
-                            <th scope="row">user123</th>
-                            <td>jmlandry@gmail.com</td>
-                            <td>user</td>
-                            <td>active</td>
-                            <td> <button type="button" class="edit-row" id="editBtn">Edit</button></td>
-                            <td> <button type="button" class="delete-row" id="editBtn">Delete</button></td>
-                        <tr>
-                            <td><input type="checkbox" name="record"></td>
-                            <th scope="row">jmlandry</th>
-                            <td>jmlandry@gmail.com</td>
-                            <td>Userr</td>
-                            <td>active</td>
-                            <td> <button type="button" class="edit-row" id="editBtn">Edit</button></td>
-                            <td> <button type="button" class="delete-row" id="editBtn">Delete</button></td>
-                        </tr>    
-                        <tr>
-                            <td><input type="checkbox" name="record"></td>
-                            <th scope="row">user123</th>
-                            <td>jmlandry@gmail.com</td>
-                            <td>User</td>
-                            <td>active</td>
-                            <td> <button type="button" class="edit-row" id="editBtn">Edit</button></td>
-                            <td> <button type="button" class="delete-row" id="editBtn">Delete</button></td>
-                        
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox" name="record"></td>
-                            <th scope="row">jmlandry</th>
-                            <td>jmlandry@gmail.com</td>
-                            <td>User</td>
-                            <td>active</td>
-                            <td> <button type="button" class="edit-row" id="editBtn">Edit</button></td>
-                            <td> <button type="button" class="delete-row" id="editBtn">Delete</button></td>
-                        </tr>    
+                           
                     </tbody>
                 </Table>
                 

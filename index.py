@@ -1,6 +1,7 @@
 import json
 import html
 import hashlib
+from requests import get
 import stripe
 
 from flask import Flask
@@ -104,10 +105,14 @@ def init_database():
         "C#": {"Introduction": "S"},
         "Lua": {"Introduction": "S"}
     }
-    user = create_user("username", "username@hotmail.com", "password")
+    for i in range (0,25):
+        user = create_user("username"+str(i), "username@hotmail.com", "password")
+        user.set_progress(progress)
+        get_db().insert_user(user)
+
+    user = create_user("administrator", "username@hotmail.com", "password")
     user.set_progress(progress)
     get_db().insert_user(user)
-
 
 @app.route('/', methods=["GET"])
 def index():
@@ -122,7 +127,8 @@ def a_propos():
 def compteAdmin():
     sujets = get_db().read_all_sujet()
     sujets_info = [sujet.to_json() for sujet in sujets]
-    return render_template('admin/compteAdmin.html', sujets=sujets_info, title='Admin'), 200
+    userS = get_db().read_users()
+    return render_template('admin/compteAdmin.html', sujets=sujets_info,users=userS, title='Admin'), 200
 
 
 
@@ -557,22 +563,13 @@ def api_is_authorized():
 
 
 # Modifier les informations d'un utilisateur
-@app.route('/api/compte/modifier', methods=["GET"])
-def api_modifier_compte():
-    username = request.args.get('username')
-    email = request.args.get('email')
-    password = request.args.get('password')
+@app.route('/api/compteA/supprimer', methods=["GET"])
+def api_supprimer_compte():
+
+    id = request.args.get('id')
     try:
         db = get_db()
-        if (username != session['user']['name']
-                and db.read_user_username(username)):
-            #  Nom utilisateur invalide
-            error = "Username already exists. Please enter another one"
-            return jsonify({"valid": False, "reason": error}), 404
-        user = db.read_user_username(session['user']['name'])
-        modify_user(user, username, email, password)  # ValueError
-        session["user"] = user.session()
-        db.update_user_info(user)
+        db.delete_users(id)
     except ValueError as error:
         return jsonify({"valid": False, "reason": str(error)}), 404
     return jsonify({"valid": True}), 200

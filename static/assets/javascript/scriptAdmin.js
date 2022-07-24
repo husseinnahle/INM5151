@@ -22,7 +22,14 @@ $(document).ready(function(){
 
      // Find and remove selected table rows
      $(".delete-row").click(function(){
-                $(this).parents("tr").remove();
+
+        var id =$(this).parents("tr").attr("id");
+        fetch('/api/compteA/supprimer?id=' + id)
+        .then(function (response) {
+          return response.text();
+        })
+      
+        $(this).parents("tr").remove();
             
     });
 });
