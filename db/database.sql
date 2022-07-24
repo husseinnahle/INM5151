@@ -12,7 +12,7 @@ create table user (
   hash varchar(128),
   member integer,
   progress text,
-  user_type_id integer references user_type (id)
+  type_id integer references user_type (id)
 );
 
 create table user_type (

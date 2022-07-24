@@ -10,7 +10,7 @@ def create_user(username, email, password):
         raise ValueError(error)
     salt = uuid.uuid4().hex
     hash = hashlib.sha512(str(password + salt).encode("utf-8")).hexdigest()
-    return User(0, username, email, salt, hash)
+    return User(0, username, email, salt, hash, 3)
 
 
 def modify_user(user, username, email, password):
@@ -71,12 +71,13 @@ def validate_support_form(name, email, message):
 
 class User:
     def __init__(self, id: int, username: str, email: str, salt: str,
-                 hash: str):
+                 hash: str, type: int):
         self.id = id
         self.name = username
         self.email = email
         self.salt = salt
         self.hash = hash
+        self.type = type
         self.member = False
         self.progress = {}
 
@@ -116,6 +117,7 @@ class User:
             "name": self.name,
             "member": self.member,
             "email": self.email,
-            "progress": self.progress
+            "progress": self.progress,
+            "type": self.type
         }
         return session

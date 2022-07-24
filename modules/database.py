@@ -48,18 +48,18 @@ class Database:
     def insert_user(self, user):
         connection = self.get_connection()
         connection.execute('insert into user'
-                           '(username, email, salt, hash, member, progress)'
-                           'values(?, ?, ?, ?, ?, ?)',
+                           '(username, email, salt, hash, member, progress, type_id)'
+                           'values(?, ?, ?, ?, ?, ?, ?)',
                            (user.name, user.email, user.salt, user.hash,
                             1 if user.member else 0,
-                            json.dumps(user.progress)))
+                            json.dumps(user.progress), 3))
         connection.commit()
 
     # Inserer un instructeur
     def insert_instructor(self, user):
         connection = self.get_connection()
         connection.execute('insert into user'
-                           '(username, email, salt, hash, member, progress, user_type_id)'
+                           '(username, email, salt, hash, member, progress, type_id)'
                            'values(?, ?, ?, ?, ?, ?, ?)',
                            (user.name, user.email, user.salt, user.hash,
                             1 if user.member else 0,
@@ -73,7 +73,7 @@ class Database:
         user = cursor.fetchone()
         if user is None:
             return None
-        user_obj = User(user[0], user[1], user[2], user[3], user[4])
+        user_obj = User(user[0], user[1], user[2], user[3], user[4], user[7])
         user_obj.set_progress(json.loads(user[6]))
         user_obj.set_member(True if user[5] == 1 else False)    
         return user_obj
