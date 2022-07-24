@@ -1,6 +1,7 @@
 $(document).ready(function(){
     $(".add-row").click(function(){
         var Username = $("#Username").val();
+        var password = $("#password").val();
         var Email = $("#Email").val();
         var Type = $("#Type").val();
         var Status = $("#Status").val();
@@ -9,6 +10,11 @@ $(document).ready(function(){
                                 "<td> <button type=\"button\" id=\"editBtn\">Edit</button></td></tr>" +
                                 "<td> <button type=\"button\" class=\"delete-row\" id=\"editBtn\">Delete</button></td>";
         $("table tbody").append(markup);
+        var id =$(this).parents("tr").attr("id");
+        fetch('/api/compteA/ajouter?username=' + Username+ "&password="+password+ "&email="+Email)
+        .then(function (response) {
+          return response.text();
+        })
     });
     
     // Find and remove selected table rows
