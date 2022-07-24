@@ -47,23 +47,11 @@ class Database:
     # Inserer un utilisateur
     def insert_user(self, user):
         connection = self.get_connection()
-        connection.execute('insert into user'
-                           '(username, email, salt, hash, member, progress, type_id)'
-                           'values(?, ?, ?, ?, ?, ?, ?)',
-                           (user.name, user.email, user.salt, user.hash,
-                            1 if user.member else 0,
-                            json.dumps(user.progress), 3))
-        connection.commit()
-
-    # Inserer un instructeur
-    def insert_instructor(self, user):
-        connection = self.get_connection()
-        connection.execute('insert into user'
-                           '(username, email, salt, hash, member, progress, type_id)'
-                           'values(?, ?, ?, ?, ?, ?, ?)',
-                           (user.name, user.email, user.salt, user.hash,
-                            1 if user.member else 0,
-                            json.dumps(user.progress), 2))
+        connection.execute(
+            'insert into user(username, email, salt, hash, member, progress, id_type) values(?, ?, ?, ?, ?, ?, ?)',
+            (user.name, user.email, user.salt, user.hash,
+             1 if user.member else 0,
+             json.dumps(user.progress), user.id_type))
         connection.commit()
 
     # Rechercher et retourner un utilisateur selon 'username'
@@ -75,7 +63,7 @@ class Database:
             return None
         user_obj = User(user[0], user[1], user[2], user[3], user[4], user[7])
         user_obj.set_progress(json.loads(user[6]))
-        user_obj.set_member(True if user[5] == 1 else False)    
+        user_obj.set_member(True if user[5] == 1 else False)
         return user_obj
 
     # Mettre à jour la progression d'un utilisateur selon 'username'

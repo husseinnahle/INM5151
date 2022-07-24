@@ -3,14 +3,14 @@ import uuid
 import re
 
 
-def create_user(username, email, password):
+def create_user(username, email, password, id_type):
     try:
         _validate_user(username, email, password)  # ValueError
     except ValueError as error:
         raise ValueError(error)
     salt = uuid.uuid4().hex
     hash = hashlib.sha512(str(password + salt).encode("utf-8")).hexdigest()
-    return User(0, username, email, salt, hash, 3)
+    return User(0, username, email, salt, hash, id_type)
 
 
 def modify_user(user, username, email, password):
@@ -71,13 +71,13 @@ def validate_support_form(name, email, message):
 
 class User:
     def __init__(self, id: int, username: str, email: str, salt: str,
-                 hash: str, type: int):
+                 hash: str, id_type: int):
         self.id = id
         self.name = username
         self.email = email
         self.salt = salt
         self.hash = hash
-        self.type = type
+        self.id_type = id_type
         self.member = False
         self.progress = {}
 
@@ -118,6 +118,6 @@ class User:
             "member": self.member,
             "email": self.email,
             "progress": self.progress,
-            "type": self.type
+            "type": self.id_type
         }
         return session

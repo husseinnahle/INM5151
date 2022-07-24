@@ -16,6 +16,7 @@ from .modules.user import create_user
 from .modules.user import modify_user
 from .modules.user import make_member
 from .modules.user import validate_support_form
+from .modules.user_type import User_type
 from functools import wraps
 from flask_hcaptcha import hCaptcha
 from flask_mail import Mail, Message
@@ -25,8 +26,11 @@ app.config['JSON_SORT_KEYS'] = False
 app.secret_key = "a6cd02e9b1104ac0*c2a02391284cb!0"
 
 stripe_keys = {
-    "secret_key" : "sk_test_51LKsa0A5hdrVdRtKeyX3nEfmneDW2AcxnXF3KToFivuuttwyNih5Mqyd7RL562hu8BuHfgdI3wpf9ZZBAI6kiJRw006N97T3JI",
-    "publishable_key": "pk_test_51LKsa0A5hdrVdRtKZhTWSDWZ7a49RgwH58gOCJ9uTWs1VKvaNLaHGv2hTA2KIL29hloRYZwpfGlMzxHSYgAvSMdH00vr5bZ3rk"
+    "secret_key": "sk_test_51LKsa0A5hdrVdRtKeyX3nEfmneDW2AcxnXF3KToFivuuttwy"
+                  "Nih5Mqyd7RL562hu8BuHfgdI3wpf9ZZBAI6kiJRw006N97T3JI",
+    "publishable_key": "pk_test_51LKsa0A5hdrVdRtKZhTWSDWZ7a49RgwH58gOCJ9uTWs"
+                       "1VKvaNLaHGv2hTA2KIL29hloRYZwpfGlMzxHSYgAvSMdH00vr5bZ"
+                       "3rk"
 }
 stripe.api_key = stripe_keys["secret_key"]
 
@@ -104,14 +108,16 @@ def init_database():
         "C#": {"Introduction": "S"},
         "Lua": {"Introduction": "S"}
     }
-    user = create_user("username", "username@hotmail.com", "password")
+    user = create_user("username", "username@hotmail.com",
+                       "password", User_type.USER.value)
     user.set_progress(progress)
     user.set_member(True)
     get_db().insert_user(user)
-    user = create_user("instructor", "instructor@ezcoding.com", "password")
+    user = create_user("instructor", "instructor@ezcoding.com", "password",
+                       User_type.INSTRUCTOR.value)
     user.set_progress(progress)
     user.set_member(True)
-    get_db().insert_instructor(user)
+    get_db().insert_user(user)
 
 
 @app.route('/', methods=["GET"])
@@ -137,7 +143,7 @@ def compte():
                            langages=langages), 200
 
 
-# ================================  devenir membre  ================================
+# =========================  devenir membre  ==========================
 
 # Permettre a un utilisateur de devenir membre
 
@@ -146,15 +152,16 @@ def get_publishable_key():
     stripe_config = {"publicKey": stripe_keys["publishable_key"]}
     return jsonify(stripe_config)
 
-    
+
 @app.route("/create-checkout-session")
 def create_checkout_session():
     session["checkout"] = True
     domain_url = "http://127.0.0.1:5000/"
     stripe.api_key = stripe_keys["secret_key"]
-    try:        
+    try:
         checkout_session = stripe.checkout.Session.create(
-            success_url=domain_url + "success?session_id={CHECKOUT_SESSION_ID}",
+            success_url=domain_url +
+            "success?session_id={CHECKOUT_SESSION_ID}",
             cancel_url=domain_url + "cancelled",
             payment_method_types=["card"],
             mode="payment",
@@ -170,6 +177,7 @@ def create_checkout_session():
         return jsonify({"sessionId": checkout_session["id"]})
     except Exception as e:
         return jsonify(error=str(e)), 403
+
 
 @app.route("/success")
 def success():
@@ -187,7 +195,7 @@ def success():
 @app.route("/cancelled")
 def cancelled():
     if "checkout" not in session:
-            return render_template("404.html", title="Not found"), 404
+        return render_template("404.html", title="Not found"), 404
     session.pop("checkout")
     return render_template("cancelled.html")
 
