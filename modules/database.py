@@ -55,6 +55,17 @@ class Database:
                             json.dumps(user.progress)))
         connection.commit()
 
+    # Inserer un instructeur
+    def insert_instructor(self, user):
+        connection = self.get_connection()
+        connection.execute('insert into user'
+                           '(username, email, salt, hash, member, progress, user_type_id)'
+                           'values(?, ?, ?, ?, ?, ?, ?)',
+                           (user.name, user.email, user.salt, user.hash,
+                            1 if user.member else 0,
+                            json.dumps(user.progress), 2))
+        connection.commit()
+
     # Rechercher et retourner un utilisateur selon 'username'
     def read_user_username(self, username):
         cursor = self.get_connection().cursor()

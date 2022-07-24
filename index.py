@@ -108,6 +108,10 @@ def init_database():
     user.set_progress(progress)
     user.set_member(True)
     get_db().insert_user(user)
+    user = create_user("instructor", "instructor@ezcoding.com", "password")
+    user.set_progress(progress)
+    user.set_member(True)
+    get_db().insert_instructor(user)
 
 
 @app.route('/', methods=["GET"])
