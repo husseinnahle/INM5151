@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="form-popup">
+  <div class="form-panel one">
+    <div class="form-header">
+      <h5>Become an instructor</h5>
+      {% if message %}
+      <h4>{{ message }}</h4>
+      {% endif %}
+    </div>
+    <div class="form-content">
+      <form method="post" action="/login" id="form-popup">
+        <div class="form-group">
+          <label for="curriculum">Curriculum vitae</label>
+          <input type="file" id="curriculum" name="curriculum" />
+        </div>
+        <div class="form-group">
+          <label for="cover">Cover letter</label>
+          <input type="file" id="cover" name="cover" />
+        </div>
+        <div id="form-popup-error-container"></div><br>
+        <div class="form-group">
+          <button type="button" onclick="#">
+            Submit</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

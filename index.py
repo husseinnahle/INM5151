@@ -586,3 +586,8 @@ def test_session():
     if "user" in session:
         user_session = session["user"]
     return jsonify({"session": user_session}), 200
+
+
+@app.route('/become_instructor', methods=["GET"])
+def become_instructor():
+    return render_template('become_instr.html', title='Become instructor'), 200
