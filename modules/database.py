@@ -47,12 +47,10 @@ class Database:
     # Inserer un utilisateur
     def insert_user(self, user):
         connection = self.get_connection()
-        connection.execute('insert into user'
-                           '(username, email, salt, hash, member, progress)'
-                           'values(?, ?, ?, ?, ?, ?)',
-                           (user.name, user.email, user.salt, user.hash,
-                            1 if user.member else 0,
-                            json.dumps(user.progress)))
+        connection.execute(
+            'insert into user(username, email, salt, hash, progress, type) values(?, ?, ?, ?, ?, ?)',
+            (user.name, user.email, user.salt, user.hash,
+             json.dumps(user.progress), user.type))
         connection.commit()
 
     # Rechercher et retourner un utilisateur selon 'username'
@@ -62,9 +60,8 @@ class Database:
         user = cursor.fetchone()
         if user is None:
             return None
-        user_obj = User(user[0], user[1], user[2], user[3], user[4])
-        user_obj.set_progress(json.loads(user[6]))
-        user_obj.set_member(True if user[5] == 1 else False)    
+        user_obj = User(user[0], user[1], user[2], user[3], user[4], user[6])
+        user_obj.set_progress(json.loads(user[5]))
         return user_obj
 
 
@@ -75,7 +72,7 @@ class Database:
         users = cursor.fetchall()
         if users is None:
             return None
-        return ( User(user[0], user[1], user[2], user[3], user[4]) for user in users)
+        return (User(user[0], user[1], user[2], user[3], user[4], user[6]) for user in users)
 
     # Rechercher et retourner un utilisateur selon 'username'
     def delete_users(self,id):
@@ -102,7 +99,7 @@ class Database:
 
     def update_user_membership(self, user: User):
         connection = self.get_connection()
-        connection.execute('update user set member = ?'
+        connection.execute('update user set type = ?'
                            'where id = ?',
-                           (1 if user.member else 0, user.id))
+                           (user.type, user.id))
         connection.commit()

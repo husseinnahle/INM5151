@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  {% if not session['user']['member'] %}
+  {% if session['user']['type'] == "STANDARD" %}
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='assets/css/publicite.css') }}" />
     <div class="publicite-popup" id="publicite-popup">
       <div class="publicite-panel one">
@@ -21,7 +21,7 @@
     </script>
   {% endif %}
   <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='assets/css/quiz.css') }}" />
-  {% if not session['user']['member'] %}
+  {% if session['user']['type'] == "STANDARD" %}
     <div id="quiz-container" style="filter:blur(10px); pointer-events:none;">
   {% else %}
     <div id="quiz-container">  

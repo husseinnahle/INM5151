@@ -27,6 +27,11 @@ $(document).ready(function(){
     $(".delete-rows").click(function(){
         $("table tbody").find('input[name="record"]').each(function(){
             if($(this).is(":checked")){
+                var id =$(this).parents("tr").attr("id");
+                fetch('/api/compteA/supprimer?id=' + id)
+                .then(function (response) {
+                    return response.text();
+                })
                 $(this).parents("tr").remove();
             }
         });
