@@ -563,16 +563,30 @@ def api_is_authorized():
     return jsonify({"is_authorized": True})
 
 
+# Valider les données et créer un nouveau compte utilisateur
+@app.route('/api/compteA/ajouter', methods=["GET"])
+def add_user_admin():
+    try:
+        db = get_db()
+        username = request.args.get("username")
+        password = request.args.get("password")
+        email = request.args.get("email")
+        if db.read_user_username(username):
+            # Nom utilisateur invalide
+            return jsonify({"valid": False, "reason": "Username already exists. Please enter another one"}), 404
+        user = create_user(username, email, password)  # ValueError
+        db.insert_user(user)
+    except ValueError as error :
+        return jsonify({"valid": False, "reason": error}), 404
+    return jsonify({"valid": True}), 200
+
+
 # Modifier les informations d'un utilisateur
 @app.route('/api/compteA/supprimer', methods=["GET"])
 def api_supprimer_compte():
-
     id = request.args.get('id')
-    try:
-        db = get_db()
-        db.delete_users(id)
-    except ValueError as error:
-        return jsonify({"valid": False, "reason": str(error)}), 404
+    db = get_db()
+    db.delete_users(id)
     return jsonify({"valid": True}), 200
 
 
@@ -583,27 +597,3 @@ def test_session():
     if "user" in session:
         user_session = session["user"]
     return jsonify({"session": user_session}), 200
-
-
-
-
-
-# Valider les données et créer un nouveau compte utilisateur
-@app.route('/api/compteA/ajouter', methods=["GET"])
-def add_user_admin():
-    try:
-        db = get_db()
-        username = request.args.get["username"]
-        password = request.args.get["password"]
-        email = request.args.get["email"]
-        if db.read_user_username(username):
-            # Nom utilisateur invalide
-            return jsonify({"valid": False, "reason":  "Username already exists. Please enter another one"}), 404
-        user = create_user(username, email, password)  # ValueError
-        db.insert_user(user)
-    except ValueError as error :
-        print (error)
-    return jsonify({"valid": True}), 200
-
-
-

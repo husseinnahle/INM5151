@@ -1,5 +1,6 @@
 $(document).ready(function(){
     $(".add-row").click(function(){
+        document.getElementById("errorField").innerText = "";
         var Username = $("#Username").val();
         var password = $("#password").val();
         var Email = $("#Email").val();
@@ -14,6 +15,11 @@ $(document).ready(function(){
         fetch('/api/compteA/ajouter?username=' + Username+ "&password="+password+ "&email="+Email)
         .then(function (response) {
           return response.text();
+        }).then(function (text) {
+            var jsonObject = JSON.parse(text);
+            if (jsonObject["valid"] == false) {
+                document.getElementById("errorField").innerText = jsonObject["reason"];
+            }
         })
     });
     
@@ -28,14 +34,11 @@ $(document).ready(function(){
 
      // Find and remove selected table rows
      $(".delete-row").click(function(){
-
         var id =$(this).parents("tr").attr("id");
         fetch('/api/compteA/supprimer?id=' + id)
         .then(function (response) {
           return response.text();
         })
-      
-        $(this).parents("tr").remove();
-            
+        $(this).parents("tr").remove(); 
     });
 });

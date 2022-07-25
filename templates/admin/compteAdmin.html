@@ -4,28 +4,6 @@
   <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='assets/css/compte.css') }}" />
   <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='assets/css/admin.css') }}" />
   <script src="{{ url_for('static', filename='assets/javascript/scriptAdmin.js') }}"></script>
-  <div class="compteContainer">
-        
-        <div class="langages">
-            <div class="langages-container-admin">
-                <h2>Languages</h2>
-                <div class="langages-content-admin">
-                    <div class="langage-cards">
-                        {% for sujet in sujets %}
-                 <a href="/languages/{{ sujet["Nom"] }}">
-                     <div class="card-admin">
-                     <img class="card__image" src="{{ sujet["Information"]["Logo"] }}" alt="">
-                      <div class="card__content">
-                            <h4>{{ sujet["Nom"] }}</h4>
-                      </div>
-                     </div>
-                    </a>
-                {% endfor %}
-                </div>
-                </div>
-                <button type="button" id="submitBtn" onclick="window.location.href='/editLangage'">Add Langage</button>
-            </div>
-        </div>
         <div class="infoCompte">
             <div class="infoCompte-form">
                 <h2>Accounts</h2>
@@ -67,6 +45,7 @@
                     <input type="text" id="Email" placeholder="Email">
                     <input type="text" id="Type" placeholder="Type">
                     <input type="text" id="Status" placeholder="Status">
+                    <span id="errorField"><span>
                     <input type="button" class="add-row" value="Add account">
                 </form>  
                 
