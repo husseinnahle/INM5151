@@ -13,6 +13,7 @@ from flask import jsonify
 from flask import Response
 from .modules.database import Database
 from .modules.user import create_user
+from .modules.user import modify_user
 from .modules.user import validate_support_form
 from .modules.user_type import user_type
 from functools import wraps
@@ -117,7 +118,6 @@ def compteAdmin():
     return render_template('admin/compteAdmin.html', sujets=sujets_info,users=userS, title='Admin'), 200
 
 
-
 @app.route('/editLangage', methods=["GET"])
 def editLang():
     return render_template('admin/editLangage.html', title='editLangage'), 200
@@ -134,6 +134,11 @@ def compte():
                 {"name": sujet.get_nom(), "logo": sujet.get_logo()})
     return render_template('compte.html', title='My account',
                            langages=langages), 200
+
+
+@app.route('/become_instructor', methods=["GET"])
+def become_instructor():
+    return render_template('become_instr.html', title='Become instructor'), 200
 
 
 # =========================  devenir membre  ==========================
@@ -550,26 +555,49 @@ def api_is_authorized():
     return jsonify({"is_authorized": True})
 
 
-# Valider les données et créer un nouveau compte utilisateur
-@app.route('/api/compteA/ajouter', methods=["GET"])
-def add_user_admin():
+# Modifier les informations d'un utilisateur
+@app.route('/api/compte/modifier', methods=["GET"])
+def api_modifier_compte():
+    username = request.args.get('username')
+    email = request.args.get('email')
+    password = request.args.get('password')
     try:
         db = get_db()
-        username = request.args.get("username")
-        password = request.args.get("password")
-        email = request.args.get("email")
-        if db.read_user_username(username):
-            # Nom utilisateur invalide
-            return jsonify({"valid": False, "reason": "Username already exists. Please enter another one"}), 404
-        user = create_user(username, email, password)  # ValueError
-        db.insert_user(user)
-    except ValueError as error :
-        return jsonify({"valid": False, "reason": error}), 404
+        if (username != session['user']['name']
+                and db.read_user_username(username)):
+            #  Nom utilisateur invalide
+            error = "Username already exists. Please enter another one"
+            return jsonify({"valid": False, "reason": error}), 404
+        user = db.read_user_username(session['user']['name'])
+        modify_user(user, username, email, password)  # ValueError
+        session["user"] = user.session()
+        db.update_user_info(user)
+    except ValueError as error:
+        return jsonify({"valid": False, "reason": str(error)}), 404
     return jsonify({"valid": True}), 200
 
 
-# Modifier les informations d'un utilisateur
-@app.route('/api/compteA/supprimer', methods=["GET"])
+# Créer un nouveau compte utilisateur
+@app.route('/api/admin/compte/ajouter', methods=["GET"])
+def add_user_admin():
+    db = get_db()
+    username = request.args.get("username")
+    password = request.args.get("password")
+    email = request.args.get("email")
+    type = request.args.get("type")
+    if db.read_user_username(username):
+        # Nom utilisateur invalide
+        return jsonify({"valid": False, "reason": "Username already exists. Please enter another one"}), 404
+    try:
+        user = create_user(username, email, password, type)  # ValueError
+    except ValueError as error :
+        return jsonify({"valid": False, "reason": str(error)}), 404
+    user_id = db.insert_user(user)
+    return jsonify({"valid": True, "id": user_id}), 200
+
+
+# Supprimer un compte utilisateur
+@app.route('/api/admin/compte/supprimer', methods=["GET"])
 def api_supprimer_compte():
     id = request.args.get('id')
     db = get_db()
@@ -584,8 +612,3 @@ def test_session():
     if "user" in session:
         user_session = session["user"]
     return jsonify({"session": user_session}), 200
-
-
-@app.route('/become_instructor', methods=["GET"])
-def become_instructor():
-    return render_template('become_instr.html', title='Become instructor'), 200

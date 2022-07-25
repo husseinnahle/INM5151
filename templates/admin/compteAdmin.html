@@ -29,7 +29,7 @@
         <div class="infoCompte">
             <div class="infoCompte-form">
                 <h2>Accounts</h2>
-                <Table class="fixed_header">
+                <table class="fixed_header">
                     <thead>
                         <tr>
                             <th>Select</th>
@@ -46,22 +46,19 @@
                         {% for user in users %}
                         <tr id ="{{user.id}}">
                             <td><input type="checkbox" name="record"></td>
-                            <th scope="row"id ="id" >{{user.id}}</th>
-                            <td scope="row"id="name">{{user.name}}</th>
+                            <td scope="row"id ="id" >{{user.id}}</td>
+                            <td scope="row"id="name">{{user.name}}</td>
                             <td id="email">{{user.email}}</td>
-                            <td id="type">user</td>
+                            <td id="type">{{user.type}}</td>
                             <td id="type">active</td>
                             <td> <button type="button" class="edit-row" id="editBtn">Edit</button></td>
                             <td> <button type="button" class="delete-row" id="editBtn">Delete</button></td>
-
                         </tr>
                         {%endfor%}
-                        
-                           
                     </tbody>
-                </Table>
-                
-                <form>
+                </table>
+
+                <div>
                     <input type="text" id="Username" placeholder="Username">
                     <input type="text" id="password" placeholder="password">
                     <input type="text" id="Email" placeholder="Email">
@@ -69,7 +66,7 @@
                     <input type="text" id="Status" placeholder="Status">
                     <span id="errorField"><span>
                     <input type="button" class="add-row" value="Add account">
-                </form>  
+                </div>
                 
                 <button type="button" class="delete-rows">Delete selected Account</button>
             </div>

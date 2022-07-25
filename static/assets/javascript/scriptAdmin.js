@@ -2,24 +2,31 @@ $(document).ready(function(){
     $(".add-row").click(function(){
         document.getElementById("errorField").innerText = "";
         var Username = $("#Username").val();
-        var password = $("#password").val();
+        var Password = $("#password").val();
         var Email = $("#Email").val();
         var Type = $("#Type").val();
-        var Status = $("#Status").val();
-        var markup = "<tr><td><input type='checkbox' name ='record'></td><td>" + Username + "</td><td>" 
-                                + Email +"</td><td>" + Type  + "</td><td>" + Status + "</td>" +
-                                "<td> <button type=\"button\" id=\"editBtn\">Edit</button></td></tr>" +
-                                "<td> <button type=\"button\" class=\"delete-row\" id=\"editBtn\">Delete</button></td>";
-        $("table tbody").append(markup);
-        var id =$(this).parents("tr").attr("id");
-        fetch('/api/compteA/ajouter?username=' + Username+ "&password="+password+ "&email="+Email)
+        // var Status = $("#Status").val();
+        fetch('/api/admin/compte/ajouter?username=' + Username + "&password=" + Password + "&email=" + Email + "&type=" + Type)
         .then(function (response) {
           return response.text();
         }).then(function (text) {
             var jsonObject = JSON.parse(text);
             if (jsonObject["valid"] == false) {
                 document.getElementById("errorField").innerText = jsonObject["reason"];
+                return
             }
+            var markup = `
+                <tr id ="${jsonObject["id"]}">
+                    <td><input type="checkbox" name="record"></td>
+                    <td scope="row"id ="id" >${jsonObject["id"]}</td>
+                    <td scope="row"id="name">${Username}</td>
+                    <td id="email">${Email}</td>
+                    <td id="type">${Type}</td>
+                    <td id="type">active</td>
+                    <td> <button type="button" class="edit-row" id="editBtn">Edit</button></td>
+                    <td> <button type="button" class="delete-row" id="editBtn">Delete</button></td>
+                </tr>`;
+            $("table tbody").append(markup);
         })
     });
     
@@ -28,7 +35,7 @@ $(document).ready(function(){
         $("table tbody").find('input[name="record"]').each(function(){
             if($(this).is(":checked")){
                 var id =$(this).parents("tr").attr("id");
-                fetch('/api/compteA/supprimer?id=' + id)
+                fetch('/api/admin/compte/supprimer?id=' + id)
                 .then(function (response) {
                     return response.text();
                 })
@@ -40,7 +47,7 @@ $(document).ready(function(){
      // Find and remove selected table rows
      $(".delete-row").click(function(){
         var id =$(this).parents("tr").attr("id");
-        fetch('/api/compteA/supprimer?id=' + id)
+        fetch('/api/admin/compte/supprimer?id=' + id)
         .then(function (response) {
           return response.text();
         })
