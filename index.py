@@ -14,9 +14,8 @@ from flask import Response
 from .modules.database import Database
 from .modules.user import create_user
 from .modules.user import modify_user
-from .modules.user import make_member
 from .modules.user import validate_support_form
-from .modules.user_type import User_type
+from .modules.user_type import user_type
 from functools import wraps
 from flask_hcaptcha import hCaptcha
 from flask_mail import Mail, Message
@@ -93,30 +92,7 @@ def init_database():
         db.insert_sujet(i, key, json.dumps(data[key]))
     file.close()
     # Temporaire pour tester
-    progress = {
-        "Python": {"Introduction": "S"},
-        "Ruby": {"Introduction": "S"},
-        "Java": {"Introduction": "S"},
-        "Bash": {"Introduction": "S"},
-        "C": {"Introduction": "S"},
-        "Javascript": {"Introduction": "S"},
-        "PHP": {"Introduction": "S"},
-        "HTML": {"Introduction": "S"},
-        "Go": {"Introduction": "S"},
-        "C++": {"Introduction": "S"},
-        "Swift": {"Introduction": "S"},
-        "C#": {"Introduction": "S"},
-        "Lua": {"Introduction": "S"}
-    }
-    user = create_user("username", "username@hotmail.com",
-                       "password", User_type.USER.value)
-    user.set_progress(progress)
-    user.set_member(True)
-    get_db().insert_user(user)
-    user = create_user("instructor", "instructor@ezcoding.com", "password",
-                       User_type.INSTRUCTOR.value)
-    user.set_progress(progress)
-    user.set_member(True)
+    user = create_user("instructor", "instructor@ezcoding.com", "password", user_type.INSTRUCTOR)
     get_db().insert_user(user)
 
 
@@ -186,7 +162,7 @@ def success():
     session.pop("checkout")
     db = get_db()
     user = db.read_user_username(session['user']['name'])
-    make_member(user)
+    user.make_member()
     db.update_user_membership(user)
     session['user'] = user.session()
     return render_template("success.html")
@@ -202,7 +178,7 @@ def cancelled():
 
 @app.route("/membership")
 def paiement():
-    if not is_authenticated() or session['user']['member'] == True:
+    if not is_authenticated() or session['user']['type'] == user_type.MEMBER:
         return render_template("404.html", title="Not found"), 404
     return render_template("paiement.html")
 
@@ -285,7 +261,7 @@ def register_post():
             return redirect('/register')
         if hcaptcha.verify():
             # hCaptcha ok
-            user = create_user(username, email, password)  # ValueError
+            user = create_user(username, email, password, user_type.STANDARD)  # ValueError
             db.insert_user(user)
             session["message"] = "Account created!"
             return redirect("/login")

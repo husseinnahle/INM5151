@@ -3,3 +3,4 @@ pycodestyle==2.8.0
 flask-hcaptcha==0.6.0
 Flask-Mail==0.9.1
 stripe==3.5.0
+backports.strenum==1.1.1

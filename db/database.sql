@@ -10,7 +10,6 @@ create table user (
   email varchar(100),
   salt varchar(32),
   hash varchar(128),
-  member integer,
   progress text,
-  id_type integer  -- voir modules/user_type.py
+  type varchar
 );

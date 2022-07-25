@@ -1,16 +1,17 @@
 import hashlib
 import uuid
 import re
+from .user_type import user_type
 
 
-def create_user(username, email, password, id_type):
+def create_user(username: str, email: str, password: str, type: user_type):
     try:
         _validate_user(username, email, password)  # ValueError
     except ValueError as error:
         raise ValueError(error)
     salt = uuid.uuid4().hex
     hash = hashlib.sha512(str(password + salt).encode("utf-8")).hexdigest()
-    return User(0, username, email, salt, hash, id_type)
+    return User(0, username, email, salt, hash, type)
 
 
 def modify_user(user, username, email, password):
@@ -27,10 +28,6 @@ def modify_user(user, username, email, password):
         salt = user.get_salt()
         hash = hashlib.sha512(str(password + salt).encode("utf-8")).hexdigest()
     user._modify_info(username, email, hash)
-
-
-def make_member(user):
-    user.set_member(True)
 
 
 def _validate_user(username, email, password):
@@ -71,14 +68,13 @@ def validate_support_form(name, email, message):
 
 class User:
     def __init__(self, id: int, username: str, email: str, salt: str,
-                 hash: str, id_type: int):
+                 hash: str, type: user_type):
         self.id = id
         self.name = username
         self.email = email
         self.salt = salt
         self.hash = hash
-        self.id_type = id_type
-        self.member = False
+        self.type = type
         self.progress = {}
 
     def update_progress(self, sujet, sous_sujet, resultat):
@@ -109,15 +105,14 @@ class User:
         if hash != "":
             self.hash = hash
 
-    def set_member(self, value):
-        self.member = value
+    def make_member(self):
+        self.type = user_type.MEMBER
 
     def session(self):
         session = {
             "name": self.name,
-            "member": self.member,
+            "type": self.type,
             "email": self.email,
             "progress": self.progress,
-            "type": self.id_type
         }
         return session

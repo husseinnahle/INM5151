@@ -1,7 +1,7 @@
-from enum import Enum
+from backports.strenum import StrEnum
 
-class User_type(Enum):
-    ADMIN = 1
-    INSTRUCTOR = 2
-    USER = 3
-    
+class user_type(StrEnum):
+    ADMIN = 'ADMIN',
+    INSTRUCTOR = 'INSTRUCTOR',
+    MEMBER = "MEMBER",
+    STANDARD = "STANDARD"
