@@ -337,6 +337,11 @@ footer{
   line-height: inherit;
 }
 
+.form-group input[type=file] {
+  background: none;  
+  color: white;
+}
+
 .form-group input {
   color: rgba(0, 0, 0, 0.8);
 }
