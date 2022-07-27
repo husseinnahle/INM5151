@@ -11,14 +11,18 @@ from flask import session
 from flask import g
 from flask import jsonify
 from flask import Response
+from flask import url_for
+from flask import session
 from .modules.database import Database
 from .modules.user import create_user
 from .modules.user import modify_user
 from .modules.user import validate_support_form
 from .modules.user_type import user_type
 from functools import wraps
+
 from flask_hcaptcha import hCaptcha
 from flask_mail import Mail, Message
+from flask_socketio import SocketIO, send
 
 app = Flask(__name__)
 app.config['JSON_SORT_KEYS'] = False
@@ -43,6 +47,84 @@ HCAPTCHA_ERROR = 'Error in hCaptcha. Please try again'
 hcaptcha = hCaptcha(app)
 mail = Mail(app)
 
+# CHATBOX  first version SECTION
+
+#app.config['SECRET'] = "secret!123"
+#socketio = SocketIO(app, cors_allowed_origins="*")
+
+#@socketio.on('message')
+#def handle_message(message):
+#    print("Received message: " + message)
+#    if message != "User connected!":
+#        send(message, broadcast=True)
+
+#@app.route('/chatbox', methods=["GET"])
+#def chatbox():
+#    return render_template('chatbox.html', title='Chatbox'), 200
+
+#if __name__ == "__main__":
+#    socketio.run(app, host="localhost")
+
+# CHATBOX first version  END SECTION
+
+# CHATBOX  second version SECTION
+
+
+app.config['SECRET_KEY'] = 'secret'
+app.config['SESSION_TYPE'] = 'filesystem'
+
+Session(app)
+
+socketio = SocketIO(app, manage_session=False)
+
+socketio = SocketIO(app, cors_allowed_origins="*")
+
+@app.route('/chatmenu', methods=['GET', 'POST'])
+def chatmenu():
+    return render_template('chatmenu.html')
+
+@app.route('/chatbox', methods=['GET', 'POST'])
+def chat():
+    if(request.method=='POST'):
+        username = request.form['username']
+        room = request.form['room']
+        #Store the data in session
+        session['username'] = username
+        session['room'] = room
+        return render_template('chatbox.html', session = session)
+    else:
+        if(session.get('username') is not None):
+            return render_template('chatbox.html', session = session)
+        else:
+            return redirect(url_for('chatmenu'))
+
+@socketio.on('join', namespace='/chatbox')
+def join(message):
+    room = session.get('room')
+    join_room(room)
+    emit('status', {'msg':  session.get('username') + ' has entered the room.'}, room=room)
+
+
+@socketio.on('text', namespace='/chatbox')
+def text(message):
+    room = session.get('room')
+    emit('message', {'msg': session.get('username') + ' : ' + message['msg']}, room=room)
+
+
+@socketio.on('left', namespace='/chatbox')
+def left(message):
+    room = session.get('room')
+    username = session.get('username')
+    leave_room(room)
+    session.clear()
+    emit('status', {'msg': username + ' has left the room.'}, room=room)
+
+
+if __name__ == '__main__':
+    socketio.run(app)
+
+
+# CHATBOX first version  END SECTION
 
 def get_db():
     db = getattr(g, 'database', None)
