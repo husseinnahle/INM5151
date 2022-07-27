@@ -1,66 +1,52 @@
 .compteContainer{
-    display: table;
     width: 100%;
-    max-height: 70vh;
-    border-collapse: separate;
-    border-spacing: 100px;
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
+    display: flex;
 }
 
 .infoCompte {
-    display: table-cell;
-    position: relative;
+    flex: 1;
     background: #212529;
-    width: 550px;
-    height: 560px;
-    max-height: 70vh;
     border-radius: 4px;
     box-shadow: 0 0 20px black;
-    box-sizing: border-box;
     color: white;
+    padding: 20px;
+    margin: 10px;
+    width: 50%;
 }
 
 .langages {
-    display: table-cell;
-    position: relative;
+    margin-right: 20px;
     background: #212529;
-    width: 550px;
-    height: 560px;
+    float: left;
     border-radius: 4px;
     box-shadow: 0 0 20px black;
-    box-sizing: border-box;
     color: white;
+    padding: 20px;
+    margin: 10px;
+    width: 50%;
 }
 
 .langages-container {
-    margin: 70px;
+    margin: 50px;
 }
 
 .langages-content {
     display: grid;
     width: 100%;
-    max-height: 100%;
+    height: 370px;
     border-radius: 4px;
     background: #2d3033;
-    width: 100%;
-    height: 370px;
     margin: 0 auto;
     overflow-y: auto;
 }
 
 .langage-cards {
-    margin: 0 auto;
     max-width: 100%;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
     grid-auto-rows: 100px;
     gap: 20px;
-    padding-top: 30px;
-    padding-bottom: 30px;
-    padding-left: 5px;
+    margin: 20px;
 }
 
 .langage-cards a {
@@ -118,7 +104,7 @@ h2 {
 }
 
 .infoCompte-form {
-    margin: 70px;
+    margin: 50px;
 }
 
 .form-group {
@@ -211,4 +197,16 @@ button {
 .langages-content::-webkit-scrollbar-thumb {
     background-color: darkgrey;
 }
-  
+
+.becomeInstructor {
+    background: #212529;
+    border-radius: 4px;
+    box-shadow: 0 0 20px black;
+    color: white;
+    padding: 20px;
+    margin: 10px;
+}
+
+.becomeInstructor-container{
+    margin: 50px;
+}
