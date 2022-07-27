@@ -12,7 +12,7 @@ from flask import g
 from flask import jsonify
 from flask import Response
 from flask import url_for
-from flask import session
+
 from .modules.database import Database
 from .modules.user import create_user
 from .modules.user import modify_user
@@ -23,6 +23,7 @@ from functools import wraps
 from flask_hcaptcha import hCaptcha
 from flask_mail import Mail, Message
 from flask_socketio import SocketIO, send
+from flask_session import Session
 
 app = Flask(__name__)
 app.config['JSON_SORT_KEYS'] = False
