@@ -92,6 +92,8 @@ def init_database():
         db.insert_sujet(i, key, json.dumps(data[key]))
     file.close()
     # Temporaire pour tester
+    user = create_user("username", "instructor@ezcoding.com", "password", user_type.MEMBER)
+    get_db().insert_user(user)
     user = create_user("instructor", "instructor@ezcoding.com", "password", user_type.INSTRUCTOR)
     get_db().insert_user(user)
 
