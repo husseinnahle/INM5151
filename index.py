@@ -108,6 +108,13 @@ def a_propos():
     return render_template('about_us.html', title='About'), 200
 
 
+@app.route('/become_instructor', methods=["GET"])
+def become_instructor():
+    sujets = get_db().read_all_sujet()
+    sujets = [sujet.nom for sujet in sujets]
+    return render_template('request_instructor.html', title='Become an instructor', sujets=sujets), 200
+
+
 @app.route('/account', methods=["GET"])
 @authentication_required
 def compte():
@@ -564,8 +571,3 @@ def test_session():
     if "user" in session:
         user_session = session["user"]
     return jsonify({"session": user_session}), 200
-
-
-@app.route('/become_instructor', methods=["GET"])
-def become_instructor():
-    return render_template('become_instr.html', title='Become instructor'), 200

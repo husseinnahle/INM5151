@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='assets/css/component-chosen.min.css') }}" />
+  <div class="form-popup form-center" style="width:700px;">
+    <div class="form-panel one">
+      <div class="form-header">
+        <h5>Become an instructor</h5>
+      </div>
+      <br>
+      <div class="form-content">
+        <form method="post" action="/become_instructor">
+          <div class="fullname">
+            <div class="form-group" style="display: table-cell;">
+              <label for="firstName">First name</label>
+              <input type="text" id="curriculum" name="curriculum" />
+            </div>
+            <div class="form-group" style="display: table-cell;padding-left:75px;">
+              <label for="lastName">Last name</label>
+              <input type="text" id="curriculum" name="curriculum" />
+            </div>
+          </div>
+          <br><br>
+          <div class="form-group">
+            <label for="speciality">Speciality</label>
+            <select id="multiple" class="form-control form-control-chosen" data-placeholder="Please select..." multiple>
+              <option></option>
+              {% for sujet in sujets %}
+                <option>{{ sujet }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <br>
+          <div style="display: table">
+            <div class="form-group" style="display: table-cell">
+              <label for="curriculum">Curriculum vitae</label>
+              <input type="file" id="curriculum" name="curriculum" />
+            </div>
+            <br>
+            <div class="form-group" style="display: table-cell">
+              <label for="cover-letter">Cover letter (Optional)</label>
+              <input type="file" id="cover-letter" name="cover-letter" />
+            </div>
+          </div>
+          <div id="form-popup-error-container"></div><br>
+          <div class="form-group">
+            <button type="submit">Submit</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="{{ url_for('static', filename='assets/javascript/chosen.jquery.min.js') }}"></script>
+  <script type="text/javascript">
+    $('.form-control-chosen').chosen({
+      allow_single_deselect: true,
+      width: '100%'
+    });
+    
+    $(function() {
+      $('[title="clickable_optgroup"]').addClass('chosen-container-optgroup-clickable');
+    });
+    $(document).on('click', '[title="clickable_optgroup"] .group-result', function() {
+      var unselected = $(this).nextUntil('.group-result').not('.result-selected');
+      if(unselected.length) {
+        unselected.trigger('mouseup');
+      } else {
+        $(this).nextUntil('.group-result').each(function() {
+          $('a.search-choice-close[data-option-array-index="' + $(this).data('option-array-index') + '"]').trigger('click');
+        });
+      }
+    });
+    $('#is_valid_chosen').addClass('is-valid');
+    $('#is_invalid_chosen').addClass('is-invalid');  </script>
+{% endblock %}
