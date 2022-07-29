@@ -5,20 +5,6 @@
   <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='assets/css/admin.css') }}" />
   <script src="{{ url_for('static', filename='assets/javascript/scriptAdmin.js') }}"></script>
   <div class="compteContainer">
-        
-        <div class="langages">
-            <div class="langages-container-admin">
-                <h2>Languages</h2>
-                <div class="langages-content-admin">
-                    <div class="langage-cards">
-                        {% for sujet in sujets %}
-                
-                {% endfor %}
-                </div>
-                </div>
-                <button type="button" id="submitBtn" onclick="window.location.href='/editLangage'">Add Langage</button>
-            </div>
-        </div>
         <div class="infoCompte">
             <div class="infoCompte-form">
                 <h2>Accounts</h2>
@@ -31,8 +17,8 @@
                             <th scope="col">Email</th>
                             <th scope="col">Type</th>
                             <th scope="col">Status</th>
-                            <th scope="col"></th>
-                            <th scope="col"></th>
+                            <th scope="col">Edit</th>
+                            <th scope="col">Delete</th>
                         </tr>
                      </thead>
                     <tbody>
@@ -48,20 +34,42 @@
                             <td> <button type="button" class="delete-row" id="editBtn">Delete</button></td>
                         </tr>
                         {%endfor%}
+                        
+                        <tfoot>
+                            <tr>
+                                <td>
+                                    <button type="button" class="delete-rows">Delete selected Account</button>
+                                </td>
+                            </tr>
+                        </tfoot>
+                        
+                        
                     </tbody>
                 </table>
-
-                <div>
-                    <input type="text" id="Username" placeholder="Username">
-                    <input type="text" id="password" placeholder="password">
-                    <input type="text" id="Email" placeholder="Email">
-                    <input type="text" id="Type" placeholder="Type">
-                    <input type="text" id="Status" placeholder="Status">
-                    <span id="errorField"><span>
-                    <input type="button" class="add-row" value="Add account">
-                </div>
                 
-                <button type="button" class="delete-rows">Delete selected Account</button>
+                
+
+                            <form>
+                            <input type="text" id="Username" placeholder="Username"></td>
+                            <input type="text" id="password" placeholder="password"></td>
+                            <input type="text" id="Email" placeholder="Email"></td>
+                            <select name="type" id="Type">
+                                    <option value="">--Choose a type--</option>
+                                    <option value="Administrator">Admin</option>
+                                    <option value="Instructor">Instructor</option>
+                                    <option value="Standard">Standard</option>
+                                    <option value="Member">member</option>
+                                </select>
+                            
+                            <select name="Status" id="Status">
+                                    <option value="">--Choose a status--</option>
+                                    <option value="Active">Active</option>
+                                    <option value="Inactive">Inactive</option>
+                                </select>
+
+                        <input type="submit" class="add-row" value="Add account">
+                    </form>
+                
             </div>
         </div>
   </div>

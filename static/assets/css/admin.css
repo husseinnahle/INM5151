@@ -13,7 +13,11 @@ table {
     table-layout: fixed;
     border-collapse: collapse;
 }
-
+.fixed_header thead tfoot {
+  position: sticky;
+  color:#fff;
+  background: rgb(28, 28, 28);
+}
 .fixed_header tbody{
   display:block;
   width: 100%;
@@ -36,29 +40,10 @@ table {
   width: 200px;
 }
 
-/* left div */
-.langages-container-admin {
-    margin-top: 2vh;
-    margin-bottom: 2vh;
-    margin-right: 2vw;
-    margin-left: 2vw;
-}
 
-.cards-container-admin {
-  border-top-left-radius: 10px;
-  border-bottom-left-radius: 10px;
-  background-color: #2d3033;
-  margin: 70px auto;
-  width: 90%;
-  height: 600px;
-  overflow: auto;
-}
-
-.cards-admin {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  grid-auto-rows: auto;
-  gap: 9px;
-  margin-left: 15px;
-  font-family: sans-serif;
+.fixed_header  tfoot {
+  position: sticky;
+  align-items: left;
+  color:#fff;
+  background: rgb(28, 28, 28);
 }
