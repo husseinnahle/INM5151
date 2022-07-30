@@ -92,9 +92,11 @@ def init_database():
         db.insert_sujet(i, key, json.dumps(data[key]))
     file.close()
     # Temporaire pour tester
-    user = create_user("username", "instructor@ezcoding.com", "password", user_type.MEMBER)
+    user = create_user("username", "username@ezcoding.com",
+                       "password", user_type.MEMBER)
     get_db().insert_user(user)
-    user = create_user("instructor", "instructor@ezcoding.com", "password", user_type.INSTRUCTOR)
+    user = create_user("instructor", "instructor@ezcoding.com",
+                       "password", user_type.INSTRUCTOR)
     get_db().insert_user(user)
 
 
@@ -263,7 +265,8 @@ def register_post():
             return redirect('/register')
         if hcaptcha.verify():
             # hCaptcha ok
-            user = create_user(username, email, password, user_type.STANDARD)  # ValueError
+            user = create_user(username, email, password,
+                               user_type.STANDARD)  # ValueError
             db.insert_user(user)
             session["message"] = "Account created!"
             return redirect("/login")
@@ -568,4 +571,10 @@ def test_session():
 
 @app.route('/become_instructor', methods=["GET"])
 def become_instructor():
-    return render_template('become_instr.html', title='Become instructor'), 200
+    sujets = get_db().read_all_sujet()
+    langages = []
+    for sujet in sujets:
+        langages.append(sujet.get_nom())
+    langages.sort()
+    return render_template('become_instr.html', title='Become instructor',
+                           langages=langages), 200
