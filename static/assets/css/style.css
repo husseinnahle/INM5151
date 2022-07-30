@@ -343,7 +343,19 @@ footer {
 }
 
 .form-group input[type=file] {
-  background: none;  
+  background: none;
+  color: white;
+}
+
+.form-group select {
+  background: #212529;
+  color: white;
+  width: 110px;
+  margin-top: -10px;
+  margin-left: 20px;
+}
+
+.form-content p {
   color: white;
 }
 

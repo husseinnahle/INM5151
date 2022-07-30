@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="form-popup">
+<div class="form-popup form-center">
   <div class="form-panel one">
     <div class="form-header">
       <h5>Become an instructor</h5>
@@ -13,13 +13,24 @@
       <form method="post" action="/login" id="form-popup">
         <div class="form-group">
           <label for="curriculum">Curriculum vitae</label>
-          <input type="file" id="curriculum" name="curriculum" />
+          <input type="file" id="curriculum" name="curriculum" accept=".pdf" required />
         </div>
-        <br>
         <div class="form-group">
           <label for="cover">Cover letter</label>
-          <input type="file" id="cover" name="cover" />
+          <input type="file" id="cover" name="cover" accept=".pdf" required />
         </div>
+        <div class="form-group">
+          <label for="lang">Languages</label>
+        </div>
+        <div class="form-group">
+          <select id="lang" name="lang" size="3" multiple>
+            {% for langage in langages %}
+            <option value="{{ langage }}">{{ langage }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <p>Hold down the Ctrl (Windows) or Command (Mac) key to select many
+          languages.</p>
         <div id="form-popup-error-container"></div><br>
         <div class="form-group">
           <button type="button" onclick="#">
