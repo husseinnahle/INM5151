@@ -4,15 +4,27 @@
 <div class="form-popup form-center">
   <div class="form-panel one">
     <div class="form-header">
-      <h5>Become an instructor</h5>
+      <h5>Teach with us</h5>
       {% if message %}
       <h4>{{ message }}</h4>
       {% endif %}
     </div>
+    {% if not session['user'] or session['user']['type'] == "STANDARD"
+    or session['user']['type'] == "MEMBER" %}
+    <p>Help people learn new skills, advance their careers, and explore their hobbies by sharing your knowledge.</p><br>
+    <p>You only need to fill a form with your resume and a cover letter. Then, we will evaluate your candidature.</p>
+    <br>
+    {% endif %}
+    {% if not session['user'] %}
+    <p>If you have an account, <a href="/login">login</a> to continue.</p>
+    <p>If not, <a href="/register">create an account</a> and login to continue.</p>
+    {% endif %}
+    {% if session['user'] and (session['user']['type'] == "STANDARD"
+    or session['user']['type'] == "MEMBER") %}    
     <div class="form-content">
-      <form method="post" action="/login" id="form-popup">
+      <form method="post" action="/become_instructor" id="form-popup" enctype="multipart/form-data">
         <div class="form-group">
-          <label for="curriculum">Curriculum vitae</label>
+          <label for="curriculum">Resume</label>
           <input type="file" id="curriculum" name="curriculum" accept=".pdf" required />
         </div>
         <div class="form-group">
@@ -23,21 +35,22 @@
           <label for="lang">Languages</label>
         </div>
         <div class="form-group">
-          <select id="lang" name="lang" size="3" multiple>
+          <select id="lang" name="lang" size="3" multiple required>
+            <option value="" disabled>-- Select one or more --</option>
             {% for langage in langages %}
             <option value="{{ langage }}">{{ langage }}</option>
             {% endfor %}
           </select>
         </div>
-        <p>Hold down the Ctrl (Windows) or Command (Mac) key to select many
+        <p>Hold down the Ctrl (Windows) or Command (Mac) key to select several
           languages.</p>
         <div id="form-popup-error-container"></div><br>
         <div class="form-group">
-          <button type="button" onclick="#">
-            Submit</button>
+          <button type="submit">Submit</button>
         </div>
       </form>
     </div>
+    {% endif %}
   </div>
 </div>
 {% endblock %}
