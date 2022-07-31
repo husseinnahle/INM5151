@@ -13,3 +13,15 @@ create table user (
   progress text,
   type varchar
 );
+
+create table request (
+  id integer primary key,
+  username varchar(25),
+  first_name varchar(25),
+  last_name varchar(25),
+  speciality text,
+  cv blob,
+  letter blob,
+  status varchar(25),
+  date date
+);

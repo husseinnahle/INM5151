@@ -2,6 +2,8 @@ import sqlite3
 import json
 from .sujet import Sujet
 from .user import User
+from .request import Request
+from .status import status
 
 
 class Database:
@@ -85,3 +87,26 @@ class Database:
                            'where id = ?',
                            (user.type, user.id))
         connection.commit()
+
+    def insert_request(self, request, username):
+        connection = self.get_connection()
+        connection.execute('insert into request(username, first_name, last_name, speciality, cv, letter, status, date)'
+                           'values(?, ?, ?, ?, ?, ?, ?, ?)',
+                            (username, request.first_name, request.last_name,
+                             ' '.join(request.speciality),
+                             sqlite3.Binary(request.cv.read()),
+                             sqlite3.Binary(request.letter.read()),
+                             request.status, request.date))
+        connection.commit()
+
+    def read_request_username(self, username):
+        cursor = self.get_connection().cursor()
+        cursor.execute('select * from request where username = ?', (username,))
+        requests = cursor.fetchall()
+        return [Request(request[0], request[2], request[3], request[4].split(' '), request[5], request[6], status(request[7]), request[8]) for request in requests]
+    
+    def read_request_id(self, id):
+        cursor = self.get_connection().cursor()
+        cursor.execute('select * from request where id = ?', (id,))
+        request = cursor.fetchone()
+        return Request(request[0], request[2], request[3], request[4].split(' '), request[5], request[6], status(request[7]), request[8])

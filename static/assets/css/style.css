@@ -576,6 +576,21 @@ footer {
   transform: translate(0, -50%);
 }
 
+.qtip.tip-bottom:before {
+  bottom: 0;
+  left: 50%;
+  transform: translate(-50%, calc(100% + 8px));
+  box-sizing: border-box;
+  border-radius: 3px;
+}
+.qtip.tip-bottom:after {
+  border-width: 0 8px 8px 8px;
+  border-color: transparent transparent rgba(10, 20, 30, 0.85) transparent;
+  bottom: -8px;
+  left: 50%;
+  transform: translate(-50%, 0);
+}
+
 .price{
   display: flex;
   font-size: 3.5rem;
@@ -717,4 +732,29 @@ footer {
   border-color: #00a8a8;
   transform-origin: bottom left;
   transform: rotate(45deg);
+}
+
+.doc_link {
+  text-decoration: none;
+  color: white;
+  text-transform: uppercase;
+}
+
+.doc_link:hover {
+  text-decoration: none;
+  color: white;
+}
+
+.edit {
+  transition: all 0.2s;
+  width: 80px;
+}
+
+.cancel {
+  color: #f83470;
+  white-space: nowrap;
+  text-align: center;
+  background-color: #2d3033;
+  margin-left: 20px;
+  visibility: hidden;
 }
