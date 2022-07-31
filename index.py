@@ -11,11 +11,14 @@ from flask import session
 from flask import g
 from flask import jsonify
 from flask import Response
+from flask import make_response
 from .modules.database import Database
 from .modules.user import create_user
 from .modules.user import modify_user
 from .modules.user import validate_support_form
 from .modules.user_type import user_type
+from .modules.status import status
+from .modules.request import create_request
 from functools import wraps
 from flask_hcaptcha import hCaptcha
 from flask_mail import Mail, Message
@@ -92,7 +95,10 @@ def init_database():
         db.insert_sujet(i, key, json.dumps(data[key]))
     file.close()
     # Temporaire pour tester
-    user = create_user("username", "instructor@ezcoding.com", "password", user_type.MEMBER)
+    for i in range (0,25):
+        user = create_user("username"+str(i), "username"+str(i)+"@hotmail.com", "password", user_type.STANDARD)
+        get_db().insert_user(user)
+    user = create_user("administrator", "username@hotmail.com", "password", user_type.ADMIN)
     get_db().insert_user(user)
     user = create_user("instructor", "instructor@ezcoding.com", "password", user_type.INSTRUCTOR)
     get_db().insert_user(user)
@@ -109,23 +115,66 @@ def a_propos():
 
 
 @app.route('/become_instructor', methods=["GET"])
-def become_instructor():
+def become_instructor_get():
     sujets = get_db().read_all_sujet()
     sujets = [sujet.nom for sujet in sujets]
-    return render_template('request_instructor.html', title='Become an instructor', sujets=sujets), 200
+    return render_template('request_instructor.html', title='Become an instructor', edit=False, sujets=sujets), 200
+
+
+@app.route('/become_instructor', methods=["POST"])
+def become_instructor_post():
+    first_name = request.form['firstName']
+    last_name = request.form['lastName']
+    speciality = request.form.getlist('speciality')
+    cv = None
+    letter = None
+    if "curriculum" in request.files and "cover-letter" in request.files:
+        cv = request.files['curriculum']
+        letter = request.files['cover-letter']
+    try:
+        request_obj = create_request(first_name, last_name, speciality, cv, letter)
+    except ValueError as error:
+        sujets = get_db().read_all_sujet()
+        sujets = [sujet.nom for sujet in sujets]
+        return render_template('request_instructor.html', title='Become an instructor', sujets=sujets, edit=False, error=str(error)), 200
+    get_db().insert_request(request_obj, session['user']['name'])
+    return redirect("/account")
+
+
+@app.route('/account/request/document/<document>', methods=["GET"])
+def download_cv(document):
+    id = request.args.get("id")
+    req = get_db().read_request_id(id)
+    binary_document = req.cv if document == "cv" else req.letter 
+    response = make_response(binary_document)
+    response.headers.set('Content-Type', 'application/pdf')    
+    return response, 200
+
+
+@app.route('/account/request/<id>', methods=["GET"])
+def view_request(id):
+    request = get_db().read_request_id(id)
+    sujets = get_db().read_all_sujet()
+    sujets = [sujet.nom for sujet in sujets]
+    return render_template('request_instructor.html', title='Become an instructor', sujets=sujets, edit=True, request=request), 200
 
 
 @app.route('/account', methods=["GET"])
 @authentication_required
 def compte():
-    sujets = get_db().read_all_sujet()
+    db = get_db()
+    sujets = db.read_all_sujet()
+    requests = db.read_request_username(session['user']['name'])
+    pending = False
+    if requests is not None and len(requests) > 0 and requests[-1].status == status.PENDING:
+        pending = True
     langages = []
     for sujet in sujets:
         if sujet.get_nom() in session['user']['progress']:
-            langages.append(
-                {"name": sujet.get_nom(), "logo": sujet.get_logo()})
+            langages.append({"name": sujet.get_nom(), "logo": sujet.get_logo()})
     return render_template('compte.html', title='My account',
-                           langages=langages), 200
+                           langages=langages, requests=requests,
+                           pending=pending), 200
 
 
 # =========================  devenir membre  ==========================

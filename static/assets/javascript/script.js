@@ -202,6 +202,7 @@ function disableField(input) {
   input.style.cursor = "default";
   input.style.background = "#2d3033";
   input.style.color = "#e4e4e4";
+  input.style.border = "2px solid white";
 }
 
 function clearField() {
@@ -240,4 +241,22 @@ function paiement() {
       });
     });
   });
+}
+
+function disableRequestFields() {
+  var input_fields = document.getElementsByClassName("field");
+  for (var i = 0; i < input_fields.length; i++) {
+    disableField(input_fields[i]);
+  }
+  disableField(document.getElementsByClassName("chosen-choices")[0]);
+  var search_choices = document.getElementsByClassName("search-choice");
+  for (var i = 0; i < search_choices.length; i++) {
+    search_choices[i].style.filter = "grayscale(1)";
+  }
+  document.getElementById("multiple_chosen").style.pointerEvents = "none";
+  var input_file = document.getElementsByClassName("input_file");
+  for (var i = 0; input_file.length; i++) {
+    input_file[i].style.display = "none";
+  }
+  document.getElementById("cl-container").style.paddingLeft = "180px";
 }
