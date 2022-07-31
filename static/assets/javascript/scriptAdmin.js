@@ -24,7 +24,7 @@ $(document).ready(function(){
                     <td id="type">${Type}</td>
                     <td id="type">active</td>
                     <td> <button type="button" class="edit-row" id="editBtn">Edit</button></td>
-                    <td> <button type="button" class="delete-row" id="editBtn">Delete</button></td>
+                    <td> <button type="button" class="delete-row" id="dltBtn">Delete</button></td>
                 </tr>`;
             $("table tbody").append(markup);
         })

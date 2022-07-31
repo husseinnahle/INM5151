@@ -35,7 +35,7 @@
                             <td id="type">{{user.type}}</td>
                             <td id="type">active</td>
                             <td> <button type="button" class="edit-row" id="editBtn">Edit</button></td>
-                            <td> <button type="button" class="delete-row" id="editBtn">Delete</button></td>
+                            <td> <button type="button" class="delete-row" id="dltBtn">Delete</button></td>
                         </tr>
                         {%endfor%}
                         
@@ -86,19 +86,7 @@
                     <p>Quiz content</p>
                 </div>
             <script>
-                function openTab(evt, tabName) {
-                  var i, tabcontent, tablinks;
-                  tabcontent = document.getElementsByClassName("tabContent");
-                  for (i = 0; i < tabcontent.length; i++) {
-                    tabcontent[i].style.display = "none";
-                  }
-                  tablinks = document.getElementsByClassName("tablinks");
-                  for (i = 0; i < 4; i++) {
-                    tablinks[i].className = tablinks[i].className.replace(" active", "");
-                  }
-                  document.getElementById(tabName).style.display = "table-cell";
-                  evt.currentTarget.className += " active";
-                }
+                
             </script>
         </div>
   </div>

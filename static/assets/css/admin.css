@@ -1,12 +1,13 @@
 /*general*/
-h2 {
+h2 h3 {
+  align-self: center;
   text-align: center;
 }
 
 /*Account div*/
 table {
     background-color:#ffffff41;
-    max-height: 40;
+    max-height: 60%;
 }
 .fixed_header{
     width: 100%;
@@ -55,7 +56,7 @@ table {
   display: none;
   position: relative;
   background: #212529;
-  max-height: 70vh;
+  max-height: 70vh; 
   border-radius: 4px;
   box-shadow: 0 0 20px black;
   box-sizing: border-box;
