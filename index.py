@@ -2,6 +2,7 @@ import json
 import html
 import hashlib
 import stripe
+import os
 
 from flask import Flask
 from flask import render_template
@@ -42,6 +43,12 @@ app.config['HCAPTCHA_SECRET_KEY'] = "0x58956B96080BFdBA80d7B228B4c460e3F7C"\
 HCAPTCHA_ERROR = 'Error in hCaptcha. Please try again'
 hcaptcha = hCaptcha(app)
 mail = Mail(app)
+
+UPLOAD_FOLDER = 'uploads'
+ALLOWED_EXTENSIONS = {'pdf'}
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+# Taille max de chaque fichier : 500 KB
+app.config['MAX_CONTENT_LENGTH'] = 500 * 1024
 
 
 def get_db():
@@ -570,11 +577,41 @@ def test_session():
 
 
 @app.route('/become_instructor', methods=["GET"])
-def become_instructor():
-    sujets = get_db().read_all_sujet()
+def become_instructor_get():
     langages = []
-    for sujet in sujets:
-        langages.append(sujet.get_nom())
-    langages.sort()
+    if is_authenticated():
+        sujets = get_db().read_all_sujet()
+        for sujet in sujets:
+            langages.append(sujet.get_nom())
+        langages.sort()
     return render_template('become_instr.html', title='Become instructor',
-                           langages=langages), 200
+                           langages=langages ), 200
+
+
+@app.route('/become_instructor', methods=["POST"])
+def become_instructor_post():
+    if 'curriculum' not in request.files or 'cover' not in request.files:
+        session['error'] = 'Please select the requested files'
+        return redirect('/become_instructor')
+    file01 = request.files['curriculum']
+    if file01.filename == '':
+        session['error'] = "No selected file for 'Curriculum vitae'"
+        return redirect('/become_instructor')
+    file02 = request.files['cover']
+    if file02.filename == '':
+        session['error'] = "No selected file for 'Cover letter'"
+        return redirect('/become_instructor')
+    if file01 and allowed_file(file01.filename):
+        filename01 = session['user']['name'] + "_resume.pdf"
+        file01.save(os.path.join(app.config['UPLOAD_FOLDER'], filename01))
+    if file02 and allowed_file(file02.filename):
+        filename02 = session['user']['name'] + "_cover.pdf"
+        file02.save(os.path.join(app.config['UPLOAD_FOLDER'], filename02))
+    selected_langs = request.form.getlist("lang")
+    print("Selected langs : ", selected_langs, flush=True)
+    return redirect('/become_instructor')
+
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
