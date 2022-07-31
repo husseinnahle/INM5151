@@ -6,7 +6,11 @@
   <script src="{{ url_for('static', filename='assets/javascript/scriptAdmin.js') }}"></script>
   <div class="compteContainer">
         <div class="infoCompte">
-            <div class="infoCompte-form">
+            <button class="tablinks" onclick="openTab(event, 'Account')">Account</button>
+            <button class="tablinks" onclick="openTab(event, 'Languages')">Languages</button>
+            <button class="tablinks" onclick="openTab(event, 'Subject')">Subject</button>
+            <button class="tablinks" onclick="openTab(event, 'Quiz')">Quiz</button>
+            <div id="Account" class="tabContent">
                 <h2>Accounts</h2>
                 <table class="fixed_header">
                     <thead>
@@ -46,9 +50,6 @@
                         
                     </tbody>
                 </table>
-                
-                
-
                             <form>
                             <input type="text" id="Username" placeholder="Username"></td>
                             <input type="text" id="password" placeholder="password"></td>
@@ -70,7 +71,35 @@
                         <input type="submit" class="add-row" value="Add account">
                     </form>
                 
-            </div>
+                </div>
+                <div div id="Languages" class="tabContent">
+                    <h3>Languages</h3>
+                    <p>Languages content</p> 
+                </div>
+                
+                <div id="Subject" class="tabContent">
+                    <h3>Subject</h3>
+                    <p>Subjectcontent</p>
+                </div>
+                <div id="Quiz" class="tabContent">
+                    <h3>Quiz</h3>
+                    <p>Quiz content</p>
+                </div>
+            <script>
+                function openTab(evt, tabName) {
+                  var i, tabcontent, tablinks;
+                  tabcontent = document.getElementsByClassName("tabContent");
+                  for (i = 0; i < tabcontent.length; i++) {
+                    tabcontent[i].style.display = "none";
+                  }
+                  tablinks = document.getElementsByClassName("tablinks");
+                  for (i = 0; i < 4; i++) {
+                    tablinks[i].className = tablinks[i].className.replace(" active", "");
+                  }
+                  document.getElementById(tabName).style.display = "table-cell";
+                  evt.currentTarget.className += " active";
+                }
+            </script>
         </div>
   </div>
 {% endblock %}
