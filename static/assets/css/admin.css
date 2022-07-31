@@ -1,13 +1,14 @@
 /*general*/
-h2 h3 {
-  align-self: center;
+#Account h2 h3 {
+  padding-top: 1vh;
   text-align: center;
 }
 
 /*Account div*/
 table {
     background-color:#ffffff41;
-    max-height: 60%;
+    max-height: 60vh;
+    max-width: 60vw;
 }
 .fixed_header{
     width: 100%;
@@ -49,44 +50,56 @@ table {
   background: rgb(28, 28, 28);
 }
 
-
+/*Div css */
+.tabContainer{
+  max-width: 70vw;
+  margin-left: 15vw;
+}
 
 /*Div css */
 .tabContent {
   display: none;
   position: relative;
+  text-align: center;
   background: #212529;
   max-height: 70vh; 
+  max-width: 60vw;
   border-radius: 4px;
   box-shadow: 0 0 20px black;
   box-sizing: border-box;
   color: white;
 }
 /* Style the tab */
-.tab {
-  overflow: hidden;
-  border: 1px solid #ccc;
-  background-color: #f1f1f1;
+#Account {
+  padding-top: 1vh;
+  margin-left: 16vw;
+  margin-right: auto;
+  margin-top: 5vh;
+  margin-bottom: 5vh;
 }
 
+
 /* Style the buttons inside the tab */
-.tab button {
-  float: left;
+.infoCompte button {
+  border-radius: 4px;
+  color: #fafafa;
+  float: center;
   border: none;
+  border-radius: 0px;
   outline: none;
   cursor: pointer;
   padding: 14px 16px;
-  transition: 0.3s;
+  transition: 0.7s;
   font-size: 17px;
 }
 
 /* Change background color of buttons on hover */
-.tab button:hover {
-  background-color: #ddd;
+.infoCompte  button:hover {
+  background-color: rgb(37, 36, 36);
 }
 
 /* Create an active/current tablink class */
-.tab button.active {
+.infoCompte button.active {
   background-color: rgb(119, 119, 119);
 }
 

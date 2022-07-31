@@ -61,9 +61,9 @@ function openTab(evt, tabName) {
       tabcontent[i].style.display = "none";
     }
     tablinks = document.getElementsByClassName("tablinks");
-    for (i = 0; i < 4; i++) {
+    for (i = 0; i < tabcontent.length; i++) {
       tablinks[i].className = tablinks[i].className.replace(" active", "");
     }
-    document.getElementById(tabName).style.display = "table-cell";
+    document.getElementById(tabName).style.display = "block";
     evt.currentTarget.className += " active";
   }
