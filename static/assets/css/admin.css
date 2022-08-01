@@ -1,7 +1,6 @@
 /*general*/
 #Account h2 h3 {
-  border: 2vh;
-  padding-top: 1vh;
+
   text-align: center;
 }
 .compteContainer{
@@ -45,7 +44,7 @@ table {
 }
 
 .fixed_header th, .fixed_header td {
-  padding: 1vh;
+  padding-top: 1vh;
   text-align: center;
   width: 200px;
 }
@@ -66,6 +65,7 @@ table {
 
 /*Div css */
 .tabContent {
+  margin-top: 5vh;
   display: none;
   position: relative;
   text-align: center;
@@ -81,7 +81,7 @@ table {
 #Account {
   padding-top: 1vh;
   margin-right: auto;
-  margin-top: 5vh;
+
   margin-bottom: 5vh;
 }
 

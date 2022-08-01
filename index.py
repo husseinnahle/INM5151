@@ -118,7 +118,7 @@ def compteAdmin():
     sujets = get_db().read_all_sujet()
     sujets_info = [sujet.to_json() for sujet in sujets]
     userS = get_db().read_users()
-    return render_template('admin/compteAdmin.html', sujets=sujets_info,users=userS, title='Admin'), 200
+    return render_template('admin/compteAdmin.html', sujetS=sujets_info,users=userS, title='Admin'), 200
 
 
 @app.route('/editLangage', methods=["GET"])
