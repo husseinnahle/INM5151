@@ -68,7 +68,7 @@
                                         <option value="">--Choose a status--</option>
                                         <option value="Active">Active</option>
                                         <option value="Inactive">Inactive</option>
-                                    </select>
+                                </select>
 
                             <input type="submit" class="add-row" value="Add account">
                         </form>
@@ -103,19 +103,98 @@
                         </tbody>
                     </table>
                     <form>
-                        <input type="text" id="LangagesName" placeholder="langage Name"></td>
-                        <input type="file" id="Logo" placeholder="Logo"></td>
+                        <input type="text" id="LangagesName" placeholder="langage Name">
+                        <label for="logoFile">Select a logo file</label>
+                        <input type="file" id="logoFile" name="logoFile">
                         <input type="submit" class="add-row" value="Add Languages">
                     </form>
                 </div>
                     
                 <div id="Subject" class="tabContent">
                     <h3>Subject</h3>
-                    <p>Subjectcontent</p>
+                    <table class="fixed_header">
+                        <thead>
+                            <tr>
+                                <th>Select</th>
+                                <th scope="col">Id</th>
+                                <th scope="col">Subject</th>
+                                <th scope="col">Edit</th>
+                                <th scope="col">Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        
+                        </form>
+                            
+                            <tfoot>
+                                <tr>
+                                    <td>
+                                        <button type="button" class="delete-rows">Delete selected Subject</button>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                            
+                            
+                        </tbody>
+                    </table>
+                    <form>
+                        <input type="text" id="SubjectName" placeholder="Subject Name">
+
+                        <input type="submit" class="add-row" value="Add Subject">
+                    </form>
                 </div>
                 <div id="Quiz" class="tabContent">
                     <h3>Quiz</h3>
-                    <p>Quiz content</p>
+
+            
+                    <table class="fixed_header">
+                        <thead>
+                            <tr>
+                                <input list="languages" name="languages" id="language"placeholder="langage Name">
+                                <datalist id="languages">
+                                  <option value="Python">
+                                  <option value="Java">
+                                  <option value="Ruby">
+                                </datalist>
+                                <input list="subjects" name="subjects" id="subject"placeholder="subject">
+                                <datalist id="subjects">
+                                  <option value="Introduction">
+                                  <option value="Operateur">
+                                  <option value="fonction">
+                                </datalist>
+                                <input type="submit"value="Display questions">
+                            </tr>
+                            <tr>
+                                <th>Select</th>
+                                <th scope="col">Id</th>
+                                <th scope="col">Question</th>
+                                <th scope="col">choice</th>
+                                <th scope="col">Answers</th>
+                                <th scope="col">Edit</th>
+                                <th scope="col">Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        
+                        </form>
+                            
+                            <tfoot>
+                                <tr>
+                                    <td>
+                                        <button type="button" class="delete-rows">Delete selected Subject</button>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                            
+                            
+                        </tbody>
+                    </table>
+                    <form>
+                        <input type="text" id="LangagesName" placeholder="langage Name">
+                        <label for="logoFile">Select a logo file</label>
+                        <input type="file" id="logoFile" name="logoFile">
+                        <input type="submit" class="add-row" value="Add Languages">
+                    </form>
                 </div>
                     <div id="Instructor Request" class="tabContent">
                         <h3>Instructor Request</h3>
