@@ -9,7 +9,11 @@ function questionSuivante() {
   }
   var sujet = document.getElementById('sujet').innerText;
   var sous_sujet = document.getElementById('sous_sujet').innerText;
-  var numero = document.getElementById('numero').innerText;
+  var numero = document.getElementById('numero').innerText
+
+  //ajout***** 
+  var shortcut = document.getElementById('shortcut').innerText; 
+
   chercherQuestion(sujet, sous_sujet, numero);
   return true;
 }
@@ -60,7 +64,10 @@ function post(sujet, sous_sujet) {
   var data = {
     "sujet": sujet,
     "sous-sujet": sous_sujet,
-    "reponses": reponses
+    "reponses": reponses,
+
+    //ajout
+    "short-cut" : shortcut
   }
   hiddenField.value = JSON.stringify(data);
   form.appendChild(hiddenField);
@@ -70,8 +77,9 @@ function post(sujet, sous_sujet) {
 
 function addArrows() {
   var nodes = document.getElementsByClassName("node");
+  var nodes2 = document.getElementsByClassName("node2");
   for (var i = 0; i < nodes.length; i++) {
-    if (i + 2 < nodes.length) {
+    if (i + 1 < nodes.length) {
       endPlug = 'behind';
       _dash = null;
       if (nodes[i].getAttribute("name") == "done" && nodes[i + 1].getAttribute("name") == "current") {
@@ -90,7 +98,7 @@ function addArrows() {
           dash: _dash
         }
       );
-    }
+      }
   }
 }
 
