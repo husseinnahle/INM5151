@@ -91,10 +91,6 @@ def init_database():
     # Temporaire pour tester
     progress = {
         "Python": {"Introduction": "S"},
-
-        #ajout par stev
-        "Python": {"Shortcut": "S"},
-
         "Ruby": {"Introduction": "S"},
         "Java": {"Introduction": "S"},
         "Bash": {"Introduction": "S"},

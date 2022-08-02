@@ -45,9 +45,10 @@
         {% set sous_sujet = ss["Nom"] %}
         {% set left = ss["Position"]["Left"] %}
         {% set top = ss["Position"]["Top"] %}
-        {% set shortc = ss["Short"] %}
+        {% set previous = ss["Previous"] %}
+        {% set next = ss["Next"] %}
         
-        {% if (sous_sujet != 'shortcut')%}
+        {% if (sous_sujet != 'Shortcut')%}
         {% if ('user' in session) and (sujet in session['user']['progress']) and (sous_sujet in session['user']['progress'][sujet]) and (session['user']['progress'][sujet][sous_sujet] == "S") %}
           <div class="node" id="{{ sous_sujet }}" name="done" style="border: 4px solid #19CE95; left:{{ left }}; top: {{ top }}">
         {% elif ns.blocked %}
@@ -56,9 +57,10 @@
             <div class="node" id="{{ sous_sujet }}" name="current" style="border: 4px solid gold; left:{{ left }}; top: {{ top }}">
             {% set ns.blocked = true %}
         {% endif %}
-        {% else %}
+        {% else %}           
+          <span class="node_short" id="{{previous}}"></span> 
           <div class="node_short" id="{{ sous_sujet }}" name="current" style="border: 4px solid gold; left:{{ left }}; top: {{ top }}">
-                {% endif %}
+        {% endif %}
           <a class="node__link__wrapper" href="/languages/{{ sujet }}?sous-sujet={{ sous_sujet }}">
               <span class="node__name">{{ ss["Nom"] }}</span>
               <div class="node__score__wrapper">
@@ -76,6 +78,7 @@
   <script src="{{ url_for('static', filename='assets/javascript/leader-line.min.js') }}"></script>
   <script type="text/javascript">
     addArrows();
+    addShortcut();
     {% if not is_authorized %}
       openPopup();
     {% endif %}  

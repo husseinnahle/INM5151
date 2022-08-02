@@ -9,11 +9,7 @@ function questionSuivante() {
   }
   var sujet = document.getElementById('sujet').innerText;
   var sous_sujet = document.getElementById('sous_sujet').innerText;
-  var numero = document.getElementById('numero').innerText
-
-  //ajout***** 
-  var shortcut = document.getElementById('shortcut').innerText; 
-
+  var numero = document.getElementById('numero').innerText;
   chercherQuestion(sujet, sous_sujet, numero);
   return true;
 }
@@ -64,10 +60,7 @@ function post(sujet, sous_sujet) {
   var data = {
     "sujet": sujet,
     "sous-sujet": sous_sujet,
-    "reponses": reponses,
-
-    //ajout
-    "short-cut" : shortcut
+    "reponses": reponses
   }
   hiddenField.value = JSON.stringify(data);
   form.appendChild(hiddenField);
@@ -77,7 +70,6 @@ function post(sujet, sous_sujet) {
 
 function addArrows() {
   var nodes = document.getElementsByClassName("node");
-  var nodes2 = document.getElementsByClassName("node2");
   for (var i = 0; i < nodes.length; i++) {
     if (i + 1 < nodes.length) {
       endPlug = 'behind';
@@ -98,7 +90,45 @@ function addArrows() {
           dash: _dash
         }
       );
+    }
+  }
+}
+
+function addShortcut() {
+  var nodes = document.getElementsByClassName("node");
+  var nodes_short = document.getElementsByClassName("node_short");
+
+  for (var i = 0; i < nodes.length; i++) {
+
+
+      if(nodes[i].getAttribute("id") == nodes_short[0].getAttribute("id")){
+
+        new LeaderLine(
+          document.getElementById(nodes[i].id),
+          document.getElementById(nodes_short[1].id),
+          {
+            endPlug: endPlug,
+            endPlugSize: 0.9,
+            color: "black",
+            dash: _dash
+          }
+        );
+      } 
+      if(nodes[i].getAttribute("id") == "ensemble de données"){
+
+        new LeaderLine(
+          document.getElementById(nodes[i].id),
+          document.getElementById(nodes_short[1].id),
+          {
+            endPlug: endPlug,
+            endPlugSize: 0.9,
+            color: "black",
+            dash: _dash
+          }
+        );
       }
+    
+
   }
 }
 
@@ -210,6 +240,7 @@ function disableField(input) {
   input.style.cursor = "default";
   input.style.background = "#2d3033";
   input.style.color = "#e4e4e4";
+  input.style.border = "2px solid white";
 }
 
 function clearField() {
@@ -248,4 +279,22 @@ function paiement() {
       });
     });
   });
+}
+
+function disableRequestFields() {
+  var input_fields = document.getElementsByClassName("field");
+  for (var i = 0; i < input_fields.length; i++) {
+    disableField(input_fields[i]);
+  }
+  disableField(document.getElementsByClassName("chosen-choices")[0]);
+  var search_choices = document.getElementsByClassName("search-choice");
+  for (var i = 0; i < search_choices.length; i++) {
+    search_choices[i].style.filter = "grayscale(1)";
+  }
+  document.getElementById("multiple_chosen").style.pointerEvents = "none";
+  var input_file = document.getElementsByClassName("input_file");
+  for (var i = 0; input_file.length; i++) {
+    input_file[i].style.display = "none";
+  }
+  document.getElementById("cl-container").style.paddingLeft = "180px";
 }
