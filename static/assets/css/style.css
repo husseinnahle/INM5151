@@ -181,6 +181,7 @@ footer {
   color: rgb(0, 0, 0);
   background: #F5F5F5;
 }
+
 .node_short {
   position: relative;
   top:0;
@@ -750,11 +751,6 @@ footer {
   transform-origin: bottom left;
   transform: rotate(45deg);
 }
-<<<<<<< HEAD
- .shortcut{
-   left: 50px;
- }
-=======
 
 .doc_link {
   text-decoration: none;
@@ -780,4 +776,3 @@ footer {
   margin-left: 20px;
   visibility: hidden;
 }
->>>>>>> main
