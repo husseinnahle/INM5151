@@ -326,7 +326,7 @@ footer {
   letter-spacing: 0.2em;
 }
 
-.form-group input {
+.form-group input, .form-group select {
   outline: none;
   display: block;
   background: #e4e4e4;
@@ -335,7 +335,7 @@ footer {
   border-radius: 4px;
   box-sizing: border-box;
   padding: 12px 20px;
-  color: #e4e4e4;
+  color: #000000;
   font-family: inherit;
   font-size: inherit;
   font-weight: 500;
@@ -757,4 +757,27 @@ footer {
   background-color: #2d3033;
   margin-left: 20px;
   visibility: hidden;
+}
+
+.compteAdmin {
+  background-color: #212529;
+  border-radius: 4px;
+  color: white;
+  padding: 30px;
+  width: 100%;
+  min-height: 80vh;
+}
+
+.nav-item:hover, .nav-item {
+  text-decoration: none;
+  color: white;
+}
+
+.tab-pane {
+  padding:20px;
+}
+
+.selected:target td {
+  background-color: grey;
+  transition: all 1s linear;
 }

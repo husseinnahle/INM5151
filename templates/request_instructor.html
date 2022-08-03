@@ -73,10 +73,17 @@
           </div>
           <div id="form-popup-error">{{ error }}</div><br>
           <div class="form-group">
-            {% if edit %}
-              <button type="button" onclick="window.location.href='/account'">Back</button>
+            {% if admin %}
+              <div class="button-center">
+                <button type="button" class="accept">Accept</button>
+                <button type="button" class="refuse">Refuse</button>
+              </div>
             {% else %}
-              <button type="submit">Submit</button>
+              {% if edit %}
+                <button type="button" onclick="window.location.href='/account'">Back</button>
+              {% else %}
+                <button type="submit">Submit</button>
+              {% endif %}
             {% endif %}
           </div>
         </form>

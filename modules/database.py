@@ -107,11 +107,11 @@ class Database:
                            (user.type, user.id))
         connection.commit()
 
-    def insert_request(self, request, username):
+    def insert_request(self, request):
         connection = self.get_connection()
         connection.execute('insert into request(username, first_name, last_name, speciality, cv, letter, status, date)'
                            'values(?, ?, ?, ?, ?, ?, ?, ?)',
-                            (username, request.first_name, request.last_name,
+                            (request.username, request.first_name, request.last_name,
                              ' '.join(request.speciality),
                              sqlite3.Binary(request.cv.read()),
                              sqlite3.Binary(request.letter.read()),
@@ -122,10 +122,18 @@ class Database:
         cursor = self.get_connection().cursor()
         cursor.execute('select * from request where username = ?', (username,))
         requests = cursor.fetchall()
-        return [Request(request[0], request[2], request[3], request[4].split(' '), request[5], request[6], status(request[7]), request[8]) for request in requests]
+        return [Request(request[0], request[1], request[2], request[3], request[4].split(' '), request[5], request[6], status(request[7]), request[8]) for request in requests]
     
     def read_request_id(self, id):
         cursor = self.get_connection().cursor()
         cursor.execute('select * from request where id = ?', (id,))
         request = cursor.fetchone()
-        return Request(request[0], request[2], request[3], request[4].split(' '), request[5], request[6], status(request[7]), request[8])
+        return Request(request[0], request[1], request[2], request[3], request[4].split(' '), request[5], request[6], status(request[7]), request[8])
+    
+    def read_pending_request(self):
+        cursor = self.get_connection().cursor()
+        cursor.execute('select * from request where status = ?', (status.PENDING,))
+        requests = cursor.fetchall()
+        if requests is None:
+            return None
+        return [Request(request[0], request[1], request[2], request[3], request[4].split(' '), request[5], request[6], status(request[7]), request[8]) for request in requests]

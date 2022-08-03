@@ -95,13 +95,13 @@ def init_database():
         db.insert_sujet(i, key, json.dumps(data[key]))
     file.close()
     # Temporaire pour tester
-    for i in range (0,25):
-        user = create_user("username"+str(i), "username"+str(i)+"@hotmail.com", "password", user_type.STANDARD)
-        get_db().insert_user(user)
-    user = create_user("administrator", "username@hotmail.com", "password", user_type.ADMIN)
-    get_db().insert_user(user)
-    user = create_user("instructor", "instructor@ezcoding.com", "password", user_type.INSTRUCTOR)
-    get_db().insert_user(user)
+    # for i in range (0,25):
+    #     user = create_user("username"+str(i), "username"+str(i)+"@hotmail.com", "password", user_type.STANDARD)
+    #     get_db().insert_user(user)
+    # user = create_user("administrator", "username@hotmail.com", "password", user_type.ADMIN)
+    # get_db().insert_user(user)
+    # user = create_user("instructor", "instructor@ezcoding.com", "password", user_type.INSTRUCTOR)
+    # get_db().insert_user(user)
 
 
 @app.route('/', methods=["GET"])
@@ -115,10 +115,12 @@ def a_propos():
 
 @app.route('/admin', methods=["GET"])
 def compteAdmin():
-    sujets = get_db().read_all_sujet()
+    db = get_db()
+    sujets = db.read_all_sujet()
     sujets_info = [sujet.to_json() for sujet in sujets]
-    userS = get_db().read_users()
-    return render_template('admin/compteAdmin.html', sujets=sujets_info,users=userS, title='Admin'), 200
+    users = db.read_users()
+    requests = db.read_pending_request()
+    return render_template('admin/compteAdmin.html', sujets=sujets_info, users=users, requests=requests, title='Admin'), 200
 
 
 @app.route('/editLangage', methods=["GET"])
@@ -144,12 +146,12 @@ def become_instructor_post():
         cv = request.files['curriculum']
         letter = request.files['cover-letter']
     try:
-        request_obj = create_request(first_name, last_name, speciality, cv, letter)
+        request_obj = create_request(session['user']['name'], first_name, last_name, speciality, cv, letter)
     except ValueError as error:
         sujets = get_db().read_all_sujet()
         sujets = [sujet.nom for sujet in sujets]
         return render_template('request_instructor.html', title='Become an instructor', sujets=sujets, edit=False, error=str(error)), 200
-    get_db().insert_request(request_obj, session['user']['name'])
+    get_db().insert_request(request_obj)
     return redirect("/account")
 
 
@@ -168,7 +170,8 @@ def view_request(id):
     request = get_db().read_request_id(id)
     sujets = get_db().read_all_sujet()
     sujets = [sujet.nom for sujet in sujets]
-    return render_template('request_instructor.html', title='Become an instructor', sujets=sujets, edit=True, request=request), 200
+    admin = True if session['user']['type'] == user_type.ADMIN else False
+    return render_template('request_instructor.html', title='Become an instructor', sujets=sujets, edit=True, admin=admin, request=request), 200
 
 
 @app.route('/account', methods=["GET"])
