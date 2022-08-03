@@ -33,13 +33,6 @@ class Sujet:
         return {"Question": quiz[numero]["Question"],
                 "Choix": quiz[numero]["Choix"]}
 
-#get shortcut** ajout
-    def get_shortcut(self,shortcut):
-        for item in self.info["Shortcut"]:
-            if item["Id"] == shortcut:
-                return item
-        raise ValueError("Le shortcut " + shortcut + " n'existe pas.")
-
     def to_json(self):
         sujet = {
             "Id": self.id,
