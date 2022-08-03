@@ -45,6 +45,13 @@
                 <a class="nav-link" href="/about">About</a>
               </li>
             </ul>
+            {% if "user" in session and session['user']['type'] == 'ADMIN' %}
+              <ul class="nav navbar-nav navbar-right">
+                <li class="nav-item">
+                  <a class="nav-link" href="/admin">Admin</a>
+                </li>
+              </ul>
+            {% endif %}
           </div>
         </div>
       </nav>

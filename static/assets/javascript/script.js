@@ -1,5 +1,5 @@
 var reponses = [];
-
+//quiz
 function questionSuivante() {
   document.getElementById('erreur').innerHTML = '';
   var checked = enregistrerReponse();
@@ -67,7 +67,7 @@ function post(sujet, sous_sujet) {
   document.body.appendChild(form);
   form.submit();
 }
-
+//END QUIZ
 function addArrows() {
   var nodes = document.getElementsByClassName("node");
   for (var i = 0; i < nodes.length; i++) {
