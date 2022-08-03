@@ -2,6 +2,8 @@ import sqlite3
 import json
 from .sujet import Sujet
 from .user import User
+from .request import Request
+from .status import status
 
 
 class Database:
@@ -47,12 +49,10 @@ class Database:
     # Inserer un utilisateur
     def insert_user(self, user):
         connection = self.get_connection()
-        connection.execute('insert into user'
-                           '(username, email, salt, hash, member, progress)'
-                           'values(?, ?, ?, ?, ?, ?)',
-                           (user.name, user.email, user.salt, user.hash,
-                            1 if user.member else 0,
-                            json.dumps(user.progress)))
+        connection.execute(
+            'insert into user(username, email, salt, hash, progress, type) values(?, ?, ?, ?, ?, ?)',
+            (user.name, user.email, user.salt, user.hash,
+             json.dumps(user.progress), user.type))
         connection.commit()
 
     # Rechercher et retourner un utilisateur selon 'username'
@@ -62,9 +62,8 @@ class Database:
         user = cursor.fetchone()
         if user is None:
             return None
-        user_obj = User(user[0], user[1], user[2], user[3], user[4])
-        user_obj.set_progress(json.loads(user[6]))
-        user_obj.set_member(True if user[5] == 1 else False)    
+        user_obj = User(user[0], user[1], user[2], user[3], user[4], user[6])
+        user_obj.set_progress(json.loads(user[5]))
         return user_obj
 
     # Mettre à jour la progression d'un utilisateur selon 'username'
@@ -84,7 +83,30 @@ class Database:
 
     def update_user_membership(self, user: User):
         connection = self.get_connection()
-        connection.execute('update user set member = ?'
+        connection.execute('update user set type = ?'
                            'where id = ?',
-                           (1 if user.member else 0, user.id))
+                           (user.type, user.id))
         connection.commit()
+
+    def insert_request(self, request, username):
+        connection = self.get_connection()
+        connection.execute('insert into request(username, first_name, last_name, speciality, cv, letter, status, date)'
+                           'values(?, ?, ?, ?, ?, ?, ?, ?)',
+                            (username, request.first_name, request.last_name,
+                             ' '.join(request.speciality),
+                             sqlite3.Binary(request.cv.read()),
+                             sqlite3.Binary(request.letter.read()),
+                             request.status, request.date))
+        connection.commit()
+
+    def read_request_username(self, username):
+        cursor = self.get_connection().cursor()
+        cursor.execute('select * from request where username = ?', (username,))
+        requests = cursor.fetchall()
+        return [Request(request[0], request[2], request[3], request[4].split(' '), request[5], request[6], status(request[7]), request[8]) for request in requests]
+    
+    def read_request_id(self, id):
+        cursor = self.get_connection().cursor()
+        cursor.execute('select * from request where id = ?', (id,))
+        request = cursor.fetchone()
+        return Request(request[0], request[2], request[3], request[4].split(' '), request[5], request[6], status(request[7]), request[8])

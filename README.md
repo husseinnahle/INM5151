@@ -35,7 +35,6 @@ INM5151-virtualenv\scripts\activate
 Installer les dépendances :
 ```
 $ sudo pip install -r requirements.txt
-$ sudo pip install stripe
 ```
 <br>
 

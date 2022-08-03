@@ -11,11 +11,14 @@ from flask import session
 from flask import g
 from flask import jsonify
 from flask import Response
+from flask import make_response
 from .modules.database import Database
 from .modules.user import create_user
 from .modules.user import modify_user
-from .modules.user import make_member
 from .modules.user import validate_support_form
+from .modules.user_type import user_type
+from .modules.status import status
+from .modules.request import create_request
 from functools import wraps
 from flask_hcaptcha import hCaptcha
 from flask_mail import Mail, Message
@@ -25,8 +28,11 @@ app.config['JSON_SORT_KEYS'] = False
 app.secret_key = "a6cd02e9b1104ac0*c2a02391284cb!0"
 
 stripe_keys = {
-    "secret_key" : "sk_test_51LKsa0A5hdrVdRtKeyX3nEfmneDW2AcxnXF3KToFivuuttwyNih5Mqyd7RL562hu8BuHfgdI3wpf9ZZBAI6kiJRw006N97T3JI",
-    "publishable_key": "pk_test_51LKsa0A5hdrVdRtKZhTWSDWZ7a49RgwH58gOCJ9uTWs1VKvaNLaHGv2hTA2KIL29hloRYZwpfGlMzxHSYgAvSMdH00vr5bZ3rk"
+    "secret_key": "sk_test_51LKsa0A5hdrVdRtKeyX3nEfmneDW2AcxnXF3KToFivuuttwy"
+                  "Nih5Mqyd7RL562hu8BuHfgdI3wpf9ZZBAI6kiJRw006N97T3JI",
+    "publishable_key": "pk_test_51LKsa0A5hdrVdRtKZhTWSDWZ7a49RgwH58gOCJ9uTWs"
+                       "1VKvaNLaHGv2hTA2KIL29hloRYZwpfGlMzxHSYgAvSMdH00vr5bZ"
+                       "3rk"
 }
 stripe.api_key = stripe_keys["secret_key"]
 
@@ -89,24 +95,12 @@ def init_database():
         db.insert_sujet(i, key, json.dumps(data[key]))
     file.close()
     # Temporaire pour tester
-    progress = {
-        "Python": {"Introduction": "S"},
-        "Ruby": {"Introduction": "S"},
-        "Java": {"Introduction": "S"},
-        "Bash": {"Introduction": "S"},
-        "C": {"Introduction": "S"},
-        "Javascript": {"Introduction": "S"},
-        "PHP": {"Introduction": "S"},
-        "HTML": {"Introduction": "S"},
-        "Go": {"Introduction": "S"},
-        "C++": {"Introduction": "S"},
-        "Swift": {"Introduction": "S"},
-        "C#": {"Introduction": "S"},
-        "Lua": {"Introduction": "S"}
-    }
-    user = create_user("username", "username@hotmail.com", "password")
-    user.set_progress(progress)
-    user.set_member(True)
+    for i in range (0,25):
+        user = create_user("username"+str(i), "username"+str(i)+"@hotmail.com", "password", user_type.STANDARD)
+        get_db().insert_user(user)
+    user = create_user("administrator", "username@hotmail.com", "password", user_type.ADMIN)
+    get_db().insert_user(user)
+    user = create_user("instructor", "instructor@ezcoding.com", "password", user_type.INSTRUCTOR)
     get_db().insert_user(user)
 
 
@@ -120,20 +114,70 @@ def a_propos():
     return render_template('about_us.html', title='About'), 200
 
 
+@app.route('/become_instructor', methods=["GET"])
+def become_instructor_get():
+    sujets = get_db().read_all_sujet()
+    sujets = [sujet.nom for sujet in sujets]
+    return render_template('request_instructor.html', title='Become an instructor', edit=False, sujets=sujets), 200
+
+
+@app.route('/become_instructor', methods=["POST"])
+def become_instructor_post():
+    first_name = request.form['firstName']
+    last_name = request.form['lastName']
+    speciality = request.form.getlist('speciality')
+    cv = None
+    letter = None
+    if "curriculum" in request.files and "cover-letter" in request.files:
+        cv = request.files['curriculum']
+        letter = request.files['cover-letter']
+    try:
+        request_obj = create_request(first_name, last_name, speciality, cv, letter)
+    except ValueError as error:
+        sujets = get_db().read_all_sujet()
+        sujets = [sujet.nom for sujet in sujets]
+        return render_template('request_instructor.html', title='Become an instructor', sujets=sujets, edit=False, error=str(error)), 200
+    get_db().insert_request(request_obj, session['user']['name'])
+    return redirect("/account")
+
+
+@app.route('/account/request/document/<document>', methods=["GET"])
+def download_cv(document):
+    id = request.args.get("id")
+    req = get_db().read_request_id(id)
+    binary_document = req.cv if document == "cv" else req.letter 
+    response = make_response(binary_document)
+    response.headers.set('Content-Type', 'application/pdf')    
+    return response, 200
+
+
+@app.route('/account/request/<id>', methods=["GET"])
+def view_request(id):
+    request = get_db().read_request_id(id)
+    sujets = get_db().read_all_sujet()
+    sujets = [sujet.nom for sujet in sujets]
+    return render_template('request_instructor.html', title='Become an instructor', sujets=sujets, edit=True, request=request), 200
+
+
 @app.route('/account', methods=["GET"])
 @authentication_required
 def compte():
-    sujets = get_db().read_all_sujet()
+    db = get_db()
+    sujets = db.read_all_sujet()
+    requests = db.read_request_username(session['user']['name'])
+    pending = False
+    if requests is not None and len(requests) > 0 and requests[-1].status == status.PENDING:
+        pending = True
     langages = []
     for sujet in sujets:
         if sujet.get_nom() in session['user']['progress']:
-            langages.append(
-                {"name": sujet.get_nom(), "logo": sujet.get_logo()})
+            langages.append({"name": sujet.get_nom(), "logo": sujet.get_logo()})
     return render_template('compte.html', title='My account',
-                           langages=langages), 200
+                           langages=langages, requests=requests,
+                           pending=pending), 200
 
 
-# ================================  devenir membre  ================================
+# =========================  devenir membre  ==========================
 
 # Permettre a un utilisateur de devenir membre
 
@@ -142,15 +186,16 @@ def get_publishable_key():
     stripe_config = {"publicKey": stripe_keys["publishable_key"]}
     return jsonify(stripe_config)
 
-    
+
 @app.route("/create-checkout-session")
 def create_checkout_session():
     session["checkout"] = True
     domain_url = "http://127.0.0.1:5000/"
     stripe.api_key = stripe_keys["secret_key"]
-    try:        
+    try:
         checkout_session = stripe.checkout.Session.create(
-            success_url=domain_url + "success?session_id={CHECKOUT_SESSION_ID}",
+            success_url=domain_url +
+            "success?session_id={CHECKOUT_SESSION_ID}",
             cancel_url=domain_url + "cancelled",
             payment_method_types=["card"],
             mode="payment",
@@ -167,6 +212,7 @@ def create_checkout_session():
     except Exception as e:
         return jsonify(error=str(e)), 403
 
+
 @app.route("/success")
 def success():
     if "checkout" not in session:
@@ -174,7 +220,7 @@ def success():
     session.pop("checkout")
     db = get_db()
     user = db.read_user_username(session['user']['name'])
-    make_member(user)
+    user.make_member()
     db.update_user_membership(user)
     session['user'] = user.session()
     return render_template("success.html")
@@ -183,14 +229,14 @@ def success():
 @app.route("/cancelled")
 def cancelled():
     if "checkout" not in session:
-            return render_template("404.html", title="Not found"), 404
+        return render_template("404.html", title="Not found"), 404
     session.pop("checkout")
     return render_template("cancelled.html")
 
 
 @app.route("/membership")
 def paiement():
-    if not is_authenticated() or session['user']['member'] == True:
+    if not is_authenticated() or session['user']['type'] == user_type.MEMBER:
         return render_template("404.html", title="Not found"), 404
     return render_template("paiement.html")
 
@@ -273,7 +319,7 @@ def register_post():
             return redirect('/register')
         if hcaptcha.verify():
             # hCaptcha ok
-            user = create_user(username, email, password)  # ValueError
+            user = create_user(username, email, password, user_type.STANDARD)  # ValueError
             db.insert_user(user)
             session["message"] = "Account created!"
             return redirect("/login")
