@@ -181,6 +181,23 @@ footer {
   color: rgb(0, 0, 0);
   background: #F5F5F5;
 }
+.node_short {
+  position: relative;
+  top:0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  width: 166px;
+  height: 166px;
+  border-radius: 40px;
+  line-height: 50px;
+  text-align: center;
+  font-size: 15px;
+  font-weight: bold;
+  color: rgb(0, 0, 0);
+  background: #F5F5F5;
+}
 
 .node__link__wrapper {
   display:inline-block;
@@ -733,6 +750,11 @@ footer {
   transform-origin: bottom left;
   transform: rotate(45deg);
 }
+<<<<<<< HEAD
+ .shortcut{
+   left: 50px;
+ }
+=======
 
 .doc_link {
   text-decoration: none;
@@ -758,3 +780,4 @@ footer {
   margin-left: 20px;
   visibility: hidden;
 }
+>>>>>>> main

@@ -94,6 +94,44 @@ function addArrows() {
   }
 }
 
+function addShortcut() {
+  var nodes = document.getElementsByClassName("node");
+  var nodes_short = document.getElementsByClassName("node_short");
+
+  for (var i = 0; i < nodes.length; i++) {
+
+
+      if(nodes[i].getAttribute("id") == nodes_short[0].getAttribute("id")){
+
+        new LeaderLine(
+          document.getElementById(nodes[i].id),
+          document.getElementById(nodes_short[1].id),
+          {
+            endPlug: endPlug,
+            endPlugSize: 0.9,
+            color: "black",
+            dash: _dash
+          }
+        );
+      } 
+      if(nodes[i].getAttribute("id") == "ensemble de données"){
+
+        new LeaderLine(
+          document.getElementById(nodes[i].id),
+          document.getElementById(nodes_short[1].id),
+          {
+            endPlug: endPlug,
+            endPlugSize: 0.9,
+            color: "black",
+            dash: _dash
+          }
+        );
+      }
+    
+
+  }
+}
+
 function openPopup() {
   document.getElementById("popup").classList.add("open-popup");
   document.getElementById("tree-container").style.pointerEvents = "none";
@@ -259,4 +297,8 @@ function disableRequestFields() {
     input_file[i].style.display = "none";
   }
   document.getElementById("cl-container").style.paddingLeft = "180px";
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> main
