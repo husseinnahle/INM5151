@@ -1,0 +1,206 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='assets/css/compte.css') }}" />
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='assets/css/admin.css') }}" />
+  <script src="{{ url_for('static', filename='assets/javascript/scriptAdmin.js') }}"></script>
+  <div class="compteContainer">
+            <div class="infoCompte">
+                <button class="tablinks" onclick="openTab(event, 'Account')">Account</button>
+                <button class="tablinks" onclick="openTab(event, 'Languages')">Languages</button>
+                <button class="tablinks" onclick="openTab(event, 'Subject')">Subject</button>
+                <button class="tablinks" onclick="openTab(event, 'Quiz')">Quiz</button>
+                <button class="tablinks" onclick="openTab(event, 'Instructor Request')">Instructor Request</button>
+            <div class="tabContainer">
+                <div id="Account" class="tabContent">
+                    <h2>Accounts</h2>
+                    <table class="fixed_header">
+                        <thead>
+                            <tr>
+                                <th>Select</th>
+                                <th scope="col">Id</th>
+                                <th scope="col">Username</th>
+                                <th scope="col">Email</th>
+                                <th scope="col">Type</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Edit</th>
+                                <th scope="col">Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for user in users %}
+                            <tr id ="{{user.id}}">
+                                <td><input type="checkbox" name="record"></td>
+                                <td scope="row"id ="id" >{{user.id}}</td>
+                                <td scope="row"id="name">{{user.name}}</td>
+                                <td id="email">{{user.email}}</td>
+                                <td id="type">{{user.type}}</td>
+                                <td id="type">active</td>
+                                <td> <button type="button" class="edit-row" id="editBtn">Edit</button></td>
+                                <td> <button type="button" class="delete-row" id="dltBtn">Delete</button></td>
+                            </tr>
+                            {%endfor%}
+                            
+                            <tfoot>
+                                <tr>
+                                    <td>
+                                        <button type="button" class="delete-rows">Delete selected Account</button>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                            
+                            
+                        </tbody>
+                    </table>
+                                <form>
+                                <input type="text" id="Username" placeholder="Username"></td>
+                                <input type="text" id="password" placeholder="password"></td>
+                                <input type="text" id="Email" placeholder="Email"></td>
+                                <select name="type" id="Type">
+                                        <option value="">--Choose a type--</option>
+                                        <option value="Administrator">Admin</option>
+                                        <option value="Instructor">Instructor</option>
+                                        <option value="Standard">Standard</option>
+                                        <option value="Member">member</option>
+                                    </select>
+                                
+                                <select name="Status" id="Status">
+                                        <option value="">--Choose a status--</option>
+                                        <option value="Active">Active</option>
+                                        <option value="Inactive">Inactive</option>
+                                </select>
+
+                            <input type="submit" class="add-row" value="Add account">
+                        </form>
+                    
+                    </div>
+                <div div id="Languages" class="tabContent">
+                    <h3>Languages</h3>
+                    <table class="fixed_header">
+                        <thead>
+                            <tr>
+                                <th>Select</th>
+                                <th scope="col">Id</th>
+                                <th scope="col">name</th>
+                                <th scope="col">Logo</th>
+                                <th scope="col">Edit</th>
+                                <th scope="col">Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        
+                        </form>
+                            
+                            <tfoot>
+                                <tr>
+                                    <td>
+                                        <button type="button" class="delete-rows">Delete selected Languages</button>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                            
+                            
+                        </tbody>
+                    </table>
+                    <form>
+                        <input type="text" id="LangagesName" placeholder="langage Name">
+                        <label for="logoFile">Select a logo file</label>
+                        <input type="file" id="logoFile" name="logoFile">
+                        <input type="submit" class="add-row" value="Add Languages">
+                    </form>
+                </div>
+                    
+                <div id="Subject" class="tabContent">
+                    <h3>Subject</h3>
+                    <table class="fixed_header">
+                        <thead>
+                            <tr>
+                                <th>Select</th>
+                                <th scope="col">Id</th>
+                                <th scope="col">Subject</th>
+                                <th scope="col">Edit</th>
+                                <th scope="col">Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        
+                        </form>
+                            
+                            <tfoot>
+                                <tr>
+                                    <td>
+                                        <button type="button" class="delete-rows">Delete selected Subject</button>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                            
+                            
+                        </tbody>
+                    </table>
+                    <form>
+                        <input type="text" id="SubjectName" placeholder="Subject Name">
+
+                        <input type="submit" class="add-row" value="Add Subject">
+                    </form>
+                </div>
+                <div id="Quiz" class="tabContent">
+                    <h3>Quiz</h3>
+
+            
+                    <table class="fixed_header">
+                        <thead>
+                            <tr>
+                                <input list="languages" name="languages" id="language"placeholder="langage Name">
+                                <datalist id="languages">
+                                  <option value="Python">
+                                  <option value="Java">
+                                  <option value="Ruby">
+                                </datalist>
+                                <input list="subjects" name="subjects" id="subject"placeholder="subject">
+                                <datalist id="subjects">
+                                  <option value="Introduction">
+                                  <option value="Operateur">
+                                  <option value="fonction">
+                                </datalist>
+                                <input type="submit"value="Display questions">
+                            </tr>
+                            <tr>
+                                <th>Select</th>
+                                <th scope="col">Id</th>
+                                <th scope="col">Question</th>
+                                <th scope="col">choice</th>
+                                <th scope="col">Answers</th>
+                                <th scope="col">Edit</th>
+                                <th scope="col">Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        
+                        </form>
+                            
+                            <tfoot>
+                                <tr>
+                                    <td>
+                                        <button type="button" class="delete-rows">Delete selected Subject</button>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                            
+                            
+                        </tbody>
+                    </table>
+                    <form>
+                        <input type="text" id="LangagesName" placeholder="langage Name">
+                        <label for="logoFile">Select a logo file</label>
+                        <input type="file" id="logoFile" name="logoFile">
+                        <input type="submit" class="add-row" value="Add Languages">
+                    </form>
+                </div>
+                    <div id="Instructor Request" class="tabContent">
+                        <h3>Instructor Request</h3>
+                    
+                    </div>
+            </div>
+        </div>
+  </div>
+{% endblock %}

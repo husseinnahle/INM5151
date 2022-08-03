@@ -49,11 +49,13 @@ class Database:
     # Inserer un utilisateur
     def insert_user(self, user):
         connection = self.get_connection()
-        connection.execute(
+        cursor = connection.cursor()
+        cursor.execute(
             'insert into user(username, email, salt, hash, progress, type) values(?, ?, ?, ?, ?, ?)',
             (user.name, user.email, user.salt, user.hash,
              json.dumps(user.progress), user.type))
         connection.commit()
+        return cursor.lastrowid
 
     # Rechercher et retourner un utilisateur selon 'username'
     def read_user_username(self, username):
@@ -66,6 +68,23 @@ class Database:
         user_obj.set_progress(json.loads(user[5]))
         return user_obj
 
+
+    # Rechercher et retourner un utilisateur selon 'username'
+    def read_users(self):
+        cursor = self.get_connection().cursor()
+        cursor.execute('select * from user')
+        users = cursor.fetchall()
+        if users is None:
+            return None
+        return (User(user[0], user[1], user[2], user[3], user[4], user[6]) for user in users)
+
+    # Rechercher et retourner un utilisateur selon 'username'
+    def delete_users(self,id):
+        connection = self.get_connection()
+        connection.execute('Delete FROM user where id = ?',(id,))
+        connection.commit()
+
+
     # Mettre à jour la progression d'un utilisateur selon 'username'
     def update_user_progress(self, user: User):
         connection = self.get_connection()
@@ -76,9 +95,9 @@ class Database:
     # Mettre à jour les info du compte d'un utilisateur selon 'username'
     def update_user_info(self, user: User):
         connection = self.get_connection()
-        connection.execute('update user set username = ?, email = ?, hash = ?'
+        connection.execute('update user set username = ?, email = ?, hash = ?, type = ?'
                            'where id = ?',
-                           (user.name, user.email, user.hash, user.id))
+                           (user.name, user.email, user.hash, user.type, user.id))
         connection.commit()
 
     def update_user_membership(self, user: User):

@@ -6,7 +6,7 @@ from .user_type import user_type
 
 def create_user(username: str, email: str, password: str, type: user_type):
     try:
-        _validate_user(username, email, password)  # ValueError
+        _validate_user(username, email, password, type)  # ValueError
     except ValueError as error:
         raise ValueError(error)
     salt = uuid.uuid4().hex
@@ -30,13 +30,14 @@ def modify_user(user, username, email, password):
     user._modify_info(username, email, hash)
 
 
-def _validate_user(username, email, password):
+def _validate_user(username, email, password, type):
     if username == "" or email == "" or password == "":
         raise ValueError("All fields are required")
     try:
         _verify_username(username)
         _verify_email(email)
         _verify_password(password)
+        _verify_type(type)
     except ValueError as error:
         raise ValueError(error)
 
@@ -55,6 +56,11 @@ def _verify_email(email):
     regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
     if not re.fullmatch(regex, email):
         raise ValueError("Invalid email")
+
+
+def _verify_type(type):
+    if type not in [type.value for type in user_type]:
+        raise ValueError("Invalid type")
 
 
 def validate_support_form(name, email, message):

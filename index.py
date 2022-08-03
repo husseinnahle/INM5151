@@ -113,6 +113,18 @@ def index():
 def a_propos():
     return render_template('about_us.html', title='About'), 200
 
+@app.route('/admin', methods=["GET"])
+def compteAdmin():
+    sujets = get_db().read_all_sujet()
+    sujets_info = [sujet.to_json() for sujet in sujets]
+    userS = get_db().read_users()
+    return render_template('admin/compteAdmin.html', sujetS=sujets_info,users=userS, title='Admin'), 200
+
+
+@app.route('/editLangage', methods=["GET"])
+def editLang():
+    return render_template('admin/editLangage.html', title='editLangage'), 200
+
 
 @app.route('/become_instructor', methods=["GET"])
 def become_instructor_get():
@@ -175,6 +187,11 @@ def compte():
     return render_template('compte.html', title='My account',
                            langages=langages, requests=requests,
                            pending=pending), 200
+
+
+@app.route('/become_instructor', methods=["GET"])
+def become_instructor():
+    return render_template('become_instr.html', title='Become instructor'), 200
 
 
 # =========================  devenir membre  ==========================
@@ -615,6 +632,34 @@ def api_modifier_compte():
         db.update_user_info(user)
     except ValueError as error:
         return jsonify({"valid": False, "reason": str(error)}), 404
+    return jsonify({"valid": True}), 200
+
+
+# Créer un nouveau compte utilisateur
+@app.route('/api/admin/compte/ajouter', methods=["GET"])
+def add_user_admin():
+    db = get_db()
+    username = request.args.get("username")
+    password = request.args.get("password")
+    email = request.args.get("email")
+    type = request.args.get("type")
+    if db.read_user_username(username):
+        # Nom utilisateur invalide
+        return jsonify({"valid": False, "reason": "Username already exists. Please enter another one"}), 404
+    try:
+        user = create_user(username, email, password, type)  # ValueError
+    except ValueError as error :
+        return jsonify({"valid": False, "reason": str(error)}), 404
+    user_id = db.insert_user(user)
+    return jsonify({"valid": True, "id": user_id}), 200
+
+
+# Supprimer un compte utilisateur
+@app.route('/api/admin/compte/supprimer', methods=["GET"])
+def api_supprimer_compte():
+    id = request.args.get('id')
+    db = get_db()
+    db.delete_users(id)
     return jsonify({"valid": True}), 200
 
 
