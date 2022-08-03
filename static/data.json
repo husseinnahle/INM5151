@@ -126,22 +126,22 @@
 				],
 				"Position" : {
 					"Left" : "150px", 
-					"Top" : "95px"
+					"Top" : "150px"
 				}
 			},
 
 			{
 				"Nom" : "Language keywords",
 				"Position" : {
-					"Left" : "-250px", 
-					"Top" : "-20px"
+					"Left" : "-125px", 
+					"Top" : "-150px"
 				}
 			},
 
 			{
 				"Nom" : "ensemble de données",
 				"Position" : {
-					"Left" : "-80px", 
+					"Left" : "-225px", 
 					"Top" : "110px"
 				}
 			},
