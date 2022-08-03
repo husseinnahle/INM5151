@@ -1,5 +1,5 @@
 var reponses = [];
-//quiz
+
 function questionSuivante() {
   document.getElementById('erreur').innerHTML = '';
   var checked = enregistrerReponse();
@@ -67,7 +67,7 @@ function post(sujet, sous_sujet) {
   document.body.appendChild(form);
   form.submit();
 }
-//END QUIZ
+
 function addArrows() {
   var nodes = document.getElementsByClassName("node");
   for (var i = 0; i < nodes.length; i++) {
@@ -297,4 +297,8 @@ function disableRequestFields() {
     input_file[i].style.display = "none";
   }
   document.getElementById("cl-container").style.paddingLeft = "180px";
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> main
