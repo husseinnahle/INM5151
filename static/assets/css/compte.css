@@ -28,10 +28,25 @@
     width: 50%;
 }
 
-.langages-container {
+#langages-container {
     margin: 50px;
+    display: none;
+    text-align: center;
 }
-
+#Progression {
+    display: none;
+    margin: 50px;
+    text-align: center;
+}
+.progression-content {
+    display: grid;
+    width: 100%;
+    height: 370px;
+    border-radius: 4px;
+    background: #2d3033;
+    margin: 0 auto;
+    overflow-y: auto;
+}
 .langages-content {
     display: grid;
     width: 100%;
@@ -41,6 +56,38 @@
     margin: 0 auto;
     overflow-y: auto;
 }
+.tabcontent {
+    display: none;
+    padding: 6px 12px;
+    border: 1px solid #ccc;
+    border-top: none;
+}
+
+
+/* Style the buttons inside the tab */
+.tab button {
+    border-radius: 4px;
+    color: #fafafa;
+    float: center;
+    border: none;
+    border-radius: 0px;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 16px;
+    transition: 0.7s;
+    font-size: 17px;
+  }
+  
+  /* Change background color of buttons on hover */
+  .tab button:hover {
+    background-color:  rgb(119, 119, 119);
+  }
+  
+  /* Create an active/current tablink class */
+  .tab button.active {
+    background-color: rgb(37, 36, 36);
+  }
+  
 
 .langage-cards {
     max-width: 100%;
