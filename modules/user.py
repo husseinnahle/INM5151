@@ -2,9 +2,9 @@ import hashlib
 import uuid
 import re
 from .user_type import user_type
+from .user_level import user_level
 
-
-def create_user(username: str, email: str, password: str, type: user_type,experience: int,level: str):
+def create_user(username: str, email: str, password: str, type: user_type,experience: int,level: user_level):
     try:
         _validate_user(username, email, password, type)  # ValueError
     except ValueError as error:
@@ -74,7 +74,7 @@ def validate_support_form(name, email, message):
 
 class User:
     def __init__(self, id: int, username: str, email: str, salt: str,   hash: str, type: user_type,experience: int,
-                 level: str):
+                 level: user_level):
         self.id = id
         self.name = username
         self.email = email

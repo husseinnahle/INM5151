@@ -146,6 +146,14 @@
 img {
     object-fit: cover;
 }
+.level {
+    margin-left: 40%;
+    width: 20%;
+    height: auto;
+}
+h3 {
+    margin-top: 2%;
+}
 
 h2 {
     padding: 0px calc(5% + 10px) 30px 0px;

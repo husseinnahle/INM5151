@@ -59,9 +59,8 @@
                 
                 <div class="progression-content">
                     <h3>{{session['user']['level']}}</h3>
-                    
-                    <h4>Total xp</h4>
-                    <p>{{session['user']['experience']}}</p>
+                    <img class="level" src ="{{ url_for('static', filename='levelLogo/Initiate.png') }}">
+                    <h4>Total xp <span style="color: blue;">{{session['user']['experience']}}</span></h4>
                 </div>
                 
             </div>

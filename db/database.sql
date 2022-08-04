@@ -13,7 +13,7 @@ create table user (
   progress text,
   type varchar,
   experience int,
-  level varchar(128)
+  level varchar
 );
 
 create table request (
