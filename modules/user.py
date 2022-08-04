@@ -94,6 +94,10 @@ class User:
             self.progress[sujet][sous_sujet] = resultat
         elif sous_sujet not in self.progress[sujet]:
             self.progress[sujet][sous_sujet] = resultat
+    def add_xp(self, xp):
+        self.experience += xp
+        if (self.experience + xp > 10):
+            self.level = user_level.INITIATE
 
     def get_name(self):
         return self.name
@@ -101,11 +105,20 @@ class User:
     def get_progress(self):
         return self.progress
 
+    def get_experience(self):
+        return self.experience
+
+    def get_level(self):
+        return self.level
+    
     def get_salt(self):
         return self.salt
 
     def set_progress(self, progress):
         self.progress = progress
+
+    def set_experience(self, experience):
+        self.experience = experience
 
     def _modify_info(self, name, email, hash):
         self.name = name

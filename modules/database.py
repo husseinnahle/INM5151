@@ -90,6 +90,10 @@ class Database:
         connection = self.get_connection()
         connection.execute('update user set progress = ? where username = ?',
                            (json.dumps(user.get_progress()), user.get_name()))
+        connection.execute('update user set level = ? where username = ?',
+                           (user.get_level(), user.get_name()))
+        connection.execute('update user set experience = ? where username = ?',
+                           (user.get_experience(), user.get_name()))
         connection.commit()
 
     # Mettre à jour les info du compte d'un utilisateur selon 'username'
