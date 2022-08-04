@@ -10,6 +10,8 @@
     <link rel="icon" type="image/png" href="{{ url_for('static',filename='logo/ezcoding-window.png') }}" />
     <script defer src="https://use.fontawesome.com/releases/v5.14.0/js/all.js"></script>
     <script src="https://js.stripe.com/v3/"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.js"></script>
+    <script text="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.0/socket.io.js"></script>
   </head>
   <div class="flex-wrapper">
     <body>
@@ -42,7 +44,7 @@
                 <a class="nav-link" href="/support">Support</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="/about">About</a>
+                <a class="nav-link" href="/about">About Us</a>
               </li>
             </ul>
             {% if "user" in session and session['user']['type'] == 'ADMIN' %}
@@ -71,7 +73,7 @@
             <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button"><i class="fab fa-linkedin-in"></i></a>
         </div>
         <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
-          © 2020 Copyright:<a class="text-white" href="/">Ezcoding.com</a>
+          © 2020 Copyright: <a class="text-white" href="/">EZCoding.com</a>
         </div>
       </footer>
     </div>

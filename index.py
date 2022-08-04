@@ -20,6 +20,7 @@ from .modules.user_type import user_type
 from .modules.status import status
 from .modules.request import create_request
 from functools import wraps
+from flask_socketio import SocketIO, send
 from flask_hcaptcha import hCaptcha
 from flask_mail import Mail, Message
 
@@ -81,6 +82,27 @@ def close_connection(exception):
     db = getattr(g, 'database', None)
     if db is not None:
         db.disconnect()
+
+
+# testing with chatbox
+
+
+app.config['SECRET'] = "secret!123"
+socketio = SocketIO(app, cors_allowed_origins="*")
+
+@socketio.on('message')
+def handle_message(message):
+    print("Received message: " + message)
+    if message != "User connected!":
+        send(message, broadcast=True)
+
+
+@app.route('/chatbox', methods=["GET"])
+def chatbox():
+    return render_template('chatbox.html', title='Chatbox'), 200
+
+if __name__ == "__main__":
+    socketio.run(app, host="localhost")
 
 
 # Initialiser la base de données

@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div style= "font-family: Arial, serif; background-color: rgba(0, 0, 0, 0.664); ">
+<script type="text/javascript">
+    $(document).ready(function(){
+        socket = io();
+        socket.connect('http//localhost:5000');
+        socket.on('connect', function() {
+            socket.send("User connected!");
+        });
+
+        socket.on('message', function(data) {
+            $('#messages').append($('<p>').text(data));
+        });
+
+        $('sendBtn').on('click', function (){
+            socket.send($('#username').val() + ': ' + $('#message').val());
+            $('#message').val('');
+        });
+
+    })
+</script>
+<div class="chatBox form-popup">
+<div id="messages" style="background-color: rgb(94, 12, 12);">
+</div>
+
+<input class="inputChat" type="text" id="username" placeholder="Username">
+<input class="inputChat" type="text" id="message" placeholder="Message">
+<button id="sendBtn" class="sendBtn">Send message</button>
+</div>
+</div>
+
+{% endblock %}
+    

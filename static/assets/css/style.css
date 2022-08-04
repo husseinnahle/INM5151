@@ -591,6 +591,8 @@ footer {
   transform: translate(-50%, 0);
 }
 
+/* CSS POUR PAIEMENT */
+
 .price{
   display: flex;
   font-size: 3.5rem;
@@ -734,6 +736,8 @@ footer {
   transform: rotate(45deg);
 }
 
+
+
 .doc_link {
   text-decoration: none;
   color: white;
@@ -757,4 +761,70 @@ footer {
   background-color: #2d3033;
   margin-left: 20px;
   visibility: hidden;
+}
+
+
+/* CSS POUR LE CHATBOX */
+
+.sendBtn {
+
+  background: #f83470;
+  border: 0;
+  border-radius: 4px;
+  padding: 12px 10px;
+  color: #e4e4e4;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: 500;
+  line-height: inherit;
+  cursor: pointer;
+  text-shadow: 0.5 0.1em 0.1em rgba(255, 255, 255, 0.253);
+  text-transform: uppercase;
+}
+
+.chatBox{
+  text-align: center;
+}
+
+.inputChat{ 
+  background: #e4e4e4;  
+  border: 0;
+  border-radius: 4px;
+  box-sizing: border-box;
+  padding: 12px 20px;  
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: 500;
+  line-height: inherit;
+}
+
+
+/* CSS POUR PAGE ABOUT US */
+
+.aboutText{
+  padding: 4px 0;
+  color: #ffffff;
+  font-size: 18px;
+  font-weight: 700;  
+  text-align: justify;
+}
+
+.about-popup {
+  z-index: 15;
+  background: #212529;
+  width: 750px;
+  border-radius: 4px;
+  box-shadow: 0 0 50px black;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.about-image{
+  border-radius: 25px;
+  display: block; 
+  width: 600px;
+  height: auto;
+  display: block;
+  margin: 0 auto;
 }
