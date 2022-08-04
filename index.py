@@ -541,7 +541,7 @@ def update_user_progress():
     resultat = "E"
     if session["result"]["note"] > 79:
         resultat = "S"
-    user.add_xp(10)
+        user.update_xp_level(10)
     user.update_progress(sujet, sous_sujet, resultat)
     db.update_user_progress(user)
     session["user"] = user.session()
