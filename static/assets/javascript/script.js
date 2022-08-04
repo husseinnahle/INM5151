@@ -1,5 +1,5 @@
 var reponses = [];
-
+//quiz
 function questionSuivante() {
   document.getElementById('erreur').innerHTML = '';
   var checked = enregistrerReponse();
@@ -67,7 +67,7 @@ function post(sujet, sous_sujet) {
   document.body.appendChild(form);
   form.submit();
 }
-
+//END QUIZ
 function addArrows() {
   var nodes = document.getElementsByClassName("node");
   for (var i = 0; i < nodes.length; i++) {
@@ -94,7 +94,37 @@ function addArrows() {
   }
 }
 
+function addShortcut() {
+  var nodes = document.getElementsByClassName("node");
+  var nodes_short = document.getElementsByClassName("node_short");
+  for (var i = 0; i < nodes_short.length; i++) {
+    for(var j = 0; j < nodes_short[i].classList.length; j++){
 
+
+      if(nodes_short[i].classList.length > 1){
+
+      for(var k= 0; k < nodes.length; k++){
+
+        if(nodes[k].getAttribute("id") == nodes_short[i].classList.item(j)){
+
+        new LeaderLine(
+          document.getElementById(nodes[k].id),
+          document.getElementById(nodes_short[0].id),
+          {
+            endPlug: endPlug,
+            endPlugSize: 0.9,
+            color: "black",
+            dash: _dash
+          }
+        );
+        }
+
+      }
+    }
+
+    }
+  }
+}
 
 function openPopup() {
   document.getElementById("popup").classList.add("open-popup");
@@ -261,8 +291,5 @@ function disableRequestFields() {
     input_file[i].style.display = "none";
   }
   document.getElementById("cl-container").style.paddingLeft = "180px";
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> main
+

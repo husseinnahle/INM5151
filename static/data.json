@@ -91,7 +91,7 @@
 			{
 				"Nom" : "Shortcut",
 				"Previous" : "Variables",
-				"Next":"ensemble de données",
+				"Next":"Data_Set",
 				"Quiz" : [
 					{
 						"Question" : "What is a correct syntax to output \"Hello World\" in Python?",
@@ -139,7 +139,7 @@
 			},
 
 			{
-				"Nom" : "ensemble de données",
+				"Nom" : "Data_Set",
 				"Position" : {
 					"Left" : "-225px", 
 					"Top" : "110px"

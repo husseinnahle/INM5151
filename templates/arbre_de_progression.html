@@ -57,10 +57,13 @@
             <div class="node" id="{{ sous_sujet }}" name="current" style="border: 4px solid gold; left:{{ left }}; top: {{ top }}">
             {% set ns.blocked = true %}
         {% endif %}
-        {% else %}           
-          <span class="node_short" id="{{previous}}"></span> 
-          <div class="node_short" id="{{ sous_sujet }}" name="current" style="border: 4px solid gold; left:{{ left }}; top: {{ top }}">
-          <span class="node_short {{next}} {{previous}}"></span> 
+        {% else %}
+          {% if ('user' in session) and (sujet in session['user']['progress']) and (sous_sujet in session['user']['progress'][sujet]) and (session['user']['progress'][sujet][sous_sujet] == "S") %}
+             <div class="node_short {{previous}} {{next}} " id="{{ sous_sujet }}" name="current" style="border: 4px solid #19CE95; left:{{ left }}; top: {{ top }}">        
+          {% else %}
+              <div class="node_short {{previous}} {{next}}" id="{{ sous_sujet }}" name="current" style="border: 4px solid gold; left:{{ left }}; top: {{ top }}">
+              {% set ns.blocked = true %}
+          {% endif %}
         {% endif %}
           <a class="node__link__wrapper" href="/languages/{{ sujet }}?sous-sujet={{ sous_sujet }}">
               <span class="node__name">{{ ss["Nom"] }}</span>
