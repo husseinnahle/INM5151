@@ -4,14 +4,14 @@ import re
 from .user_type import user_type
 
 
-def create_user(username: str, email: str, password: str, type: user_type):
+def create_user(username: str, email: str, password: str, type: user_type,experience: int,level: str):
     try:
         _validate_user(username, email, password, type)  # ValueError
     except ValueError as error:
         raise ValueError(error)
     salt = uuid.uuid4().hex
     hash = hashlib.sha512(str(password + salt).encode("utf-8")).hexdigest()
-    return User(0, username, email, salt, hash, type)
+    return User(0, username, email, salt, hash, type, experience,level)
 
 
 def modify_user(user, username, email, password):
@@ -73,8 +73,8 @@ def validate_support_form(name, email, message):
 
 
 class User:
-    def __init__(self, id: int, username: str, email: str, salt: str,
-                 hash: str, type: user_type):
+    def __init__(self, id: int, username: str, email: str, salt: str,   hash: str, type: user_type,experience: int,
+                 level: str):
         self.id = id
         self.name = username
         self.email = email
@@ -82,6 +82,8 @@ class User:
         self.hash = hash
         self.type = type
         self.progress = {}
+        self.experience = experience
+        self.level = level
 
     def update_progress(self, sujet, sous_sujet, resultat):
         if sujet not in self.progress:
@@ -120,5 +122,7 @@ class User:
             "type": self.type,
             "email": self.email,
             "progress": self.progress,
+            "experience": self.experience,
+            "level": self.level,
         }
         return session

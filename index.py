@@ -96,11 +96,13 @@ def init_database():
     file.close()
     # Temporaire pour tester
     for i in range (0,25):
-        user = create_user("username"+str(i), "username"+str(i)+"@hotmail.com", "password", user_type.STANDARD)
+        user = create_user("username"+str(i), "username"+str(i)+"@hotmail.com", "password", user_type.STANDARD,0,"Beginner")
         get_db().insert_user(user)
-    user = create_user("administrator", "username@hotmail.com", "password", user_type.ADMIN)
+    user = create_user("administrator", "username@hotmail.com", "password", user_type.ADMIN,0,"Beginner")
     get_db().insert_user(user)
-    user = create_user("instructor", "instructor@ezcoding.com", "password", user_type.INSTRUCTOR)
+    user = create_user("instructor", "instructor@ezcoding.com", "password", user_type.INSTRUCTOR,0,"Beginner")
+    get_db().insert_user(user)
+    user = create_user("username26", "username26@hotmail.com", "password", user_type.STANDARD,10,"Initiate")
     get_db().insert_user(user)
 
 

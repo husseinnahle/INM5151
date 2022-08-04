@@ -11,7 +11,9 @@ create table user (
   salt varchar(32),
   hash varchar(128),
   progress text,
-  type varchar
+  type varchar,
+  experience int,
+  level varchar(128)
 );
 
 create table request (
