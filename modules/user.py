@@ -97,7 +97,7 @@ class User:
     
     def update_xp_level(self, xp):
         self.experience += xp
-        if (self.experience + xp > 20):
+        if (self.experience + xp > 50):
             self.level = user_level.ADVENTUROR
         elif (self.experience + xp > 10):
             self.level = user_level.INITIATE
