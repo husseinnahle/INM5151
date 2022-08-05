@@ -759,25 +759,7 @@ footer {
   visibility: hidden;
 }
 
-.compteAdmin {
-  background-color: #212529;
-  border-radius: 4px;
-  color: white;
-  padding: 30px;
-  width: 100%;
-  min-height: 80vh;
-}
-
-.nav-item:hover, .nav-item {
-  text-decoration: none;
-  color: white;
-}
-
-.tab-pane {
-  padding:20px;
-}
-
-.selected:target td {
-  background-color: grey;
-  transition: all 1s linear;
+.button-container {
+  display: flex;
+  justify-content: center;
 }

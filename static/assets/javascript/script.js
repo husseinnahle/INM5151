@@ -260,20 +260,3 @@ function disableRequestFields() {
   }
   document.getElementById("cl-container").style.paddingLeft = "180px";
 }
-
-function toggleRow(el) {
-  el.classList.toggle("selected");
-  el.classList.toggle("table-light");
-}
-
-function chooseAction(action) {
-  var action_elements = document.getElementsByClassName("action");
-  for (var i = 0; i < action_elements.length; i++) {
-    action_elements[i].style.display = "none";
-  }
-
-  var elements = document.getElementsByClassName(action);
-  for (var i = 0; i < elements.length; i++) {
-    elements[i].style.display = "block";
-  }
-}

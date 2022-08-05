@@ -641,11 +641,12 @@ def add_user_admin():
     password = request.args.get("password")
     email = request.args.get("email")
     type = request.args.get("type")
+    print(type)
     if db.read_user_username(username):
         # Nom utilisateur invalide
         return jsonify({"valid": False, "reason": "Username already exists. Please enter another one"}), 404
     try:
-        user = create_user(username, email, password, type)  # ValueError
+        user = create_user(username, email, password, type.upper())  # ValueError
     except ValueError as error :
         return jsonify({"valid": False, "reason": str(error)}), 404
     user_id = db.insert_user(user)

@@ -1,25 +1,30 @@
 {% extends "base.html" %}
 
 {% block content %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='assets/css/admin.css') }}" />
+    <script src="{{ url_for('static', filename='assets/javascript/scriptAdmin.js') }}"></script>
     <div class="compteAdmin">
-        <nav>
-            <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                <a class="nav-item nav-link active" id="nav-accounts-tab" data-bs-toggle="tab" href="#nav-accounts" role="tab" aria-controls="nav-accounts" aria-selected="true">Accounts</a>
-                <a class="nav-item nav-link" id="nav-requests-tab" data-bs-toggle="tab" href="#nav-requests" role="tab" aria-controls="nav-requests" aria-selected="false">Requests</a>
+        <div id="tabnav">
+            <div class="dropdown">
+                <button class="dropdown-toggle tablinks account" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false" onclick="openTab(event, 'Account')">
+                    Account
+                </button>
+                <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
+                    <li class="dropdown-item" onclick="chooseAction('view')">View</li>
+                    <li class="dropdown-item" onclick="chooseAction('add')">Add</li>
+                    <li class="dropdown-item" onclick="chooseAction('edit')">Edit</li>
+                    <li class="dropdown-item" onclick="chooseAction('delete')">Delete</li>
+                </ul>
             </div>
-        </nav>
+            <button class="tablinks" onclick="openTab(event, 'Instructor Request')">Instructor Request</button>
+            <button class="tablinks" onclick="openTab(event, 'Languages')">Languages</button>
+        </div>
 
-        <div class="tab-content" id="nav-tabContent">
-            <div class="tab-pane fade show active" id="nav-accounts" role="tabpanel" aria-labelledby="nav-accounts-tab">
-
-                <select name="action" id="action" onchange="chooseAction(this.value)">
-                    <option value=""></option>
-                    <option value="add">Add</option>
-                    <option value="edit">Edit</option>
-                    <option value="delete">Delete</option>
-                </select>
+        <div class="tabContainer">
+            <div id="Account" class="tabContent">
 
                 <div class="action add" id="add-account" style="display:none;">
+                    <h4>Add account</h4><br>
                     <div class="form-group">
                         <label for="username">Username</label>
                         <input type="text" id="username" name="username" required />
@@ -34,7 +39,7 @@
                     </div>
                     <div class="form-group">
                         <label for="type">Type</label>
-                        <select name="type" id="Type" required>
+                        <select name="type" id="type" required>
                             <option value="">--Choose a type--</option>
                             <option value="ADMIN">Administrator</option>
                             <option value="INSTRUCTOR">Instructor</option>
@@ -42,10 +47,13 @@
                             <option value="STANDARD">Standard</option>
                         </select>
                     </div>
+                    <div id="form-popup-error-container"></div>
+                    <div class="button-container">
+                        <button class="" id="addUserButton" onclick="addUser()">Add account</button>
+                    </div>
                 </div>
 
-
-                <table class="table table-dark table-hover">
+                <table class="table table-dark table-hover" id="view">
                     <thead>
                         <tr>
                             <th scope="col">Id</th>
@@ -53,10 +61,10 @@
                             <th scope="col">Email</th>
                             <th scope="col">Type</th>
                             <th scope="col" class="action edit" style="display:none">Edit type</th>
-                            <th scope="col" class="action delete" style="display:none"></th>
+                            <th scope="col" class="action delete" style="display:none">Delete</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="view-body">
                         {% for user in users %}
                             <tr id="{{user.id}}" onclick="toggleRow(this)">
                                 <td scope="row">{{user.id}}</td>
@@ -64,7 +72,7 @@
                                 <td scope="row">{{user.email}}</td>
                                 <td scope="row" id="type">{{user.type}}</td>
                                 <td scope="row" class="action edit" style="display:none">
-                                    <select name="type" id="Type">
+                                    <select name="type" id="type">
                                         <option value="">--Choose a type--</option>
                                         <option value="ADMIN">Administrator</option>
                                         <option value="INSTRUCTOR">Instructor</option>
@@ -75,14 +83,14 @@
                                     <button onclick="editRow('{{user.id}}')">Done</button>
                                     <button onclick="cancelEditRow('{{user.id}}')">Cancel</button>
                                 </td>
-                                <td scope="row" class="action delete" style="display:none"><button onclick="deleteRow('{{user.id}}')">Delete</button></td>
+                                <td scope="row" class="action delete" style="display:none"><button onclick="deleteUser('{{user.id}}')">Delete</button></td>
                             </tr>
                         {% endfor %}
                     </tbody>
                 </table>
-
             </div>
-            <div class="tab-pane fade show" id="nav-requests" role="tabpanel" aria-labelledby="nav-requests-tab">
+
+            <div id="Instructor Request" class="tabContent">
                 <table class="table table-dark table-hover">
                     <thead>
                         <tr>
@@ -98,7 +106,10 @@
                             </tr>
                         {% endfor %}
                     </tbody>
-                </table>
+                </table>                
+            </div>
+
+            <div div id="Languages" class="tabContent">
             </div>
         </div>
     </div>
