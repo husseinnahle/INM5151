@@ -1,6 +1,6 @@
 export FLASK_APP=index.py
 
-run:
+run: db
 	flask run --host=0.0.0.0
 
 db:

@@ -51,9 +51,9 @@ class Database:
         connection = self.get_connection()
         cursor = connection.cursor()
         cursor.execute(
-            'insert into user(username, email, salt, hash, progress, type) values(?, ?, ?, ?, ?, ?)',
+            'insert into user(username, email, salt, hash, progress, type, experience, level) values(?, ?, ?, ?, ?, ?, ?, ?)',
             (user.name, user.email, user.salt, user.hash,
-             json.dumps(user.progress), user.type))
+             json.dumps(user.progress), user.type, user.experience, user.level))
         connection.commit()
         return cursor.lastrowid
 
@@ -64,7 +64,7 @@ class Database:
         user = cursor.fetchone()
         if user is None:
             return None
-        user_obj = User(user[0], user[1], user[2], user[3], user[4], user[6])
+        user_obj = User(user[0], user[1], user[2], user[3], user[4], user[6], user[7], user[8])
         user_obj.set_progress(json.loads(user[5]))
         return user_obj
 
@@ -76,7 +76,7 @@ class Database:
         users = cursor.fetchall()
         if users is None:
             return None
-        return (User(user[0], user[1], user[2], user[3], user[4], user[6]) for user in users)
+        return (User(user[0], user[1], user[2], user[3], user[4], user[6], user[7], user[8]) for user in users)
 
     # Rechercher et retourner un utilisateur selon 'username'
     def delete_users(self,id):
@@ -90,14 +90,18 @@ class Database:
         connection = self.get_connection()
         connection.execute('update user set progress = ? where username = ?',
                            (json.dumps(user.get_progress()), user.get_name()))
+        connection.execute('update user set level = ? where username = ?',
+                           (user.get_level(), user.get_name()))
+        connection.execute('update user set experience = ? where username = ?',
+                           (user.get_experience(), user.get_name()))
         connection.commit()
 
     # Mettre à jour les info du compte d'un utilisateur selon 'username'
     def update_user_info(self, user: User):
         connection = self.get_connection()
-        connection.execute('update user set username = ?, email = ?, hash = ?, type = ?'
+        connection.execute('update user set username = ?, email = ?, hash = ?, type = ?, experience = ?, level = ?'
                            'where id = ?',
-                           (user.name, user.email, user.hash, user.type, user.id))
+                           (user.name, user.email, user.hash, user.type, user.experience, user.level, user.id))
         connection.commit()
 
     def update_user_type(self, user: User):
