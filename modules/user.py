@@ -2,16 +2,16 @@ import hashlib
 import uuid
 import re
 from .user_type import user_type
+from .user_level import user_level
 
-
-def create_user(username: str, email: str, password: str, type: user_type):
+def create_user(username: str, email: str, password: str, type: user_type,experience: int,level: user_level):
     try:
         _validate_user(username, email, password, type)  # ValueError
     except ValueError as error:
         raise ValueError(error)
     salt = uuid.uuid4().hex
     hash = hashlib.sha512(str(password + salt).encode("utf-8")).hexdigest()
-    return User(0, username, email, salt, hash, type)
+    return User(0, username, email, salt, hash, type, experience,level)
 
 
 def modify_user(user, username, email, password):
@@ -73,8 +73,8 @@ def validate_support_form(name, email, message):
 
 
 class User:
-    def __init__(self, id: int, username: str, email: str, salt: str,
-                 hash: str, type: user_type):
+    def __init__(self, id: int, username: str, email: str, salt: str,   hash: str, type: user_type,experience: int,
+                 level: user_level):
         self.id = id
         self.name = username
         self.email = email
@@ -82,6 +82,8 @@ class User:
         self.hash = hash
         self.type = type
         self.progress = {}
+        self.experience = experience
+        self.level = level
 
     def update_progress(self, sujet, sous_sujet, resultat):
         if sujet not in self.progress:
@@ -92,6 +94,14 @@ class User:
             self.progress[sujet][sous_sujet] = resultat
         elif sous_sujet not in self.progress[sujet]:
             self.progress[sujet][sous_sujet] = resultat
+    
+    def update_xp_level(self, xp):
+        self.experience += xp
+        if (self.experience + xp > 50):
+            self.level = user_level.ADVENTUROR
+        elif (self.experience + xp > 10):
+            self.level = user_level.INITIATE
+        
 
     def get_name(self):
         return self.name
@@ -99,11 +109,20 @@ class User:
     def get_progress(self):
         return self.progress
 
+    def get_experience(self):
+        return self.experience
+
+    def get_level(self):
+        return self.level
+    
     def get_salt(self):
         return self.salt
 
     def set_progress(self, progress):
         self.progress = progress
+
+    def set_experience(self, experience):
+        self.experience = experience
 
     def _modify_info(self, name, email, hash):
         self.name = name
@@ -120,5 +139,7 @@ class User:
             "type": self.type,
             "email": self.email,
             "progress": self.progress,
+            "experience": self.experience,
+            "level": self.level,
         }
         return session

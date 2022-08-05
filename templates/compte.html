@@ -2,6 +2,7 @@
 
 {% block content %}
   <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='assets/css/compte.css') }}" />
+  <script src="{{ url_for('static', filename='assets/javascript/compte.js') }}"></script>
   <div class="compteContainer">
         <div class="infoCompte">
             <div class="infoCompte-form">
@@ -31,7 +32,11 @@
         </div>
 
         <div class="langages">
-            <div class="langages-container">
+            <div class="tab">
+                <button class="tablinks" onclick="openTab(event, 'langages-container')">Languages</button>
+                <button class="tablinks" onclick="openTab(event, 'Progression')">Progression</button>
+            </div>
+            <div id="langages-container" class="tabContent">
                 <h2>Languages</h2>
                 <div class="langages-content">
                     <div class="langage-cards">
@@ -48,6 +53,26 @@
                         </a>
                     </div>
                 </div>
+            </div>
+            <div id="Progression" class="tabContent">
+                <h2>Progression</h2>
+                
+                <div class="progression-content">
+                    
+                    <h3>{{session['user']['level']}}</h3>
+                    {% if session['user']['level'] == "Beginner" %}
+                        <img class="level" src ="{{ url_for('static', filename='levelLogo/Beginner.png')}}">
+                    {% endif %}
+                    {% if session['user']['level'] == "Initiate" %}
+                        <img class="level" src ="{{ url_for('static', filename='levelLogo/Initiate.png')}}">
+                    {% endif %}
+                    {% if session['user']['level'] == "Adventuror" %}
+                        <img class="level" src ="{{ url_for('static', filename='levelLogo/Adventuror.png')}}">
+                    {% endif %}
+                    
+                    <h4>Total xp <span style="color: blue;">{{session['user']['experience']}}</span></h4>
+                </div>
+                
             </div>
         </div>
   </div>
