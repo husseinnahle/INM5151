@@ -100,11 +100,18 @@ class Database:
                            (user.name, user.email, user.hash, user.type, user.id))
         connection.commit()
 
-    def update_user_membership(self, user: User):
+    def update_user_type(self, user: User):
         connection = self.get_connection()
         connection.execute('update user set type = ?'
                            'where id = ?',
                            (user.type, user.id))
+        connection.commit()
+        
+    def update_user_type(self, id, type):
+        connection = self.get_connection()
+        connection.execute('update user set type = ?'
+                           'where id = ?',
+                           (type, id))
         connection.commit()
 
     def insert_request(self, request):
@@ -116,6 +123,12 @@ class Database:
                              sqlite3.Binary(request.cv.read()),
                              sqlite3.Binary(request.letter.read()),
                              request.status, request.date))
+        connection.commit()
+        
+    def update_request_status(self, request):
+        connection = self.get_connection()
+        connection.execute('update request set status = ? where id = ?',
+                            (request.status, request.id))
         connection.commit()
 
     def read_request_username(self, username):

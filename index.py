@@ -178,6 +178,7 @@ def view_request(id):
 @authentication_required
 def compte():
     db = get_db()
+    session['user'] = db.read_user_username(session['user']['name']).session()
     sujets = db.read_all_sujet()
     requests = db.read_request_username(session['user']['name'])
     pending = False
@@ -241,7 +242,7 @@ def success():
     db = get_db()
     user = db.read_user_username(session['user']['name'])
     user.make_member()
-    db.update_user_membership(user)
+    db.update_user_type(user)
     session['user'] = user.session()
     return render_template("success.html")
 
@@ -660,6 +661,33 @@ def api_supprimer_compte():
     db = get_db()
     db.delete_users(id)
     return jsonify({"valid": True}), 200
+
+
+# Modifier le type d'un compte utilisateur
+@app.route('/api/admin/compte/modifier', methods=["GET"])
+def api_modifierA_compte():
+    id = request.args.get('id')
+    type = request.args.get('type')
+    db = get_db()
+    db.update_user_type(id, type)
+    return jsonify({"valid": True}), 200
+
+
+@app.route('/admin/request/<id>', methods=["POST"])
+def request_instructor(id):
+    db = get_db()
+    req_status = request.args.get('status')
+    req = db.read_request_id(id)
+    if req_status == status.ACCEPTED:
+        req.status = status.ACCEPTED
+        db.update_request_status(req)
+        user = db.read_user_username(req.username)
+        user.type = user_type.INSTRUCTOR
+        db.update_user_type(user.id, user.type)
+    else:
+        req.status = status.REFUSED
+        db.update_request_status(req)
+    return redirect("/admin")
 
 
 # Temporaire pour tester la progression

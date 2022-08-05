@@ -20,6 +20,10 @@
             <button class="tablinks" onclick="openTab(event, 'Languages')">Languages</button>
         </div>
 
+        <div class="action delete edit" id="delete-account" style="display:none">
+            <button class="action delete" id="delete-account" style="display:none" onclick="deleteUser()">Delete</button>
+        </div>
+
         <div class="tabContainer">
             <div id="Account" class="tabContent">
 
@@ -27,19 +31,19 @@
                     <h4>Add account</h4><br>
                     <div class="form-group">
                         <label for="username">Username</label>
-                        <input type="text" id="username" name="username" required />
+                        <input class="reset" type="text" id="username" name="username" required />
                     </div>
                     <div class="form-group">
                         <label for="email">Email</label>
-                        <input type="text" id="email" name="email" required />
+                        <input class="reset" type="text" id="email" name="email" required />
                     </div>
                     <div class="form-group">
                         <label for="password">Password</label>
-                        <input type="password" id="password" name="password" required />
+                        <input class="reset" type="password" id="password" name="password" required />
                     </div>
                     <div class="form-group">
                         <label for="type">Type</label>
-                        <select name="type" id="type" required>
+                        <select class="reset" name="type" id="type" required>
                             <option value="">--Choose a type--</option>
                             <option value="ADMIN">Administrator</option>
                             <option value="INSTRUCTOR">Instructor</option>
@@ -60,30 +64,24 @@
                             <th scope="col">Username</th>
                             <th scope="col">Email</th>
                             <th scope="col">Type</th>
-                            <th scope="col" class="action edit" style="display:none">Edit type</th>
-                            <th scope="col" class="action delete" style="display:none">Delete</th>
                         </tr>
                     </thead>
                     <tbody id="view-body">
                         {% for user in users %}
-                            <tr id="{{user.id}}" onclick="toggleRow(this)">
+                            <tr id="{{user.id}}" onclick="toggleRow(this, 'false')">
                                 <td scope="row">{{user.id}}</td>
                                 <td scope="row">{{user.name}}</td>
                                 <td scope="row">{{user.email}}</td>
-                                <td scope="row" id="type">{{user.type}}</td>
+                                <td scope="row" class="typeCell {{user.id}}">{{user.type}}</td>
                                 <td scope="row" class="action edit" style="display:none">
-                                    <select name="type" id="type">
-                                        <option value="">--Choose a type--</option>
-                                        <option value="ADMIN">Administrator</option>
-                                        <option value="INSTRUCTOR">Instructor</option>
-                                        <option value="MEMBER">Member</option>
-                                        <option value="STANDARD">Standard</option>
-                                        <option value="{{user.type}}" id="previous_option" style="display:none"></option>
+                                    <select name="type" id="type" onchange="editUser({{user.id}}, this)">
+                                        <option value="">{{user.type}}</option>
+                                        <option value="ADMIN">ADMIN</option>
+                                        <option value="INSTRUCTOR">INSTRUCTOR</option>
+                                        <option value="MEMBER">MEMBER</option>
+                                        <option value="STANDARD">STANDARD</option>
                                     </select>
-                                    <button onclick="editRow('{{user.id}}')">Done</button>
-                                    <button onclick="cancelEditRow('{{user.id}}')">Cancel</button>
                                 </td>
-                                <td scope="row" class="action delete" style="display:none"><button onclick="deleteUser('{{user.id}}')">Delete</button></td>
                             </tr>
                         {% endfor %}
                     </tbody>
@@ -96,14 +94,18 @@
                         <tr>
                             <th scope="col">Request id</th>
                             <th scope="col">User</th>
+                            <th scope="col">Date</th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for request in requests %}
-                            <tr id="{{ request.id }}" onclick="window.location.href='/account/request/{{ request.id }}'">
-                                <td scope="row">{{request.id}}</td>
-                                <td scope="row">{{request.username}}</td>
-                            </tr>
+                            {% if request.status == "PENDING" %}
+                                <tr id="{{ request.id }}" onclick="window.location.href='/account/request/{{ request.id }}'">
+                                    <td scope="row">{{request.id}}</td>
+                                    <td scope="row">{{request.username}}</td>
+                                    <td scope="row">{{request.date}}</td>
+                                </tr>
+                            {% endif %}
                         {% endfor %}
                     </tbody>
                 </table>                

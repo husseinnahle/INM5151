@@ -260,3 +260,11 @@ function disableRequestFields() {
   }
   document.getElementById("cl-container").style.paddingLeft = "180px";
 }
+
+function requestInstructor(id, status) {
+  const form = document.createElement('form');
+  form.method = "POST";
+  form.action = '/admin/request/' + id + '?status=' + status;
+  document.body.appendChild(form);
+  form.submit();
+}
