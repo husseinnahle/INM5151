@@ -15,7 +15,7 @@ function openTab(evt, tabName) {
 }
 
 function toggleRow(el, exception) {
-  if (!document.getElementById("navbarDarkDropdownMenuLink").innerText.includes("Delete") && exception == "false") {
+  if (document.getElementById("action").innerText != "delete" && exception == "false") {
     return;
   }
   el.classList.toggle("selected");
@@ -24,6 +24,7 @@ function toggleRow(el, exception) {
   
 function chooseAction(action) {
   document.querySelectorAll(".selected").forEach(el => toggleRow(el, 'true'));
+  document.getElementById("action").innerText = action;
   var action_elements = document.getElementsByClassName("action");
   for (var i = 0; i < action_elements.length; i++) {
     action_elements[i].style.display = "none";
@@ -60,24 +61,21 @@ function addUser() {
           return
       }
       var markup = `
-          <tr id="${jsonObject['id']}" href="#${jsonObject['id']}" onclick="toggleRow(this)">
-            <td scope="row">${jsonObject['id']}</td>
-            <td scope="row">${username}</td>
-            <td scope="row">${email}</td>
-            <td scope="row" id="type">${type}</td>
-            <td scope="row" class="action edit" style="display:none">
-                <select name="type" id="Type">
-                    <option value="">--Choose a type--</option>
-                    <option value="ADMIN">Administrator</option>
-                    <option value="INSTRUCTOR">Instructor</option>
-                    <option value="MEMBER">Member</option>
-                    <option value="STANDARD">Standard</option>
-                    <option value="{{user.type}}" id="previous_option" style="display:none"></option>
-                </select>
-                <button onclick="editRow('${jsonObject['id']}')">Done</button>
-                <button onclick="cancelEditRow('${jsonObject['id']}')">Cancel</button>
-            </td>
-          </tr>`;
+          <tr id="${jsonObject["id"]}" onclick="toggleRow(this, 'false')">
+          <td scope="row">${jsonObject["id"]}</td>
+          <td scope="row">${username}</td>
+          <td scope="row">${email}</td>
+          <td scope="row" class="typeCell ${jsonObject["id"]}">${type}</td>
+          <td scope="row" class="action edit" style="display:none">
+              <select name="type" id="type" onchange="editUser(${jsonObject["id"]}, this)">
+                  <option value="">${type}</option>
+                  <option value="ADMIN">ADMIN</option>
+                  <option value="INSTRUCTOR">INSTRUCTOR</option>
+                  <option value="MEMBER">MEMBER</option>
+                  <option value="STANDARD">STANDARD</option>
+              </select>
+          </td>
+      </tr>`;
       document.getElementById('view-body').innerHTML += markup;
       document.querySelectorAll('.reset').forEach(el => el.value = '');
       chooseAction('view');

@@ -103,13 +103,6 @@ class Database:
                            'where id = ?',
                            (user.name, user.email, user.hash, user.type, user.experience, user.level, user.id))
         connection.commit()
-
-    def update_user_type(self, user: User):
-        connection = self.get_connection()
-        connection.execute('update user set type = ?'
-                           'where id = ?',
-                           (user.type, user.id))
-        connection.commit()
         
     def update_user_type(self, id, type):
         connection = self.get_connection()

@@ -118,6 +118,8 @@ def a_propos():
 
 @app.route('/admin', methods=["GET"])
 def compteAdmin():
+    if 'user' not in session or ('user' in session and session['user']['type'] != user_type.ADMIN):
+        return render_template("404.html", title="Not found"), 404
     db = get_db()
     sujets = db.read_all_sujet()
     sujets_info = [sujet.to_json() for sujet in sujets]
@@ -126,13 +128,10 @@ def compteAdmin():
     return render_template('admin/compteAdmin.html', sujets=sujets_info, users=users, requests=requests, title='Admin'), 200
 
 
-@app.route('/editLangage', methods=["GET"])
-def editLang():
-    return render_template('admin/editLangage.html', title='editLangage'), 200
-
-
 @app.route('/become_instructor', methods=["GET"])
 def become_instructor_get():
+    if 'user' not in session or ('user' in session and (session['user']['type'] == user_type.ADMIN or session['user']['type'] == user_type.INSTRUCTOR)):
+        return render_template("404.html", title="Not found"), 404
     sujets = get_db().read_all_sujet()
     sujets = [sujet.nom for sujet in sujets]
     return render_template('request_instructor.html', title='Become an instructor', edit=False, sujets=sujets), 200
@@ -140,6 +139,8 @@ def become_instructor_get():
 
 @app.route('/become_instructor', methods=["POST"])
 def become_instructor_post():
+    if 'user' not in session or ('user' in session and (session['user']['type'] == user_type.ADMIN or session['user']['type'] == user_type.INSTRUCTOR)):
+        return render_template("404.html", title="Not found"), 404
     first_name = request.form['firstName']
     last_name = request.form['lastName']
     speciality = request.form.getlist('speciality')
@@ -148,6 +149,8 @@ def become_instructor_post():
     if "curriculum" in request.files and "cover-letter" in request.files:
         cv = request.files['curriculum']
         letter = request.files['cover-letter']
+    else:
+        return render_template('request_instructor.html', title='Become an instructor', sujets=sujets, edit=False, error="All fields are requiered!"), 200
     try:
         request_obj = create_request(session['user']['name'], first_name, last_name, speciality, cv, letter)
     except ValueError as error:
@@ -162,19 +165,42 @@ def become_instructor_post():
 def download_cv(document):
     id = request.args.get("id")
     req = get_db().read_request_id(id)
-    binary_document = req.cv if document == "cv" else req.letter 
-    response = make_response(binary_document)
-    response.headers.set('Content-Type', 'application/pdf')    
-    return response, 200
+    if 'user' in session and (session['user']['type'] == user_type.ADMIN or req.username == session['user']['name']):
+        binary_document = req.cv if document == "cv" else req.letter 
+        response = make_response(binary_document)
+        response.headers.set('Content-Type', 'application/pdf')    
+        return response, 200
+    return render_template("404.html", title="Not found"), 404
 
 
 @app.route('/account/request/<id>', methods=["GET"])
 def view_request(id):
     request = get_db().read_request_id(id)
     sujets = get_db().read_all_sujet()
-    sujets = [sujet.nom for sujet in sujets]
-    admin = True if session['user']['type'] == user_type.ADMIN else False
-    return render_template('request_instructor.html', title='Become an instructor', sujets=sujets, edit=True, admin=admin, request=request), 200
+    if 'user' in session and (session['user']['type'] == user_type.ADMIN or request.username == session['user']['name']):
+        sujets = [sujet.nom for sujet in sujets]
+        admin = True if session['user']['type'] == user_type.ADMIN else False
+        return render_template('request_instructor.html', title='Become an instructor', sujets=sujets, edit=True, admin=admin, request=request), 200
+    return render_template("404.html", title="Not found"), 404
+
+
+@app.route('/admin/request/<id>', methods=["POST"])
+def request_instructor(id):
+    if 'user' in session and session['user']['type'] == user_type.ADMIN:
+        db = get_db()
+        req_status = request.args.get('status')
+        req = db.read_request_id(id)
+        if req_status == status.ACCEPTED:
+            req.status = status.ACCEPTED
+            db.update_request_status(req)
+            user = db.read_user_username(req.username)
+            user.type = user_type.INSTRUCTOR
+            db.update_user_type(user.id, user.type)
+        else:
+            req.status = status.REFUSED
+            db.update_request_status(req)
+        return redirect("/admin")
+    return render_template("404.html", title="Not found"), 404
 
 
 @app.route('/account', methods=["GET"])
@@ -194,11 +220,6 @@ def compte():
     return render_template('compte.html', title='My account',
                            langages=langages, requests=requests,
                            pending=pending), 200
-
-
-@app.route('/become_instructor', methods=["GET"])
-def become_instructor():
-    return render_template('become_instr.html', title='Become instructor'), 200
 
 
 # =========================  devenir membre  ==========================
@@ -245,7 +266,7 @@ def success():
     db = get_db()
     user = db.read_user_username(session['user']['name'])
     user.make_member()
-    db.update_user_type(user)
+    db.update_user_type(user.id, user.type)
     session['user'] = user.session()
     return render_template("success.html")
 
@@ -343,7 +364,7 @@ def register_post():
             return redirect('/register')
         if hcaptcha.verify():
             # hCaptcha ok
-            user = create_user(username, email, password, user_type.STANDARD)  # ValueError
+            user = create_user(username, email, password, user_type.STANDARD, 0,user_level.BEGINNER)  # ValueError
             db.insert_user(user)
             session["message"] = "Account created!"
             return redirect("/login")
@@ -641,6 +662,8 @@ def api_modifier_compte():
 # Créer un nouveau compte utilisateur
 @app.route('/api/admin/compte/ajouter', methods=["GET"])
 def add_user_admin():
+    if 'user' not in session or ('user' in session and session['user']['type'] != user_type.ADMIN):
+        return render_template("404.html", title="Not found"), 404
     db = get_db()
     username = request.args.get("username")
     password = request.args.get("password")
@@ -651,7 +674,7 @@ def add_user_admin():
         # Nom utilisateur invalide
         return jsonify({"valid": False, "reason": "Username already exists. Please enter another one"}), 404
     try:
-        user = create_user(username, email, password, type.upper())  # ValueError
+        user = create_user(username, email, password, type.upper(), 0,user_level.BEGINNER)  # ValueError
     except ValueError as error :
         return jsonify({"valid": False, "reason": str(error)}), 404
     user_id = db.insert_user(user)
@@ -661,6 +684,8 @@ def add_user_admin():
 # Supprimer un compte utilisateur
 @app.route('/api/admin/compte/supprimer', methods=["GET"])
 def api_supprimer_compte():
+    if 'user' not in session or ('user' in session and session['user']['type'] != user_type.ADMIN):
+        return render_template("404.html", title="Not found"), 404
     id = request.args.get('id')
     db = get_db()
     db.delete_users(id)
@@ -670,28 +695,13 @@ def api_supprimer_compte():
 # Modifier le type d'un compte utilisateur
 @app.route('/api/admin/compte/modifier', methods=["GET"])
 def api_modifierA_compte():
+    if 'user' not in session or ('user' in session and session['user']['type'] != user_type.ADMIN):
+        return render_template("404.html", title="Not found"), 404    
     id = request.args.get('id')
     type = request.args.get('type')
     db = get_db()
     db.update_user_type(id, type)
     return jsonify({"valid": True}), 200
-
-
-@app.route('/admin/request/<id>', methods=["POST"])
-def request_instructor(id):
-    db = get_db()
-    req_status = request.args.get('status')
-    req = db.read_request_id(id)
-    if req_status == status.ACCEPTED:
-        req.status = status.ACCEPTED
-        db.update_request_status(req)
-        user = db.read_user_username(req.username)
-        user.type = user_type.INSTRUCTOR
-        db.update_user_type(user.id, user.type)
-    else:
-        req.status = status.REFUSED
-        db.update_request_status(req)
-    return redirect("/admin")
 
 
 # Temporaire pour tester la progression
