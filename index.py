@@ -97,9 +97,13 @@ def handle_message(message):
         send(message, broadcast=True)
 
 
-@app.route('/chatbox', methods=["GET"])
+@app.route('/chatbox', methods=["POST"])
 def chatbox():
     return render_template('chatbox.html', title='Chatbox'), 200
+
+@app.route('/chatmenu', methods=["GET"])
+def chatmenu():
+    return render_template('chatmenu.html', title='Chatmenu'), 200
 
 if __name__ == "__main__":
     socketio.run(app, host="localhost")

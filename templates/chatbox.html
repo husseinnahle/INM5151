@@ -11,7 +11,7 @@
         });
 
         socket.on('message', function(data) {
-            $('#messages').append($('<p>').text(data));
+            document.getElementById("messages").innerHTML('<p>' + text(data) + '</p>');
         });
 
         $('sendBtn').on('click', function (){
@@ -21,6 +21,8 @@
 
     })
 </script>
+
+
 <div class="chatBox form-popup">
 <div id="messages" style="background-color: rgb(94, 12, 12);">
 </div>
@@ -30,6 +32,16 @@
 <button id="sendBtn" class="sendBtn">Send message</button>
 </div>
 </div>
+
+<!-- <div class="chatwindow">
+      <h2 >EZCoding Coders Chat</h2>
+      <h2>Room : {{session['room']}}</h2><br>
+      <textarea id="chat" cols="70" rows="10" placeholder="No messages yet. Start one..."></textarea><br /><br />
+      <input type="text" id="text" size="60" placeholder="Enter your message here" />
+      <button type="button" id="send" class="btn btn-success">SEND</button><br /><br />
+      <center><button type="button" class="btn btn-danger" onclick=leave_room()>Leave Chat Room</button></center>
+    </div> 
+-->
 
 {% endblock %}
     
