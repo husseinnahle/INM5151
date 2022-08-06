@@ -17,6 +17,7 @@ from .modules.user import create_user
 from .modules.user import modify_user
 from .modules.user import validate_support_form
 from .modules.user_type import user_type
+from .modules.user_level import user_level
 from .modules.status import status
 from .modules.request import create_request
 from functools import wraps
@@ -96,11 +97,13 @@ def init_database():
     file.close()
     # Temporaire pour tester
     for i in range (0,25):
-        user = create_user("username"+str(i), "username"+str(i)+"@hotmail.com", "password", user_type.STANDARD)
+        user = create_user("username"+str(i), "username"+str(i)+"@hotmail.com", "password", user_type.STANDARD,0,user_level.BEGINNER)
         get_db().insert_user(user)
-    user = create_user("administrator", "username@hotmail.com", "password", user_type.ADMIN)
+    user = create_user("administrator", "username@hotmail.com", "password", user_type.ADMIN,0,user_level.BEGINNER)
     get_db().insert_user(user)
-    user = create_user("instructor", "instructor@ezcoding.com", "password", user_type.INSTRUCTOR)
+    user = create_user("instructor", "instructor@ezcoding.com", "password", user_type.INSTRUCTOR,0,user_level.BEGINNER)
+    get_db().insert_user(user)
+    user = create_user("username26", "username26@hotmail.com", "password", user_type.STANDARD,10,user_level.INITIATE)
     get_db().insert_user(user)
 
 
@@ -543,6 +546,7 @@ def update_user_progress():
     resultat = "E"
     if session["result"]["note"] > 79:
         resultat = "S"
+        user.update_xp_level(10)
     user.update_progress(sujet, sous_sujet, resultat)
     db.update_user_progress(user)
     session["user"] = user.session()
