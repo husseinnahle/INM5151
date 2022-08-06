@@ -90,7 +90,7 @@ function addArrows() {
           dash: _dash
         }
       );
-    }
+      }
   }
 }
 
@@ -100,7 +100,9 @@ function addShortcut() {
   for (var i = 0; i < nodes_short.length; i++) {
     for(var j = 0; j < nodes_short[i].classList.length; j++){
 
-
+      if (i + 1 < nodes_short[i].classList.length) {
+        endPlug = 'behind';
+        _dash = null;
       if(nodes_short[i].classList.length > 1){
 
       for(var k= 0; k < nodes.length; k++){
@@ -123,6 +125,7 @@ function addShortcut() {
     }
 
     }
+  }
   }
 }
 

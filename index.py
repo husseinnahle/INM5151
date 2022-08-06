@@ -546,7 +546,10 @@ def update_user_progress():
     user.update_progress(sujet, sous_sujet, resultat)
     db.update_user_progress(user)
     session["user"] = user.session()
-
+    if sous_sujet == "Shortcut":
+        user.update_progress(sujet, "Language keywords", resultat)
+        db.update_user_progress(user)
+        session["user"] = user.session()
 
 # ==================================   api  ==================================
 
