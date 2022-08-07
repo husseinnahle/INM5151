@@ -130,6 +130,7 @@ def editLang():
 
 
 @app.route('/become_instructor', methods=["GET"])
+@authentication_required
 def become_instructor_get():
     sujets = get_db().read_all_sujet()
     sujets = [sujet.nom for sujet in sujets]
@@ -137,6 +138,7 @@ def become_instructor_get():
 
 
 @app.route('/become_instructor', methods=["POST"])
+@authentication_required
 def become_instructor_post():
     first_name = request.form['firstName']
     last_name = request.form['lastName']
@@ -153,7 +155,7 @@ def become_instructor_post():
         sujets = [sujet.nom for sujet in sujets]
         return render_template('request_instructor.html', title='Become an instructor', sujets=sujets, edit=False, error=str(error)), 200
     get_db().insert_request(request_obj, session['user']['name'])
-    return redirect("/account")
+    return redirect("/teach_with_us")
 
 
 @app.route('/account/request/document/<document>', methods=["GET"])
@@ -179,22 +181,27 @@ def view_request(id):
 def compte():
     db = get_db()
     sujets = db.read_all_sujet()
-    requests = db.read_request_username(session['user']['name'])
-    pending = False
-    if requests is not None and len(requests) > 0 and requests[-1].status == status.PENDING:
-        pending = True
     langages = []
     for sujet in sujets:
         if sujet.get_nom() in session['user']['progress']:
-            langages.append({"name": sujet.get_nom(), "logo": sujet.get_logo()})
+            langages.append(
+                {"name": sujet.get_nom(), "logo": sujet.get_logo()})
     return render_template('compte.html', title='My account',
-                           langages=langages, requests=requests,
-                           pending=pending), 200
+                           langages=langages), 200
 
 
-@app.route('/become_instructor', methods=["GET"])
-def become_instructor():
-    return render_template('become_instr.html', title='Become instructor'), 200
+@app.route('/teach_with_us', methods=["GET"])
+def teach_with_us():
+    db = get_db()
+    requests = None
+    if 'user' in session:
+        requests = db.read_request_username(session['user']['name'])
+    pending = False
+    if (requests is not None and len(requests) > 0 and 
+             requests[-1].status == status.PENDING):
+         pending = True
+    return render_template('teach_with_us.html', title='Teach with us',
+        requests=requests, pending=pending), 200
 
 
 # =========================  devenir membre  ==========================
@@ -339,7 +346,8 @@ def register_post():
             return redirect('/register')
         if hcaptcha.verify():
             # hCaptcha ok
-            user = create_user(username, email, password, user_type.STANDARD)  # ValueError
+            user = create_user(username, email, password, user_type.STANDARD,
+                               0, user_level.BEGINNER)  # ValueError
             db.insert_user(user)
             session["message"] = "Account created!"
             return redirect("/login")
