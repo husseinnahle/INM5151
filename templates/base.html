@@ -42,7 +42,7 @@
                 <a class="nav-link" href="/support">Support</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="/about">About</a>
+                <a class="nav-link" href="/about">About Us</a>
               </li>
             </ul>
             {% if "user" in session and session['user']['type'] == 'ADMIN' %}
@@ -61,6 +61,57 @@
         {% block content %}{% endblock %}
       </div>
 
+
+
+      <div class="container">
+        <div class="chatbox">
+            <div class="chatbox__support">
+                <div class="chatbox__header">
+                    <div class="chatbox__image--header">
+                        <img src="https://img.icons8.com/color/48/000000/circled-user-female-skin-type-5--v1.png" alt="image">
+                    </div>
+                    <div class="chatbox__content--header">
+                        <h4 class="chatbox__heading--header">Live Support</h4>
+                        
+                          <label id="choice" class="chatbox__heading--header" for="cars">Choose a language :</label>
+                          <select class="chatbox__dropdown" name="cars" id="cars">
+                            <option value="volvo">Python</option>
+                            <option value="saab">Java</option>
+                            <option value="opel">C</option>
+                            <option value="audi">Ruby</option>
+                            <option value="volvo">Bash</option>
+                            <option value="saab">PHP</option>
+                            <option value="opel">HTML</option>
+                            <option value="audi">Go</option>
+                            <option value="volvo">Javascript</option>
+                            <option value="saab">Swift</option>
+                            <option value="opel">Lua</option>
+                            <option value="audi">C++</option>
+                            <option value="volvo">C#</option>
+                            <option value="saab">R</option>
+                            <option value="opel">Haskell</option>
+                            <option value="audi">Fortran</option>
+                            <option value="volvo">Perl</option>
+                            <option value="saab">Rust</option>
+                            <option value="opel">Matlab</option>                            
+                          </select>
+                         
+                    </div>
+                </div>
+                <div class="chatbox__messages">
+                    <div></div>
+                </div>
+                <div class="chatbox__footer">
+                    <input type="text" placeholder="Write a message...">
+                    <button class="chatbox__send--footer send__button">Send</button>
+                </div>
+            </div>
+            <div class="chatbox__button">
+                <button><img src="../static/icons/Bulles.png" /></button>
+            </div>
+        </div>
+    </div>
+
       <footer class="footer bg-dark text-center text-white container-fluid">
         <div class="container p-4 pb-0">
           <section class="mb-4">
@@ -71,11 +122,11 @@
             <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button"><i class="fab fa-linkedin-in"></i></a>
         </div>
         <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
-          © 2020 Copyright:<a class="text-white" href="/">Ezcoding.com</a>
+          © 2022 Copyright : <a class="text-white" href="/">EZCoding.com</a>
         </div>
       </footer>
     </div>
-
+    <script src="{{ url_for('static', filename='assets/javascript/chatbox.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
   </body>
 </html>
