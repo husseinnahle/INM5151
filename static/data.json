@@ -99,7 +99,7 @@
 			{
 				"Nom" : "Shortcut",
 				"Previous" : "Variables",
-				"Next":"Data_Set",
+				"Next":"Operators",
 				"Quiz" : [
 					{
 						"Question" : "What is a correct syntax to output \"Hello World\" in Python?",
