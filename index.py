@@ -450,6 +450,11 @@ def languages_sujet(sujet):
                                title="Languages"), 200
     if sous_sujet_nom == "Variables":
         return render_template("python/variables.html", title="Languages"), 200
+
+
+#ajout par stev    
+    if sous_sujet_nom == "Shortcut":
+        return render_template("python/shortcut.html", title="Languages"), 200
     return render_template('sous_sujet.html', sujet=sujet.to_json()["Nom"],
                            sous_sujet=sous_sujet, title='Languages'), 200
 
@@ -545,7 +550,10 @@ def update_user_progress():
     user.update_progress(sujet, sous_sujet, resultat)
     db.update_user_progress(user)
     session["user"] = user.session()
-
+    if sous_sujet == "Shortcut":
+        user.update_progress(sujet, "Language keywords", "S")
+        db.update_user_progress(user)
+        session["user"] = user.session()
 
 # ==================================   api  ==================================
 

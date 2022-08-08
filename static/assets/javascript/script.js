@@ -109,6 +109,7 @@ function addShortcut() {
 
         if(nodes[k].getAttribute("id") == nodes_short[i].classList.item(j)){
 
+
         new LeaderLine(
           document.getElementById(nodes[k].id),
           document.getElementById(nodes_short[0].id),

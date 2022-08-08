@@ -89,6 +89,14 @@
 			},
 
 			{
+				"Nom" : "Language keywords",
+				"Position" : {
+					"Left" : "-300px", 
+					"Top" : "100px"
+				}
+			},
+
+			{
 				"Nom" : "Shortcut",
 				"Previous" : "Variables",
 				"Next":"Data_Set",
@@ -126,15 +134,7 @@
 				],
 				"Position" : {
 					"Left" : "150px", 
-					"Top" : "150px"
-				}
-			},
-
-			{
-				"Nom" : "Language keywords",
-				"Position" : {
-					"Left" : "-125px", 
-					"Top" : "-150px"
+					"Top" : "-60px"
 				}
 			},
 
