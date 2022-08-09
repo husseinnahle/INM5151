@@ -224,6 +224,8 @@ def compte():
 def teach_with_us():
     db = get_db()
     requests = None
+    user = db.read_user_username(session['user']['name'])
+    session['user'] = user.session()
     if 'user' in session and session['user']['type'] == user_type.INSTRUCTOR:
         return render_template("404.html", title="Not found"), 404
     if 'user' in session:
