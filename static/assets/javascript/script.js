@@ -294,6 +294,6 @@ function disableRequestFields() {
   for (var i = 0; input_file.length; i++) {
     input_file[i].style.display = "none";
   }
-  document.getElementById("cl-container").style.paddingLeft = "180px";
+  document.getElementById("cl-container").style.paddingLeft = "250px";
 }
 
