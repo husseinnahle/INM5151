@@ -344,7 +344,7 @@ footer {
   letter-spacing: 0.2em;
 }
 
-.form-group input, .form-group select {
+.form-group input {
   outline: none;
   display: block;
   background: #e4e4e4;
@@ -353,7 +353,7 @@ footer {
   border-radius: 4px;
   box-sizing: border-box;
   padding: 12px 20px;
-  color: #000000;
+  color: #e4e4e4;
   font-family: inherit;
   font-size: inherit;
   font-weight: 500;
@@ -686,7 +686,7 @@ footer {
   height: 550px;
   position: absolute;
   left: 50%;
-  top: 45%;
+  top: 50%;
   transform: translate(-50%, -50%);
 }
 
@@ -709,7 +709,7 @@ footer {
   height: 550px;
   position: absolute;
   left: 50%;
-  top: 45%;
+  top: 50%;
   transform: translate(-50%, -50%);
 }
 
@@ -776,11 +776,3 @@ footer {
   margin-left: 20px;
   visibility: hidden;
 }
-<<<<<<< HEAD
-=======
-
-.button-container {
-  display: flex;
-  justify-content: center;
-}
->>>>>>> main
