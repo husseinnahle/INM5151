@@ -102,3 +102,8 @@ button {
   font-weight: 600;
   margin-top: 10px;
 }
+
+.button-container {
+  display: flex;
+  justify-content: center;
+}
