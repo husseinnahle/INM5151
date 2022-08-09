@@ -38,12 +38,11 @@
                   <a class="nav-link" href="/login">Login</a>
                 {% endif %}
               </li>
-              {% if not session['user'] or 
-                session['user']['type'] == "STANDARD" or 
-                session['user']['type'] == "MEMBER" %}
-              <li class="nav-item">
-                <a class="nav-link" href="/teach_with_us">Teach with us</a>
-              </li>
+              {% if session['user'] and (session['user']['type'] == "INSTRUCTOR" or session['user']['type'] == "ADMIN") %}
+              {% else %}
+                <li class="nav-item">
+                  <a class="nav-link" href="/teach_with_us">Teach with us</a>
+                </li>
               {% endif %}
               <li class="nav-item">
                 <a class="nav-link" href="/support">Support</a>

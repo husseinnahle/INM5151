@@ -286,7 +286,7 @@ footer {
 }
 
 .becomeInstructor {
-  width: 550px;
+  width: 750px;
   position: absolute;
   left: 50%;
   top: 50%;
@@ -334,7 +334,7 @@ footer {
   letter-spacing: 0.2em;
 }
 
-.form-group input {
+.form-group input, .form-group select {
   outline: none;
   display: block;
   background: #e4e4e4;
@@ -343,7 +343,7 @@ footer {
   border-radius: 4px;
   box-sizing: border-box;
   padding: 12px 20px;
-  color: #e4e4e4;
+  color: #000000;
   font-family: inherit;
   font-size: inherit;
   font-weight: 500;
@@ -676,7 +676,7 @@ footer {
   height: 550px;
   position: absolute;
   left: 50%;
-  top: 50%;
+  top: 45%;
   transform: translate(-50%, -50%);
 }
 
@@ -699,7 +699,7 @@ footer {
   height: 550px;
   position: absolute;
   left: 50%;
-  top: 50%;
+  top: 45%;
   transform: translate(-50%, -50%);
 }
 
@@ -765,4 +765,9 @@ footer {
   background-color: #2d3033;
   margin-left: 20px;
   visibility: hidden;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
 }

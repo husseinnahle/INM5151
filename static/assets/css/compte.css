@@ -182,7 +182,7 @@ h2 {
     letter-spacing: 0.2em;
 }
   
-.form-group input {
+.form-group .blocked {
     outline: none;
     display: block;
     background: #2d3033;
@@ -276,13 +276,19 @@ button {
     color: white;
 }
 
-.button-center {
-    display: flex;
-    justify-content: center;
+.buttons {
+    display: inline-flex;
 }
 
 .fullname {
     display: table;
     border-collapse: separate;
-    border-spacing: 20px;
 }
+
+.refuse {
+    background-color: #2d3033;
+    color: #f83470;
+    border: 2px solid #f83470;
+    margin-left: 10px;
+}
+

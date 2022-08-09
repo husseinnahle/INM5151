@@ -82,11 +82,6 @@ label span:before {
   box-shadow: inset 0 0 0 0.125em #212529;
 }
 
-.button-container {
-  display: flex;
-  justify-content: center;
-}
-
 button {
   background: #f83470;
   float: right;
