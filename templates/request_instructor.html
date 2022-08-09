@@ -29,22 +29,21 @@
           <div class="fullname">
             <div class="form-group {{ class }}" style="display: table-cell;">
               <label for="firstName">First name</label>
-              <input class="field" type="text" id="curriculum" name="firstName" value="{{ first_name }}"/>
+              <input class="field" type="text" id="curriculum" name="firstName" value="{{ first_name }}" required />
             </div>
             <div class="form-group {{ class }}" style="display: table-cell;padding-left:75px;">
               <label for="lastName">Last name</label>
-              <input class="field" type="text" id="curriculum" name="lastName" value="{{ last_name }}"/>
+              <input class="field" type="text" id="curriculum" name="lastName" value="{{ last_name }}" required />
             </div>
           </div>
           <br><br>
           <div class="form-group">
             <label for="speciality">Speciality</label>
               {% if edit %}
-                <select id="multiple" class="form-control form-control-chosen" data-placeholder="Please select..." multiple name="speciality">
+                <select id="multiple" class="form-control form-control-chosen" data-placeholder="Please select..." multiple name="speciality" required >
               {% else %}
-                <select id="multiple" class="form-control form-control-chosen" data-placeholder="Please select..." multiple name="speciality">
+                <select id="multiple" class="form-control form-control-chosen"  data-placeholder="Please select..." multiple name="speciality" required >
               {% endif %}
-              <option></option>
               {% for sujet in sujets %}
                 {% if edit and sujet in request.speciality %}                
                   <option selected="">{{ sujet }}</option>
@@ -58,10 +57,10 @@
           <div style="display: table">
             <div class="form-group" id="cv-container" style="display: table-cell">
               {% if edit %}
-                <a class="doc_link" href="/account/request/document/cv?id={{ request.id }}" target="_blank">Curriculum vitae</a>
+                <a class="doc_link" href="/account/request/document/cv?id={{ request.id }}" target="_blank">Resume</a>
               {% else %}
-                <label for="curriculum">Curriculum vitae</label>
-                <input type="file" class="input_file" name="curriculum" style="font-size:small;" accept=".pdf"/>
+                <label for="curriculum">Resume</label>
+                <input type="file" class="input_file" name="curriculum" style="font-size:small;border: 2px solid #e4e4e4;border-radius: 4px;" accept=".pdf" required />
               {% endif %}
             </div>
             <br>
@@ -70,7 +69,7 @@
                 <a class="doc_link" href="/account/request/document/letter?id={{ request.id }}" target="_blank">Cover letter</a>
               {% else %}
                 <label for="cover-letter">Cover letter</label>
-                <input type="file" class="input_file" name="cover-letter" style="font-size:small;" accept=".pdf"/>
+                <input type="file" class="input_file" name="cover-letter" style="font-size:small;border: 2px solid #e4e4e4;border-radius: 4px;" accept=".pdf"/>
               {% endif %}
             </div>
           </div>
@@ -82,7 +81,7 @@
             </div>
           {% else %}
             {% if edit %}
-              <button type="button" onclick="window.location.href='/account'">Back</button>
+              <button type="button" onclick="window.location.href='/teach_with_us'">Back</button>
             {% else %}
               <button type="submit">Submit</button>
             {% endif %}

@@ -38,6 +38,12 @@
                   <a class="nav-link" href="/login">Login</a>
                 {% endif %}
               </li>
+              {% if session['user'] and (session['user']['type'] == "INSTRUCTOR" or session['user']['type'] == "ADMIN") %}
+              {% else %}
+                <li class="nav-item">
+                  <a class="nav-link" href="/teach_with_us">Teach with us</a>
+                </li>
+              {% endif %}
               <li class="nav-item">
                 <a class="nav-link" href="/support">Support</a>
               </li>
@@ -70,8 +76,9 @@
             <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button"><i class="fab fa-instagram"></i></a>
             <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button"><i class="fab fa-linkedin-in"></i></a>
         </div>
-        <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
-          © 2020 Copyright:<a class="text-white" href="/">Ezcoding.com</a>
+        <div class="text-center p-3" style="background-color: #212529")>  
+          © 2022 <a class="text-white" href="/">EZCoding.</a> 
+          - All rights reserved.
         </div>
       </footer>
     </div>

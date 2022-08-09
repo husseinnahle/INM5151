@@ -285,6 +285,14 @@ footer {
   transform: translate(0, -100%);
 }
 
+.becomeInstructor {
+  width: 750px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -60%);
+}
+
 .form-popup {
   z-index: 15;
   background: #212529;
