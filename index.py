@@ -593,7 +593,7 @@ def update_user_progress():
     session["user"] = user.session()
     if session["result"]["note"] > 79 and sous_sujet == "Shortcut":
         user.update_progress(sujet, "Language keywords", resultat)
-        user.update_progress(sujet, "Data_Set", resultat)
+        user.update_progress(sujet, "Data Set", resultat)
         db.update_user_progress(user)
         session["user"] = user.session()
 

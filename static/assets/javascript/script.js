@@ -75,8 +75,8 @@ function addArrows() {
       endPlug = 'behind';
       _dash = null;
       if (nodes[i].getAttribute("name") == "done" && nodes[i + 1].getAttribute("name") == "current") {
-        endPlug = 'hand';
-        _dash = { animation: true };
+        // endPlug = 'hand';
+        // _dash = { animation: true };
       } else if (nodes[i].getAttribute("name") == "done" && nodes[i + 1].getAttribute("name") == "done") {
         // continue;
       }
