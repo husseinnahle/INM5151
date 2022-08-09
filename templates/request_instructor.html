@@ -5,12 +5,15 @@
   {% if edit %}
     {% set first_name = request.first_name %}
     {% set last_name = request.last_name %}
+    {% set class = "blocked" %}
   {% else %}
     {% set first_name = "" %}
     {% set last_name = "" %}
+    {% set class = "" %}
   {% endif %}
 
   <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='assets/css/component-chosen.min.css') }}" />
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='assets/css/compte.css') }}" />
   <div class="form-popup form-center" style="width:700px;">
     <div class="form-panel one">
       <div class="form-header">
@@ -24,11 +27,11 @@
       <div class="form-content">
         <form method="post" action="/become_instructor" enctype="multipart/form-data">
           <div class="fullname">
-            <div class="form-group" style="display: table-cell;">
+            <div class="form-group {{ class }}" style="display: table-cell;">
               <label for="firstName">First name</label>
               <input class="field" type="text" id="curriculum" name="firstName" value="{{ first_name }}"/>
             </div>
-            <div class="form-group" style="display: table-cell;padding-left:75px;">
+            <div class="form-group {{ class }}" style="display: table-cell;padding-left:75px;">
               <label for="lastName">Last name</label>
               <input class="field" type="text" id="curriculum" name="lastName" value="{{ last_name }}"/>
             </div>
@@ -58,7 +61,7 @@
                 <a class="doc_link" href="/account/request/document/cv?id={{ request.id }}" target="_blank">Curriculum vitae</a>
               {% else %}
                 <label for="curriculum">Curriculum vitae</label>
-                <input type="file" class="input_file" name="curriculum" style="font-size:small;margin-left:-20px;" accept=".pdf"/>
+                <input type="file" class="input_file" name="curriculum" style="font-size:small;" accept=".pdf"/>
               {% endif %}
             </div>
             <br>
@@ -67,18 +70,23 @@
                 <a class="doc_link" href="/account/request/document/letter?id={{ request.id }}" target="_blank">Cover letter</a>
               {% else %}
                 <label for="cover-letter">Cover letter</label>
-                <input type="file" class="input_file" name="cover-letter" style="font-size:small;margin-left:-20px;" accept=".pdf"/>
+                <input type="file" class="input_file" name="cover-letter" style="font-size:small;" accept=".pdf"/>
               {% endif %}
             </div>
           </div>
           <div id="form-popup-error">{{ error }}</div><br>
-          <div class="form-group">
+          {% if admin %}
+            <div class="buttons">
+              <button type="button" class="accept" onclick="requestInstructor({{ request.id }}, 'ACCEPTED')">Accept</button>
+              <button type="button" class="refuse" onclick="requestInstructor({{ request.id }}, 'REFUSED')">Refuse</button>
+            </div>
+          {% else %}
             {% if edit %}
               <button type="button" onclick="window.location.href='/account'">Back</button>
             {% else %}
               <button type="submit">Submit</button>
             {% endif %}
-          </div>
+          {% endif %}
         </form>
       </div>
     </div>

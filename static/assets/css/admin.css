@@ -1,119 +1,78 @@
-/*general*/
-#Account h2 h3 {
-
-  text-align: center;
-}
-.compteContainer{
-  margin-left: 1vh;
-  width: 100%;
-  display: flex;
-  height: 80vh;
-}
-
-
-/*Account div*/
-table {
-    background-color:#ffffff41;
-    max-height: 0vh;
-    max-width: 70vw;
-}
-.fixed_header{
-    width: 100%;
-    table-layout: fixed;
-    border-collapse: collapse;
-}
-.fixed_header thead tfoot {
-  position: sticky;
-  color:#fff;
-  background: rgb(28, 28, 28);
-}
-.fixed_header tbody{
-  display:block;
-  width: 100%;
-  overflow: auto;
-  height: 40vh;
-}
-
-.fixed_header thead tr {
-   display: block;
-}
-
-.fixed_header thead {
-  background: rgb(28, 28, 28);
-  color:#fff;
-}
-
-.fixed_header th, .fixed_header td {
-  padding-top: 1vh;
-  text-align: center;
-  width: 200px;
-}
-
-
-.fixed_header  tfoot {
-  position: sticky;
-  align-items: left;
-  color:#fff;
-  background: rgb(28, 28, 28);
-}
-
-/*Div css */
-.tabContainer{
-  max-width: 70vw;
-  margin-left: 15vw;
-}
-
-/*Div css */
-.tabContent {
-  margin-top: 5vh;
-  display: none;
-  position: relative;
-  text-align: center;
-  background: #212529;
-  max-height: 70vh; 
-  max-width: 60vw;
+.compteAdmin {
+  background-color: #212529;
   border-radius: 4px;
-  box-shadow: 0 0 20px black;
-  box-sizing: border-box;
   color: white;
-}
-/* Style the tab */
-#Account {
-  padding-top: 1vh;
-  margin-right: auto;
-
-  margin-bottom: 5vh;
+  padding: 30px;
+  width: 100%;
+  min-height: 80vh;
 }
 
-
-/* Style the buttons inside the tab */
-.infoCompte button {
-  border-radius: 4px;
-  color: #fafafa;
-  float: center;
-  border: none;
-  border-radius: 0px;
-  outline: none;
-  cursor: pointer;
-  padding: 14px 16px;
-  transition: 0.7s;
-  font-size: 17px;
+.tabContainer {
+  padding: 10px;
+  margin-left: -5px;
 }
 
-/* Change background color of buttons on hover */
-.infoCompte  button:hover {
-  background-color: rgb(37, 36, 36);
-}
-
-/* Create an active/current tablink class */
-.infoCompte button.active {
-  background-color: rgb(119, 119, 119);
-}
-
-/* Style the tab content */
-.tabcontent {
+.tabContent {
   display: none;
-  padding: 6px 12px;
-  border: 1px solid #ccc;
-  border-top: none;
+}
+
+#view {
+  border: 2px solid #e4e4e4;
+  border-radius: 4px;
+}
+
+#tabnav {
+  display: inline-flex;
+}
+
+button {
+  outline: none;
+  background: #f83470;
+  border: 2px solid #f83470;
+  border-radius: 4px;
+  padding: 10px 20px;
+  color: #e4e4e4;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: 500;
+  line-height: inherit;
+  cursor: pointer;
+  text-shadow: 0.5 0.1em 0.1em #ffffff41;
+}
+
+#addUserButton {
+  margin-top: 10px;
+}
+
+.tablinks {
+  margin-left: 5px;
+  margin-bottom: 20px;
+}
+
+.compteAdmin .tablinks.active {
+  color: #f83470;
+  white-space: nowrap;
+  text-align: center;
+  background-color: #2d3033;
+}
+
+#add-account {
+  padding:30px;
+  width: 550px;
+  height: auto;
+  margin: 0 auto;
+  border: 2px solid #e4e4e4;
+  border-radius: 4px;
+}
+
+#delete-account {
+  position: relative;
+  float: right;
+  left: -5px;
+}
+
+#search-field {
+  position: relative;
+  float: right;
+  left: -5px;
 }
