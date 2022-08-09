@@ -75,8 +75,8 @@ function addArrows() {
       endPlug = 'behind';
       _dash = null;
       if (nodes[i].getAttribute("name") == "done" && nodes[i + 1].getAttribute("name") == "current") {
-        endPlug = 'hand';
-        _dash = { animation: true };
+        // endPlug = 'hand';
+        // _dash = { animation: true };
       } else if (nodes[i].getAttribute("name") == "done" && nodes[i + 1].getAttribute("name") == "done") {
         // continue;
       }
@@ -90,7 +90,43 @@ function addArrows() {
           dash: _dash
         }
       );
+      }
+  }
+}
+
+function addShortcut() {
+  var nodes = document.getElementsByClassName("node");
+  var nodes_short = document.getElementsByClassName("node_short");
+  for (var i = 0; i < nodes_short.length; i++) {
+    for(var j = 0; j < nodes_short[i].classList.length; j++){
+
+      if (i + 1 < nodes_short[i].classList.length) {
+        endPlug = 'behind';
+        _dash = null;
+      if(nodes_short[i].classList.length > 1){
+
+      for(var k= 0; k < nodes.length; k++){
+
+        if(nodes[k].getAttribute("id") == nodes_short[i].classList.item(j)){
+
+
+        new LeaderLine(
+          document.getElementById(nodes[k].id),
+          document.getElementById(nodes_short[0].id),
+          {
+            endPlug: endPlug,
+            endPlugSize: 0.9,
+            color: "black",
+            dash: _dash
+          }
+        );
+        }
+
+      }
     }
+
+    }
+  }
   }
 }
 

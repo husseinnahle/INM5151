@@ -87,17 +87,61 @@
 					"Top" : "50px"
 				}
 			},
+
 			{
 				"Nom" : "Language keywords",
 				"Position" : {
-					"Left" : "-250px", 
-					"Top" : "-20px"
+					"Left" : "-300px", 
+					"Top" : "100px"
 				}
 			},
+
 			{
-				"Nom" : "ensemble de données",
+				"Nom" : "Shortcut",
+				"Previous" : "Variables",
+				"Next":"Operators",
+				"Quiz" : [
+					{
+						"Question" : "What is a correct syntax to output \"Hello World\" in Python?",
+						"Choix" : ["echo \"Hello World\"", "p(\"Hello World\")", "print(\"Hello World\")","echo(\"Hello World\")"],
+						"Reponse" : "print(\"Hello World\")",
+						"Indice": "This is a hint for the question over which you are hovering."
+					},
+					{
+						"Question" : "It is not possible to modify a global variable",
+						"Choix" : ["true","false"],
+						"Reponse" : "false",
+						"Indice": "This is a hint for the question over which you are hovering. Sed ut perspiciatis unde omnis."
+					},
+					{
+						"Question" : "Which one is NOT a legal variable name?",
+						"Choix" : ["my-var", "my_var", "_myvar", "Myvar"],
+						"Reponse" : "my-var",
+						"Indice": "This is a hint for the question over which you are hovering. Er zijn vele variaties van passages."
+					},
+					{
+						"Question" : "Which of the following that is not considered as Python's Keywords?",
+						"Choix" : ["and", "while", "a"],
+						"Reponse" : "a",
+						"Indice": "This is a hint for the question over which you are hovering. Het gebruikt een woordenlijst van 200."
+					},
+					{
+						"Question" : "In Python, 'break', is a keyword that is use to break a class",
+						"Choix" : ["True", "False"],
+						"Reponse" : "False",
+						"Indice": "This is a hint for the question over which you are hovering. De gegenereerde Lorum Ipsum is daardoor altijd vrij van herhaling, ingevoegde humor of ongebruikelijke woorden etc."
+					}
+				],
 				"Position" : {
-					"Left" : "-80px", 
+					"Left" : "150px", 
+					"Top" : "-60px"
+				}
+			},
+
+			{
+				"Nom" : "Data Set",
+				"Position" : {
+					"Left" : "-225px", 
 					"Top" : "110px"
 				}
 			},
@@ -130,6 +174,7 @@
 				}
 			}
 		]
+		
 	},
 
 	"Java" : {
